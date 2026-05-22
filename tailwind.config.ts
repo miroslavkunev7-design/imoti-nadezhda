@@ -1,0 +1,100 @@
+import type { Config } from 'tailwindcss'
+
+const config: Config = {
+  content: [
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './lib/**/*.{js,ts,jsx,tsx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        crimson: {
+          50:  '#fff0f2',
+          100: '#ffe0e5',
+          200: '#ffc1cc',
+          300: '#ff8fa3',
+          400: '#ff5070',
+          500: '#f91742',
+          600: '#e4002b',
+          700: '#c41e3a',  // primary CTA
+          800: '#8b0000',  // deep brand
+          900: '#7b0d1e',  // logo / logo dark
+          950: '#4a0010',  // deepest
+        },
+        brand: {
+          bg:       '#080810',  // page background
+          surface:  '#0f0f1a',  // card backgrounds
+          elevated: '#161625',  // elevated cards
+          border:   'rgba(255,255,255,0.07)',
+          borderHover: 'rgba(196,30,58,0.45)',
+        },
+      },
+      fontFamily: {
+        display: ['var(--font-playfair)', 'Georgia', 'serif'],
+        body:    ['var(--font-inter)',     'system-ui', 'sans-serif'],
+        sans:    ['var(--font-inter)',     'system-ui', 'sans-serif'],
+        serif:   ['var(--font-playfair)', 'Georgia', 'serif'],
+      },
+      fontSize: {
+        'hero':    ['clamp(2.5rem, 5vw, 4rem)',  { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+        'city':    ['clamp(2rem,   4vw, 3rem)',  { lineHeight: '1.15' }],
+        'section': ['clamp(1.4rem, 2.5vw, 1.75rem)', { lineHeight: '1.2' }],
+        'price':   ['1.5rem',  { lineHeight: '1',    fontWeight: '700' }],
+        'label':   ['0.6875rem', { lineHeight: '1.4', letterSpacing: '0.1em' }],
+      },
+      backdropBlur: {
+        glass: '24px',
+      },
+      backgroundImage: {
+        'glass-dark':   'linear-gradient(135deg, rgba(8,6,18,0.85) 0%, rgba(12,10,24,0.80) 100%)',
+        'card-overlay': 'linear-gradient(to top, rgba(4,2,12,0.92) 0%, rgba(4,2,12,0.4) 55%, transparent 100%)',
+        'hero-overlay': 'linear-gradient(to bottom, rgba(8,8,16,0.45) 0%, rgba(8,8,16,0.25) 40%, rgba(8,8,16,0.65) 100%)',
+        'crimson-glow': 'radial-gradient(ellipse at center, rgba(196,30,58,0.15) 0%, transparent 70%)',
+      },
+      boxShadow: {
+        glass: '0 8px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05)',
+        card:  '0 4px 24px rgba(0,0,0,0.45)',
+        'card-hover': '0 8px 40px rgba(0,0,0,0.65)',
+        'crimson': '0 0 0 1px rgba(196,30,58,0.55), 0 8px 32px rgba(196,30,58,0.2)',
+        'btn':  '0 4px 16px rgba(196,30,58,0.45)',
+        'btn-hover': '0 6px 24px rgba(196,30,58,0.65)',
+      },
+      animation: {
+        'fade-up':       'fadeUp 0.5s ease forwards',
+        'fade-in':       'fadeIn 0.4s ease forwards',
+        'ken-burns':     'kenBurns 8s ease-in-out forwards',
+        'slide-down':    'slideDown 0.5s cubic-bezier(0.16,1,0.3,1) forwards',
+        'pulse-crimson': 'pulseCrimson 2s ease-in-out infinite',
+      },
+      keyframes: {
+        fadeUp: {
+          from: { opacity: '0', transform: 'translateY(24px)' },
+          to:   { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeIn: {
+          from: { opacity: '0' },
+          to:   { opacity: '1' },
+        },
+        kenBurns: {
+          from: { transform: 'scale(1.06)' },
+          to:   { transform: 'scale(1.0)' },
+        },
+        slideDown: {
+          from: { opacity: '0', transform: 'translateY(-16px)' },
+          to:   { opacity: '1', transform: 'translateY(0)' },
+        },
+        pulseCrimson: {
+          '0%, 100%': { boxShadow: '0 0 0 0 rgba(196,30,58,0.4)' },
+          '50%':      { boxShadow: '0 0 0 8px rgba(196,30,58,0)' },
+        },
+      },
+      transitionTimingFunction: {
+        'luxury': 'cubic-bezier(0.16, 1, 0.3, 1)',
+      },
+    },
+  },
+  plugins: [],
+}
+
+export default config
