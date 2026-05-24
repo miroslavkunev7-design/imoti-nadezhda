@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getProperties } from '@/lib/queries/properties'
 import type { SearchParams } from '@/types'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export async function GET(req: NextRequest) {
   try {

@@ -1,4 +1,5 @@
 import type { City, Property, PropertyImage, Quarter } from '@/types'
+import { resolveMediaUrl } from '@/lib/upload-bridge'
 
 /** Host DB uses `available` — app UI uses `active` */
 export function mapPropertyStatus(status: string | null | undefined): string {
@@ -84,11 +85,13 @@ export function mapPropertyRow(row: RawPropertyRow): Property {
     city_slug: row.city_slug ? String(row.city_slug) : undefined,
     quarter_name: row.quarter_name ? String(row.quarter_name) : row.quarter ? String(row.quarter) : undefined,
     quarter_slug: row.quarter_slug ? String(row.quarter_slug) : undefined,
-    primary_image: row.primary_image
-      ? String(row.primary_image)
-      : row.main_image
-        ? String(row.main_image)
-        : undefined,
+    primary_image: resolveMediaUrl(
+      row.primary_image
+        ? String(row.primary_image)
+        : row.main_image
+          ? String(row.main_image)
+          : undefined
+    ),
   }
 }
 
@@ -96,7 +99,7 @@ export function mapPropertyImageRow(row: Record<string, unknown>): PropertyImage
   return {
     id: Number(row.id),
     property_id: Number(row.property_id),
-    image_url: String(row.image_url ?? row.image_path ?? ''),
+    image_url: resolveMediaUrl(String(row.image_url ?? row.image_path ?? '')) ?? '',
     is_primary: Boolean(row.is_primary ?? row.sort_order === 0),
     sort_order: Number(row.sort_order ?? 0),
   }

@@ -51,6 +51,13 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    if (!isBridgeConfigured() && process.env.VERCEL) {
+      return NextResponse.json({
+        success: false,
+        error: 'Базата не е свързана. В Vercel добави DB_BRIDGE_URL и DB_BRIDGE_KEY, после Redeploy.',
+      }, { status: 503 })
+    }
+
     if (!title || !price_eur || !area_sqm) {
       return NextResponse.json(
         { success: false, error: 'Попълнете заглавие, цена и площ' },

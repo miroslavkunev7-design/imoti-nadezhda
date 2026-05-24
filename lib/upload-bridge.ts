@@ -1,6 +1,17 @@
-/** Base URL for media stored on InfinityFree (optional) */
+/** Base URL for media stored on InfinityFree */
 export function getMediaBaseUrl(): string {
-  return (process.env.NEXT_PUBLIC_MEDIA_URL ?? '').replace(/\/$/, '')
+  const explicit = (process.env.NEXT_PUBLIC_MEDIA_URL ?? '').trim()
+  if (explicit) return explicit.replace(/\/$/, '')
+
+  const dbBridge = (process.env.DB_BRIDGE_URL ?? '').trim()
+  if (dbBridge) {
+    try {
+      return new URL(dbBridge).origin
+    } catch {
+      /* ignore */
+    }
+  }
+  return ''
 }
 
 /** Resolve image URL — supports absolute IF URLs and local paths */

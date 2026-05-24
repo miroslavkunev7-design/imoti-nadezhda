@@ -1,5 +1,6 @@
 import { FALLBACK_CITIES, QUARTERS_BY_CITY } from '@/lib/data/fallback'
 import { mapPropertyRow } from '@/lib/db/mappers'
+import { resolveMediaUrl } from '@/lib/upload-bridge'
 import {
   listLocalProperties,
   localToPropertyRow,
@@ -23,7 +24,7 @@ export function storedToProperty(p: StoredProperty): Property {
   property.images = p.images.map((url, i) => ({
     id: i + 1,
     property_id: p.id,
-    image_url: url,
+    image_url: resolveMediaUrl(url) ?? url,
     is_primary: i === 0,
     sort_order: i,
   }))

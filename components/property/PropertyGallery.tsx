@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import type { PropertyImage } from '@/types'
 import PropertyBadge from '@/components/ui/PropertyBadge'
+import { resolveMediaUrl } from '@/lib/upload-bridge'
 
 interface PropertyGalleryProps {
   images: PropertyImage[]
@@ -24,6 +25,7 @@ export default function PropertyGallery({
 
   const total = images.length
   const current = images[activeIndex]
+  const currentUrl = resolveMediaUrl(current?.image_url)
 
   function prev() { setActiveIndex(i => (i - 1 + total) % total) }
   function next() { setActiveIndex(i => (i + 1) % total) }
@@ -52,8 +54,8 @@ export default function PropertyGallery({
         <div
           className="absolute inset-0 bg-center bg-cover transition-opacity duration-300"
           style={{
-            backgroundImage: current?.image_url
-              ? `url(${current.image_url})`
+            backgroundImage: currentUrl
+              ? `url(${currentUrl})`
               : 'linear-gradient(135deg, #0f0a1a, #1a0a14)',
           }}
         />
@@ -125,7 +127,9 @@ export default function PropertyGallery({
       {/* Thumbnail strip */}
       {total > 1 && (
         <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
-          {images.map((img, i) => (
+          {images.map((img, i) => {
+            const thumbUrl = resolveMediaUrl(img.image_url)
+            return (
             <button
               key={img.id}
               onClick={() => setActiveIndex(i)}
@@ -140,13 +144,13 @@ export default function PropertyGallery({
               <div
                 className="w-full h-full bg-center bg-cover"
                 style={{
-                  backgroundImage: img.image_url
-                    ? `url(${img.image_url})`
+                  backgroundImage: thumbUrl
+                    ? `url(${thumbUrl})`
                     : 'linear-gradient(135deg, #0f0a1a, #1a0a14)',
                 }}
               />
             </button>
-          ))}
+          )})}
         </div>
       )}
 
@@ -165,7 +169,7 @@ export default function PropertyGallery({
             </svg>
           </button>
           <img
-            src={current?.image_url ?? ''}
+            src={currentUrl ?? ''}
             alt={title}
             className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg"
             onClick={e => e.stopPropagation()}

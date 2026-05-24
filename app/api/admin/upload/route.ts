@@ -38,10 +38,17 @@ export async function POST(req: NextRequest) {
     let publicPath: string
     let publicUrl: string
 
+    const onVercel = Boolean(process.env.VERCEL)
+
     if (isRemoteUploadConfigured()) {
       const uploaded = await uploadToBridge(webpBuffer, fileName, 'image/webp')
       publicUrl = uploaded.url
       publicPath = uploaded.path.startsWith('http') ? uploaded.path : uploaded.url
+    } else if (onVercel) {
+      return NextResponse.json({
+        success: false,
+        error: 'Снимките не са настроени на Vercel. Добави DB_BRIDGE_URL + upload.php на InfinityFree, после Redeploy.',
+      }, { status: 503 })
     } else {
       const dir = path.join(process.cwd(), 'public', 'uploads', 'properties')
       await mkdir(dir, { recursive: true })

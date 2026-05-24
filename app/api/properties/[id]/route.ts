@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getPropertyById } from '@/lib/queries/properties'
 
-export const revalidate = 30
+export const dynamic = 'force-dynamic'
 
 export async function GET(
   _req: Request,

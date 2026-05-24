@@ -1,4 +1,5 @@
 import { cardStyle, PageHeader } from '@/components/admin/AdminCard'
+import ConnectionStatus from '@/components/admin/ConnectionStatus'
 
 const SECTIONS = [
   {
@@ -27,6 +28,7 @@ export default function SettingsPage() {
   return (
     <div>
       <PageHeader title="Настройки" />
+      <ConnectionStatus />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {SECTIONS.map(section => (
