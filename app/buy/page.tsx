@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import SearchWidget from '@/components/search/SearchWidget'
 import PropertyCard from '@/components/cards/PropertyCard'
+import BuySellBackground from '@/components/layout/BuySellBackground'
 import { FALLBACK_CITIES } from '@/lib/data/fallback'
 import type { Property } from '@/types'
 
@@ -21,7 +22,7 @@ export default async function BuyPage({ searchParams }: { searchParams: Record<s
 
   return (
     <div className="min-h-screen pb-[68px] relative">
-      <div className="fixed inset-0 -z-10" style={{ background: 'var(--bg-base)' }} />
+      <BuySellBackground />
       <div className="max-w-[1280px] mx-auto px-5 lg:px-8" style={{ paddingTop: 88 }}>
 
         {/* Search */}

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import SellPropertyForm from '@/components/sell/SellPropertyForm'
+import BuySellBackground from '@/components/layout/BuySellBackground'
 import { FALLBACK_CITIES, QUARTERS_BY_CITY } from '@/lib/data/fallback'
 
 export const metadata: Metadata = {
@@ -13,7 +14,7 @@ export default function SellPage() {
 
   return (
     <div className="min-h-screen pb-[68px] relative">
-      <div className="fixed inset-0 -z-10" style={{ background: 'var(--bg-base)' }} />
+      <BuySellBackground />
       <div className="max-w-[860px] mx-auto px-5 lg:px-8" style={{ paddingTop: 88 }}>
         <div className="mb-8">
           <h1 className="font-display text-themed-primary text-3xl font-bold mb-2">
