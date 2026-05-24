@@ -52,10 +52,23 @@ export async function uploadToBridge(
 
   const form = new FormData()
   form.append('key', key)
-  form.append('file', new Blob([new Uint8Array(buffer)], { type: mimeType }), fileName)
+  form.append(
+    'file',
+    new File([new Uint8Array(buffer)], fileName, { type: mimeType })
+  )
 
   const res = await fetch(url, { method: 'POST', body: form, cache: 'no-store' })
-  const json = await res.json() as { success: boolean; url?: string; path?: string; error?: string }
+  const text = await res.text()
+
+  let json: { success: boolean; url?: string; path?: string; error?: string }
+  try {
+    json = JSON.parse(text) as typeof json
+  } catch {
+    const hint = text.trimStart().startsWith('<')
+      ? `upload.php връща HTML (грешен URL?). Провери DB_BRIDGE_URL → .../db-bridge/upload.php на imotinadezhda.infinityfree.me`
+      : 'upload.php не връща JSON'
+    throw new Error(`${hint} (HTTP ${res.status})`)
+  }
 
   if (!json.success || !json.url) {
     throw new Error(json.error ?? 'Upload bridge failed')

@@ -53,9 +53,15 @@ export async function GET() {
     db: { ok: dbOk, propertyCount, error: dbError },
     upload: { ok: uploadReachable && uploadConfigured, error: uploadError },
     hints: [
-      !bridgeConfigured && 'Vercel → Settings → Environment Variables → DB_BRIDGE_URL + DB_BRIDGE_KEY',
-      !uploadConfigured && 'Качи upload.php в db-bridge/ на InfinityFree',
-      !mediaBase && 'Добави NEXT_PUBLIC_MEDIA_URL или DB_BRIDGE_URL (за снимки)',
+      !bridgeConfigured &&
+        'Vercel → Settings → Environment Variables → DB_BRIDGE_URL=https://imotinadezhda.infinityfree.me/db-bridge/api.php + DB_BRIDGE_KEY',
+      !uploadConfigured && 'Качи upload.php + config.php в db-bridge/ на InfinityFree',
+      !mediaBase &&
+        'Добави NEXT_PUBLIC_MEDIA_URL=https://imotinadezhda.infinityfree.me (или DB_BRIDGE_URL — auto при build)',
+      bridgeConfigured &&
+        uploadUrl &&
+        !uploadUrl.includes('imotinadezhda.infinityfree.me') &&
+        'DB_BRIDGE_URL изглежда с грешен домейн — използвай imotinadezhda.infinityfree.me',
       dbOk && propertyCount === 0 && 'Базата е свързана, но няма обяви — добави имот от admin',
     ].filter(Boolean),
   })

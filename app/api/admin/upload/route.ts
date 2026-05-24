@@ -75,6 +75,7 @@ export async function POST(req: NextRequest) {
     })
   } catch (error) {
     console.error('[POST /api/admin/upload]', error)
-    return NextResponse.json({ success: false, error: 'Грешка при качване' }, { status: 500 })
+    const msg = error instanceof Error ? error.message : 'Грешка при качване'
+    return NextResponse.json({ success: false, error: msg }, { status: 500 })
   }
 }
