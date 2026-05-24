@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import type { SidebarBadges } from '@/lib/queries/admin-sidebar'
 
 const ip = { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '1.8', strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
 const DashIcon   = () => <svg {...ip}><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -19,27 +20,46 @@ const TaskIcon   = () => <svg {...ip}><polyline points="9 11 12 14 22 4"/><path 
 const FolderIcon = () => <svg {...ip}><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
 const GearIcon   = () => <svg {...ip}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
 
-const NAV = [
-  { href: '/admin',                  label: 'Дашборд',    icon: <DashIcon />,     badge: 0  },
-  { href: '/admin/properties',       label: 'Имоти',      icon: <HomeIcon />,     badge: 0  },
-  { href: '/admin/brokers',          label: 'Брокери',    icon: <BrokerIcon />,   badge: 2  },
-  { href: '/admin/clients',          label: 'Клиенти',    icon: <CrmIcon />,      badge: 0  },
-  { href: '/admin/inquiries',        label: 'Запитвания', icon: <MailIcon />,     badge: 11 },
-  { href: '/admin/chat',             label: 'Чат',        icon: <ChatIcon />,     badge: 1  },
-  { href: '/admin/calendar',         label: 'Календар',   icon: <CalIcon />,      badge: 0  },
-  { href: '/admin/contracts',        label: 'Договори',   icon: <DocIcon />,      badge: 0  },
-  { href: '/admin/finance',          label: 'Финанси',    icon: <FinIcon />,      badge: 0  },
-  { href: '/admin/marketing',        label: 'Маркетинг',  icon: <MegaIcon />,     badge: 0  },
-  { href: '/admin/tasks',            label: 'Задачи',     icon: <TaskIcon />,     badge: 0  },
-  { href: '/admin/documents',        label: 'Документи',  icon: <FolderIcon />,   badge: 0  },
-  { href: '/admin/settings',         label: 'Настройки',  icon: <GearIcon />,     badge: 0  },
+type NavKey = keyof SidebarBadges
+
+const NAV: Array<{
+  href: string
+  label: string
+  icon: React.ReactNode
+  badgeKey?: NavKey
+}> = [
+  { href: '/admin',                  label: 'Дашборд',    icon: <DashIcon /> },
+  { href: '/admin/properties',       label: 'Имоти',      icon: <HomeIcon />,     badgeKey: 'properties' },
+  { href: '/admin/brokers',          label: 'Брокери',    icon: <BrokerIcon />,   badgeKey: 'brokers' },
+  { href: '/admin/clients',          label: 'Клиенти',    icon: <CrmIcon />,      badgeKey: 'clients' },
+  { href: '/admin/inquiries',        label: 'Запитвания', icon: <MailIcon />,     badgeKey: 'inquiries' },
+  { href: '/admin/chat',             label: 'Чат',        icon: <ChatIcon /> },
+  { href: '/admin/calendar',         label: 'Календар',   icon: <CalIcon /> },
+  { href: '/admin/contracts',        label: 'Договори',   icon: <DocIcon /> },
+  { href: '/admin/finance',          label: 'Финанси',    icon: <FinIcon /> },
+  { href: '/admin/marketing',        label: 'Маркетинг',  icon: <MegaIcon /> },
+  { href: '/admin/tasks',            label: 'Задачи',     icon: <TaskIcon />,     badgeKey: 'tasks' },
+  { href: '/admin/documents',        label: 'Документи',  icon: <FolderIcon /> },
+  { href: '/admin/settings',         label: 'Настройки',  icon: <GearIcon /> },
 ]
 
-export default function AdminSidebar() {
+interface Props {
+  badges: SidebarBadges
+}
+
+export default function AdminSidebar({ badges }: Props) {
   const pathname  = usePathname()
   const router    = useRouter()
   const clickRef  = useRef(0)
   const timerRef  = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [systemOk, setSystemOk] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    fetch('/api/admin/health')
+      .then(r => r.json())
+      .then(json => setSystemOk(Boolean(json.db?.ok)))
+      .catch(() => setSystemOk(false))
+  }, [])
 
   function handleLogoClick(e: React.MouseEvent) {
     clickRef.current += 1
@@ -47,6 +67,10 @@ export default function AdminSidebar() {
     if (clickRef.current >= 3) { clickRef.current = 0; e.preventDefault(); router.push('/') }
     timerRef.current = setTimeout(() => { clickRef.current = 0 }, 600)
   }
+
+  const statusColor = systemOk === null ? 'bg-yellow-400' : systemOk ? 'bg-green-400' : 'bg-red-400'
+  const statusText =
+    systemOk === null ? 'Проверка...' : systemOk ? 'Системата работи' : 'Проблем с базата'
 
   return (
     <aside
@@ -83,6 +107,7 @@ export default function AdminSidebar() {
           const active = item.href === '/admin'
             ? pathname === '/admin'
             : pathname.startsWith(item.href)
+          const badge = item.badgeKey ? badges[item.badgeKey] : 0
           return (
             <Link
               key={item.href}
@@ -103,10 +128,10 @@ export default function AdminSidebar() {
                 {item.icon}
               </span>
               <span className="flex-1 truncate">{item.label}</span>
-              {item.badge > 0 && (
+              {badge > 0 && (
                 <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full text-white flex-shrink-0"
                   style={{ background: '#c41e3a', minWidth: 18, textAlign: 'center' }}>
-                  {item.badge}
+                  {badge > 99 ? '99+' : badge}
                 </span>
               )}
             </Link>
@@ -118,8 +143,8 @@ export default function AdminSidebar() {
       <div className="px-2 pb-3">
         <div className="rounded-lg px-3 py-2 mb-1 flex items-center gap-2"
           style={{ background: 'rgba(196,30,58,0.08)', border: '1px solid rgba(196,30,58,0.15)' }}>
-          <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse flex-shrink-0" />
-          <span className="text-[10px] text-white font-medium">Системата работи</span>
+          <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 animate-pulse ${statusColor}`} />
+          <span className="text-[10px] text-white font-medium">{statusText}</span>
         </div>
         <LogoutButton />
       </div>

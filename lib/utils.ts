@@ -18,6 +18,36 @@ export function formatPrice(amount: number): string {
   }).format(amount)
 }
 
+/** Mortgage term in years (20–30) scaled by property price */
+export function getMortgageTermYears(priceEur: number): number {
+  const minPrice = 80_000
+  const maxPrice = 450_000
+  if (priceEur <= minPrice) return 20
+  if (priceEur >= maxPrice) return 30
+  const ratio = (priceEur - minPrice) / (maxPrice - minPrice)
+  return Math.round(20 + ratio * 10)
+}
+
+/** Monthly mortgage payment (annuity formula) */
+export function calculateMonthlyPayment(
+  principal: number,
+  annualRatePercent: number,
+  termYears: number
+): number {
+  if (principal <= 0) return 0
+  const months = termYears * 12
+  const monthlyRate = annualRatePercent / 100 / 12
+  if (monthlyRate === 0) return principal / months
+  const factor = Math.pow(1 + monthlyRate, months)
+  return (principal * monthlyRate * factor) / (factor - 1)
+}
+
+/** Default mortgage assumptions for display */
+export const MORTGAGE_DEFAULTS = {
+  downPaymentPercent: 20,
+  annualRatePercent: 4.5,
+} as const
+
 /** Format area in m² */
 export function formatArea(sqm: number): string {
   return `${sqm} м²`

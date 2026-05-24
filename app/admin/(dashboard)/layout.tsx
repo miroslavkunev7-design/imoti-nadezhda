@@ -1,10 +1,14 @@
 import type { Metadata } from 'next'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 import AdminTopbar  from '@/components/admin/AdminTopbar'
+import { getSidebarBadges } from '@/lib/queries/admin-sidebar'
 
 export const metadata: Metadata = { title: { template: '%s | Имоти Надежда Admin', default: 'Admin' } }
+export const dynamic = 'force-dynamic'
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const badges = await getSidebarBadges()
+
   return (
     <div className="min-h-screen relative">
 
@@ -19,7 +23,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <AdminTopbar />
 
       {/* ── Sidebar ── */}
-      <AdminSidebar />
+      <AdminSidebar badges={badges} />
 
       {/* ── Main content ── */}
       <main

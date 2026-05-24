@@ -4,6 +4,7 @@ import { useState } from 'react'
 import type { Property } from '@/types'
 import { formatPrice, formatArea, formatFloor, FEATURE_LABELS } from '@/lib/utils'
 import FavoriteButton from '@/components/ui/FavoriteButton'
+import MortgageCalculator from '@/components/property/MortgageCalculator'
 
 interface PropertyInfoPanelProps {
   property: Property
@@ -66,6 +67,11 @@ export default function PropertyInfoPanel({ property }: PropertyInfoPanelProps) 
       <div className="text-[2rem] font-bold text-crimson-700 leading-none">
         {formatPrice(property.price_eur)}
       </div>
+
+      {/* Mortgage estimate */}
+      {property.price_eur > 0 && (
+        <MortgageCalculator priceEur={property.price_eur} />
+      )}
 
       {/* Actions row */}
       <div className="flex items-center gap-3">

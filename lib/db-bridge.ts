@@ -37,12 +37,24 @@ async function callBridge(
       cache: 'no-store',
     })
 
-    const json = await res.json() as {
+    const text = await res.text()
+    const contentType = res.headers.get('content-type') ?? ''
+
+    let json: {
       success: boolean
       rows?: unknown[]
       insertId?: number
       affectedRows?: number
       error?: string
+    }
+
+    try {
+      json = JSON.parse(text) as typeof json
+    } catch {
+      const hint = text.trimStart().startsWith('<')
+        ? 'Bridge URL връща HTML (404 или грешна страница). Провери DB_BRIDGE_URL — трябва да сочи към .../db-bridge/api.php на InfinityFree.'
+        : 'Bridge URL не връща валиден JSON.'
+      throw new Error(`${hint} HTTP ${res.status}, Content-Type: ${contentType || 'unknown'}`)
     }
 
     if (!json.success) {
