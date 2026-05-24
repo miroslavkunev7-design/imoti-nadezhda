@@ -66,6 +66,14 @@ export async function createLocalProperty(
   return record
 }
 
+export async function deleteLocalProperty(id: number): Promise<boolean> {
+  const items = await readStore()
+  const next = items.filter(p => p.id !== id)
+  if (next.length === items.length) return false
+  await writeStore(next)
+  return true
+}
+
 export function localToPropertyRow(p: StoredProperty): Record<string, unknown> {
   return {
     ...p,

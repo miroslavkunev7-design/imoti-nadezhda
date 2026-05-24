@@ -1,14 +1,16 @@
 import type { City, Property, PropertyImage, Quarter } from '@/types'
 import { resolveMediaUrl } from '@/lib/upload-bridge'
 
-/** Host DB uses `available` — app UI uses `active` */
+/** Host DB uses `available` — app UI uses `active`; keep pending as-is */
 export function mapPropertyStatus(status: string | null | undefined): string {
   if (status === 'available') return 'active'
+  if (status === 'pending') return 'pending'
   return status ?? 'active'
 }
 
 export function toHostPropertyStatus(status: string): string {
   if (status === 'active') return 'available'
+  if (status === 'pending') return 'pending'
   return status
 }
 

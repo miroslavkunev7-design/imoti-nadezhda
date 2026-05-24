@@ -6,22 +6,63 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   try {
     const body = await req.json()
     const id = parseInt(params.id, 10)
+    const fields: string[] = []
+    const values: (string | number | null)[] = []
 
+    if (body.name !== undefined) {
+      fields.push('name = ?')
+      values.push(body.name)
+    }
+    if (body.email !== undefined) {
+      fields.push('email = ?')
+      values.push(body.email)
+    }
+    if (body.phone !== undefined) {
+      fields.push('phone = ?')
+      values.push(body.phone || null)
+    }
+    if (body.budget_min !== undefined) {
+      fields.push('budget_min = ?')
+      values.push(body.budget_min ? Number(body.budget_min) : null)
+    }
+    if (body.budget_max !== undefined) {
+      fields.push('budget_max = ?')
+      values.push(body.budget_max ? Number(body.budget_max) : null)
+    }
     if (body.status !== undefined) {
-      await execute(
-        `UPDATE crm_clients SET status = ? WHERE id = ?`,
-        [toHostClientStatus(body.status), id]
-      )
+      fields.push('status = ?')
+      values.push(toHostClientStatus(body.status))
     }
     if (body.assigned_agent_id !== undefined) {
-      await execute(
-        `UPDATE crm_clients SET agent_id = ? WHERE id = ?`,
-        [body.assigned_agent_id, id]
-      )
+      fields.push('agent_id = ?')
+      values.push(body.assigned_agent_id || null)
+    }
+
+    if (fields.length) {
+      values.push(id)
+      await execute(`UPDATE crm_clients SET ${fields.join(', ')} WHERE id = ?`, values)
     }
 
     return NextResponse.json({ success: true })
-  } catch {
-    return NextResponse.json({ success: false }, { status: 500 })
+  } catch (error) {
+    console.error('[PATCH /api/admin/clients/[id]]', error)
+    return NextResponse.json({ success: false, error: 'Грешка при запис' }, { status: 500 })
+  }
+}
+
+export async function DELETE(
+  _req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const id = parseInt(params.id, 10)
+    try {
+      await execute(`DELETE FROM crm_notes WHERE client_id = ?`, [id])
+    } catch { /* optional */ }
+    await execute(`DELETE FROM crm_clients WHERE id = ?`, [id])
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error('[DELETE /api/admin/clients/[id]]', error)
+    return NextResponse.json({ success: false, error: 'Грешка при изтриване' }, { status: 500 })
   }
 }
