@@ -1,16 +1,19 @@
 import { NextResponse } from 'next/server'
 import { isBridgeConfigured } from '@/lib/db-bridge'
 import { query } from '@/lib/db'
-import { getMediaBaseUrl, isRemoteUploadConfigured } from '@/lib/upload-bridge'
+import { getMediaBaseUrl } from '@/lib/upload-bridge'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const bridgeConfigured = isBridgeConfigured()
-  const uploadConfigured = isRemoteUploadConfigured()
   const mediaBase = getMediaBaseUrl()
   const bridgeUrl = process.env.DB_BRIDGE_URL?.trim() ?? ''
-  const bridgeKey = process.env.DB_BRIDGE_KEY?.trim() ?? ''
+
+  // Cloudinary takes priority for uploads (browser-side, no server check needed)
+  const cloudName = (process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? '').trim()
+  const cloudPreset = (process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ?? '').trim()
+  const cloudinaryConfigured = Boolean(cloudName && cloudPreset)
 
   let dbOk = false
   let dbError: string | null = null
@@ -37,69 +40,33 @@ export async function GET() {
     dbError = 'DB_BRIDGE_URL или DB_BRIDGE_KEY липсват в Vercel'
   }
 
-  let uploadReachable = false
-  let uploadError: string | null = null
+  const uploadOk = cloudinaryConfigured
+  const uploadDetail = cloudinaryConfigured
+    ? `Cloudinary (${cloudName})`
+    : 'Cloudinary не е конфигуриран'
+  const uploadError = cloudinaryConfigured ? null : 'Добави NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME и NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET в Vercel'
 
-  if (bridgeUrl && bridgeKey) {
-    try {
-      // Send a 1-chunk upload with a tiny 1×1 transparent PNG (~68 bytes) — expects 200 OK with URL
-      const tinyPng = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
-      const res = await fetch(bridgeUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          key: bridgeKey,
-          action: 'upload_chunk',
-          uploadId: `health-${Date.now()}`,
-          chunkIndex: 0,
-          totalChunks: 1,
-          fileName: 'health.png',
-          data: tinyPng,
-        }),
-        cache: 'no-store',
-      })
-      const text = await res.text()
-      if (text.trimStart().startsWith('<')) {
-        uploadReachable = false
-        uploadError = 'api.php връща HTML (bot protection). Опитай пак след малко.'
-      } else {
-        const json = JSON.parse(text) as { success?: boolean; error?: string }
-        uploadReachable = json.success === true
-        if (!uploadReachable) uploadError = json.error ?? `api.php upload_chunk грешка (${res.status})`
-      }
-    } catch (e) {
-      uploadError = e instanceof Error ? e.message : 'api.php upload недостъпен'
-    }
-  } else {
-    uploadError = 'DB_BRIDGE_URL липсва (задай в Vercel)'
-  }
-
-  const linked = dbOk && uploadConfigured && uploadReachable
+  const linked = dbOk && uploadOk
 
   return NextResponse.json({
     success: linked,
     bridgeConfigured,
-    uploadConfigured,
+    uploadConfigured: cloudinaryConfigured,
+    cloudinaryConfigured,
     mediaBase: mediaBase || null,
-    uploadUrl: bridgeUrl || null,
+    uploadUrl: cloudinaryConfigured ? `https://api.cloudinary.com/v1_1/${cloudName}/image/upload` : (bridgeUrl || null),
     db: { ok: dbOk, propertyCount, totalPropertyCount, error: dbError },
-    upload: { ok: uploadReachable && uploadConfigured, error: uploadError },
+    upload: { ok: uploadOk, detail: uploadDetail, error: uploadError },
     hints: [
       !bridgeConfigured &&
-        'Vercel → Settings → Environment Variables → DB_BRIDGE_URL=https://imotinadezhda.infinityfree.me/db-bridge/api.php + DB_BRIDGE_KEY=imotinadejda2026',
-      !uploadConfigured && 'Качи обновения api.php + config.php в db-bridge/ на InfinityFree',
-      !mediaBase &&
+        'Vercel → Settings → Environment Variables → DB_BRIDGE_URL + DB_BRIDGE_KEY',
+      !cloudinaryConfigured &&
+        'Добави NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME и NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET в Vercel → Redeploy',
+      !mediaBase && !cloudinaryConfigured &&
         'Добави NEXT_PUBLIC_MEDIA_URL=https://imotinadezhda.infinityfree.me',
-      bridgeConfigured &&
-        bridgeUrl &&
-        !bridgeUrl.includes('imotinadezhda.infinityfree.me') &&
-        'DB_BRIDGE_URL изглежда с грешен домейн — използвай imotinadezhda.infinityfree.me',
-      linked &&
-        totalPropertyCount === 0 &&
-        'Връзката работи. Базата е празна — добави първи имот от Admin → Имоти → Добави',
-      linked &&
-        totalPropertyCount > 0 &&
-        propertyCount === 0 &&
+      linked && totalPropertyCount === 0 &&
+        'Всичко е свързано. Базата е празна — добави първи имот от Admin → Имоти → Добави',
+      linked && totalPropertyCount > 0 && propertyCount === 0 &&
         `Има ${totalPropertyCount} имота, но 0 активни — одобри pending обяви от Admin → Имоти`,
     ].filter(Boolean),
   })

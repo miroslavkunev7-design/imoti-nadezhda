@@ -7,9 +7,10 @@ type Health = {
   success: boolean
   bridgeConfigured: boolean
   uploadConfigured: boolean
+  cloudinaryConfigured: boolean
   mediaBase: string | null
   db: { ok: boolean; propertyCount: number; totalPropertyCount?: number; error: string | null }
-  upload: { ok: boolean; error: string | null }
+  upload: { ok: boolean; detail?: string; error: string | null }
   hints: string[]
 }
 
@@ -78,9 +79,9 @@ export default function ConnectionStatus() {
           }
         />
         <StatusRow
-          label="Качване на снимки"
+          label={health.cloudinaryConfigured ? 'Снимки (Cloudinary)' : 'Снимки (bridge)'}
           ok={health.upload.ok}
-          detail={health.upload.ok ? 'api.php upload работи' : (health.upload.error ?? 'Не е настроено')}
+          detail={health.upload.ok ? (health.upload.detail ?? 'OK') : (health.upload.error ?? 'Не е настроено')}
         />
         {health.mediaBase && (
           <StatusRow label="URL на снимки" ok={true} detail={health.mediaBase} />
