@@ -41,36 +41,85 @@ if (!hash_equals($config['api_key'], $key)) {
 
 $action = $body['action'] ?? '';
 
-if ($action === 'upload') {
-    $data     = $body['data'] ?? '';
-    $fileName = basename($body['fileName'] ?? 'photo.webp');
-    $fileName = preg_replace('/[^a-zA-Z0-9._-]/', '', $fileName);
-    if ($fileName === '') {
-        $fileName = 'photo.webp';
-    }
+if ($action === 'upload_chunk') {
+    $uploadId    = preg_replace('/[^a-zA-Z0-9_-]/', '', $body['uploadId'] ?? '');
+    $chunkIndex  = (int)($body['chunkIndex'] ?? -1);
+    $totalChunks = (int)($body['totalChunks'] ?? 0);
+    $data        = $body['data'] ?? '';
+    $fileName    = basename($body['fileName'] ?? 'photo.webp');
+    $fileName    = preg_replace('/[^a-zA-Z0-9._-]/', '', $fileName);
+    if ($fileName === '') $fileName = 'photo.webp';
 
+    if ($uploadId === '' || $chunkIndex < 0 || $totalChunks < 1) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => 'Missing chunk params']);
+        exit;
+    }
     if ($data === '') {
         http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'Missing image data']);
+        echo json_encode(['success' => false, 'error' => 'Empty chunk data']);
         exit;
     }
 
-    $binary = base64_decode($data, true);
-    if ($binary === false) {
+    $chunk = base64_decode($data, true);
+    if ($chunk === false) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'Invalid base64 data']);
+        echo json_encode(['success' => false, 'error' => 'Invalid base64 chunk']);
         exit;
+    }
+
+    $tmpBase = dirname(__DIR__) . '/uploads/tmp';
+    $tmpDir  = $tmpBase . '/' . $uploadId;
+    if (!is_dir($tmpDir)) {
+        mkdir($tmpDir, 0755, true);
+    }
+
+    file_put_contents($tmpDir . '/chunk_' . $chunkIndex, $chunk);
+
+    // Not the last chunk — acknowledge and wait
+    if ($chunkIndex < $totalChunks - 1) {
+        echo json_encode(['success' => true, 'partial' => true, 'chunkIndex' => $chunkIndex]);
+        exit;
+    }
+
+    // Last chunk received — reassemble
+    $assembled = '';
+    for ($i = 0; $i < $totalChunks; $i++) {
+        $cf = $tmpDir . '/chunk_' . $i;
+        if (!file_exists($cf)) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => "Missing chunk $i"]);
+            exit;
+        }
+        $assembled .= file_get_contents($cf);
+    }
+
+    // Clean up temp chunks
+    foreach (glob($tmpDir . '/*') as $f) { @unlink($f); }
+    @rmdir($tmpDir);
+
+    // Clean up old temp dirs (> 1 hour)
+    if (is_dir($tmpBase)) {
+        foreach (scandir($tmpBase) as $d) {
+            if ($d === '.' || $d === '..') continue;
+            $dp = $tmpBase . '/' . $d;
+            if (is_dir($dp) && (time() - filemtime($dp)) > 3600) {
+                foreach (glob($dp . '/*') as $f) { @unlink($f); }
+                @rmdir($dp);
+            }
+        }
     }
 
     $maxSize = 8 * 1024 * 1024;
-    if (strlen($binary) > $maxSize) {
+    if (strlen($assembled) > $maxSize) {
         http_response_code(400);
         echo json_encode(['success' => false, 'error' => 'Max 8 MB']);
         exit;
     }
 
+    // Verify MIME
     $tmp = tempnam(sys_get_temp_dir(), 'up');
-    file_put_contents($tmp, $binary);
+    file_put_contents($tmp, $assembled);
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     $mime  = $finfo->file($tmp);
     unlink($tmp);
@@ -88,17 +137,13 @@ if ($action === 'upload') {
     }
 
     $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-    if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif'], true)) {
-        $ext = 'webp';
-    }
-    if ($ext === 'jpeg') {
-        $ext = 'jpg';
-    }
+    if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif'], true)) $ext = 'webp';
+    if ($ext === 'jpeg') $ext = 'jpg';
 
     $safeName = time() . '-' . bin2hex(random_bytes(4)) . '.' . $ext;
     $dest     = $uploadDir . '/' . $safeName;
 
-    if (file_put_contents($dest, $binary) === false) {
+    if (file_put_contents($dest, $assembled) === false) {
         http_response_code(500);
         echo json_encode(['success' => false, 'error' => 'Save failed']);
         exit;
@@ -108,11 +153,7 @@ if ($action === 'upload') {
     $path    = '/uploads/properties/' . $safeName;
     $url     = $baseUrl ? ($baseUrl . $path) : $path;
 
-    echo json_encode([
-        'success' => true,
-        'url'     => $url,
-        'path'    => $path,
-    ]);
+    echo json_encode(['success' => true, 'url' => $url, 'path' => $path]);
     exit;
 }
 

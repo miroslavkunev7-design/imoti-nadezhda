@@ -42,21 +42,30 @@ export async function GET() {
 
   if (bridgeUrl && bridgeKey) {
     try {
+      // Send a 1-chunk upload with a tiny 1×1 transparent PNG (~68 bytes) — expects 200 OK with URL
+      const tinyPng = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
       const res = await fetch(bridgeUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           key: bridgeKey,
-          action: 'upload',
-          fileName: 'health.webp',
-          data: '',
+          action: 'upload_chunk',
+          uploadId: `health-${Date.now()}`,
+          chunkIndex: 0,
+          totalChunks: 1,
+          fileName: 'health.png',
+          data: tinyPng,
         }),
         cache: 'no-store',
       })
-      const json = (await res.json()) as { success?: boolean; error?: string }
-      uploadReachable = res.status === 400 && json.success === false
-      if (!uploadReachable) {
-        uploadError = `api.php upload отговори с ${res.status}`
+      const text = await res.text()
+      if (text.trimStart().startsWith('<')) {
+        uploadReachable = false
+        uploadError = 'api.php връща HTML (bot protection). Опитай пак след малко.'
+      } else {
+        const json = JSON.parse(text) as { success?: boolean; error?: string }
+        uploadReachable = json.success === true
+        if (!uploadReachable) uploadError = json.error ?? `api.php upload_chunk грешка (${res.status})`
       }
     } catch (e) {
       uploadError = e instanceof Error ? e.message : 'api.php upload недостъпен'
