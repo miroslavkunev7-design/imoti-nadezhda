@@ -638,3 +638,21 @@ html.light .city-bg-overlay { opacity: 0.18; }
     flex-shrink: 0;
   }
 }
+
+/* ── Admin CRM light mode ─────────────────────────────────────── */
+html.light .admin-sidebar {
+  background: rgba(255, 251, 245, 0.96) !important;
+  border-right-color: rgba(196, 30, 58, 0.18) !important;
+}
+html.light .admin-sidebar .text-white { color: var(--text-primary) !important; }
+html.light .admin-topbar {
+  background: rgba(255, 251, 245, 0.88) !important;
+  border-bottom-color: rgba(196, 30, 58, 0.15) !important;
+}
+html.light .admin-bg-overlay {
+  background: rgba(245, 240, 232, 0.90) !important;
+}
+html.light .property-card-surface {
+  background: rgba(255, 255, 255, 0.88) !important;
+  border-color: rgba(196, 30, 58, 0.18) !important;
+}

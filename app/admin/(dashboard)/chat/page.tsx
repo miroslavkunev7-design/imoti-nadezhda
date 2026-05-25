@@ -34,8 +34,9 @@ export default function ChatPage() {
       .then(r => r.json())
       .then(json => {
         if (json.success) {
-          setMessages(json.messages)
-          if (json.messages.length) {
+          setMessages(json.messages ?? [])
+          if (json.myId) setMyId(json.myId)
+          if (json.messages?.length) {
             latestRef.current = json.messages[json.messages.length - 1].created_at
           }
         }

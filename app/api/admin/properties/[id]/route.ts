@@ -1,7 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { execute, queryOne } from '@/lib/db'
+import { execute, query, queryOne } from '@/lib/db'
 import { toHostPropertyStatus } from '@/lib/db/mappers'
 import { deleteLocalProperty } from '@/lib/local-store/properties'
+
+async function deleteRelatedPropertyRows(id: number): Promise<void> {
+  const stmts = [
+    `DELETE FROM property_images WHERE property_id = ?`,
+    `DELETE FROM property_features WHERE property_id = ?`,
+    `UPDATE inquiries SET property_id = NULL WHERE property_id = ?`,
+    `UPDATE crm_tasks SET property_id = NULL WHERE property_id = ?`,
+  ]
+  for (const sql of stmts) {
+    try { await execute(sql, [id]) } catch { /* optional tables/columns */ }
+  }
+}
 
 export async function GET(
   _req: NextRequest,
@@ -21,6 +33,19 @@ export async function GET(
       return NextResponse.json({ success: false, error: 'Имотът не е намерен' }, { status: 404 })
     }
 
+    let images: string[] = []
+    try {
+      const imgRows = await query<{ image_path: string }>(
+        `SELECT image_path FROM property_images WHERE property_id = ? ORDER BY sort_order ASC`,
+        [id]
+      )
+      images = imgRows.map(r => r.image_path).filter(Boolean)
+    } catch { /* optional */ }
+
+    if (!images.length && row.main_image) {
+      images = [String(row.main_image)]
+    }
+
     return NextResponse.json({
       success: true,
       property: {
@@ -38,6 +63,7 @@ export async function GET(
         floor: row.floor,
         total_floors: row.total_floors,
         main_image: row.main_image,
+        images,
       },
     })
   } catch (error) {
@@ -82,6 +108,21 @@ export async function PATCH(
       values.push(toHostPropertyStatus(body.status))
     }
 
+    if (Array.isArray(body.images)) {
+      const imgs = body.images.filter(Boolean).slice(0, 50)
+      try {
+        await execute(`DELETE FROM property_images WHERE property_id = ?`, [id])
+        for (let i = 0; i < imgs.length; i++) {
+          await execute(
+            `INSERT INTO property_images (property_id, image_path, sort_order) VALUES (?, ?, ?)`,
+            [id, imgs[i], i]
+          )
+        }
+      } catch { /* optional table */ }
+      fields.push('main_image = ?')
+      values.push(imgs[0] ?? null)
+    }
+
     if (!fields.length) {
       return NextResponse.json({ success: false, error: 'Няма полета за обновяване' }, { status: 400 })
     }
@@ -92,7 +133,8 @@ export async function PATCH(
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('[PATCH /api/admin/properties/[id]]', error)
-    return NextResponse.json({ success: false, error: 'Грешка при запис' }, { status: 500 })
+    const msg = error instanceof Error ? error.message : 'Грешка при запис'
+    return NextResponse.json({ success: false, error: msg }, { status: 500 })
   }
 }
 
@@ -108,22 +150,18 @@ export async function DELETE(
       return NextResponse.json({ success: true })
     }
 
-    // Remove all FK-dependent rows before deleting the property
-    const related = [
-      `DELETE FROM property_images   WHERE property_id = ?`,
-      `DELETE FROM property_features WHERE property_id = ?`,
-      `DELETE FROM inquiries          WHERE property_id = ?`,
-      `DELETE FROM appointments       WHERE property_id = ?`,
-      `DELETE FROM contracts          WHERE property_id = ?`,
-    ]
-    for (const sql of related) {
-      try { await execute(sql, [id]) } catch { /* table may not exist */ }
+    await deleteRelatedPropertyRows(id)
+
+    try {
+      await execute(`DELETE FROM properties WHERE id = ?`, [id])
+    } catch {
+      await execute(`UPDATE properties SET status = 'draft' WHERE id = ?`, [id])
     }
-    await execute(`DELETE FROM properties WHERE id = ?`, [id])
 
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('[DELETE /api/admin/properties/[id]]', error)
-    return NextResponse.json({ success: false, error: 'Грешка при изтриване' }, { status: 500 })
+    const msg = error instanceof Error ? error.message : 'Грешка при изтриване'
+    return NextResponse.json({ success: false, error: msg }, { status: 500 })
   }
 }

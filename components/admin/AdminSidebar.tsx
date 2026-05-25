@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import type { SidebarBadges } from '@/lib/queries/admin-sidebar'
+import { pathnameToPageSlug } from '@/lib/auth/pages'
+import type { SessionUser } from '@/lib/auth/session'
 
 const ip = { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '1.8', strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
 const DashIcon   = () => <svg {...ip}><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -19,6 +21,7 @@ const MegaIcon   = () => <svg {...ip}><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
 const TaskIcon   = () => <svg {...ip}><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
 const FolderIcon = () => <svg {...ip}><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
 const GearIcon   = () => <svg {...ip}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+const UserIcon   = () => <svg {...ip}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
 
 type NavKey = keyof SidebarBadges
 
@@ -27,10 +30,11 @@ const NAV: Array<{
   label: string
   icon: React.ReactNode
   badgeKey?: NavKey
+  adminOnly?: boolean
 }> = [
   { href: '/admin',                  label: 'Дашборд',    icon: <DashIcon /> },
   { href: '/admin/properties',       label: 'Имоти',      icon: <HomeIcon />,     badgeKey: 'properties' },
-  { href: '/admin/brokers',          label: 'Брокери',    icon: <BrokerIcon />,   badgeKey: 'brokers' },
+  { href: '/admin/brokers',          label: 'Брокери',    icon: <BrokerIcon />,   badgeKey: 'brokers', adminOnly: true },
   { href: '/admin/clients',          label: 'Клиенти',    icon: <CrmIcon />,      badgeKey: 'clients' },
   { href: '/admin/inquiries',        label: 'Запитвания', icon: <MailIcon />,     badgeKey: 'inquiries' },
   { href: '/admin/chat',             label: 'Чат',        icon: <ChatIcon /> },
@@ -45,16 +49,17 @@ const NAV: Array<{
 
 interface Props {
   badges: SidebarBadges
-  restrictedPages?: string[]
-  role?: string
+  session: SessionUser | null
+  restrictedPages: string[]
 }
 
-export default function AdminSidebar({ badges, restrictedPages = [], role = 'admin' }: Props) {
+export default function AdminSidebar({ badges, session, restrictedPages }: Props) {
   const pathname  = usePathname()
   const router    = useRouter()
   const clickRef  = useRef(0)
   const timerRef  = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [systemOk, setSystemOk] = useState<boolean | null>(null)
+  const isAdmin = session?.role === 'admin'
 
   useEffect(() => {
     fetch('/api/admin/health')
@@ -70,13 +75,20 @@ export default function AdminSidebar({ badges, restrictedPages = [], role = 'adm
     timerRef.current = setTimeout(() => { clickRef.current = 0 }, 600)
   }
 
+  const visibleNav = NAV.filter(item => {
+    const slug = pathnameToPageSlug(item.href)
+    if (item.adminOnly && !isAdmin) return false
+    if (restrictedPages.includes(slug)) return false
+    return true
+  })
+
   const statusColor = systemOk === null ? 'bg-yellow-400' : systemOk ? 'bg-green-400' : 'bg-red-400'
   const statusText =
     systemOk === null ? 'Проверка...' : systemOk ? 'Системата работи' : 'Проблем с базата'
 
   return (
     <aside
-      className="fixed top-0 left-0 bottom-0 z-50 flex flex-col"
+      className="fixed top-0 left-0 bottom-0 z-50 flex flex-col admin-sidebar"
       style={{
         width: 200,
         background: 'rgba(4,2,12,0.92)',
@@ -85,7 +97,6 @@ export default function AdminSidebar({ badges, restrictedPages = [], role = 'adm
         borderRight: '1px solid rgba(196,30,58,0.25)',
       }}
     >
-      {/* Brand */}
       <div
         className="flex items-center gap-2.5 px-4 cursor-pointer select-none"
         style={{ height: 56, borderBottom: '1px solid rgba(196,30,58,0.18)' }}
@@ -97,19 +108,33 @@ export default function AdminSidebar({ badges, restrictedPages = [], role = 'adm
             <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
           </svg>
         </div>
-        <div className="leading-none">
-          <p className="text-white font-bold text-sm tracking-wide">Имоти</p>
+        <div className="leading-none min-w-0">
+          <p className="text-white font-bold text-sm tracking-wide truncate">Имоти</p>
           <p className="text-crimson-700 text-[9px] uppercase tracking-widest">Надежда</p>
         </div>
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 overflow-y-auto py-2 px-2" style={{ scrollbarWidth: 'none' }}>
-        {NAV.map(item => {
-          // Extract slug from href (e.g. /admin/finance → finance)
-          const slug = item.href.replace('/admin/', '').replace('/admin', '')
-          if (role !== 'admin' && restrictedPages.includes(slug)) return null
+      {session && (
+        <Link href="/admin/profile"
+          className="mx-2 mt-2 mb-1 flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-[rgba(196,30,58,0.08)] transition-colors">
+          {session.avatar_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={session.avatar_url} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+          ) : (
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
+              style={{ background: '#c41e3a' }}>
+              {(session.name ?? 'U').charAt(0).toUpperCase()}
+            </div>
+          )}
+          <div className="min-w-0">
+            <p className="text-white text-xs font-medium truncate">{session.name ?? 'Профил'}</p>
+            <p className="text-[10px] text-[rgba(255,255,255,0.4)]">{isAdmin ? 'Админ' : 'Брокер'}</p>
+          </div>
+        </Link>
+      )}
 
+      <nav className="flex-1 overflow-y-auto py-2 px-2" style={{ scrollbarWidth: 'none' }}>
+        {visibleNav.map(item => {
           const active = item.href === '/admin'
             ? pathname === '/admin'
             : pathname.startsWith(item.href)
@@ -145,7 +170,6 @@ export default function AdminSidebar({ badges, restrictedPages = [], role = 'adm
         })}
       </nav>
 
-      {/* Status + logout */}
       <div className="px-2 pb-3">
         <div className="rounded-lg px-3 py-2 mb-1 flex items-center gap-2"
           style={{ background: 'rgba(196,30,58,0.08)', border: '1px solid rgba(196,30,58,0.15)' }}>

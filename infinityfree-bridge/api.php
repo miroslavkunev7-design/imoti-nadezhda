@@ -41,67 +41,6 @@ if (!hash_equals($config['api_key'], $key)) {
 
 $action = $body['action'] ?? '';
 
-if ($action === 'create_table') {
-    $tableName = preg_replace('/[^a-zA-Z0-9_]/', '', $body['table'] ?? '');
-    $allowed = ['crm_messages', 'broker_restrictions'];
-
-    if (!in_array($tableName, $allowed, true)) {
-        http_response_code(403);
-        echo json_encode(['success' => false, 'error' => 'Table not in whitelist']);
-        exit;
-    }
-
-    $sqls = [
-        'crm_messages' =>
-            "CREATE TABLE IF NOT EXISTS crm_messages (
-              id INT AUTO_INCREMENT PRIMARY KEY,
-              sender_id INT NOT NULL DEFAULT 1,
-              sender_name VARCHAR(255) NOT NULL,
-              message TEXT NOT NULL,
-              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-              INDEX idx_created_at (created_at)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
-
-        'broker_restrictions' =>
-            "CREATE TABLE IF NOT EXISTS broker_restrictions (
-              id INT AUTO_INCREMENT PRIMARY KEY,
-              user_id INT NOT NULL,
-              page_slug VARCHAR(100) NOT NULL,
-              UNIQUE KEY uq_br (user_id, page_slug)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
-    ];
-
-    try {
-        $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', $config['db_host'], $config['db_name']);
-        $pdo = new PDO($dsn, $config['db_user'], $config['db_pass'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-        $pdo->exec($sqls[$tableName]);
-        echo json_encode(['success' => true]);
-    } catch (Throwable $e) {
-        http_response_code(500);
-        echo json_encode(['success' => false, 'error' => 'DB error']);
-    }
-    exit;
-}
-
-// Avatar URL column (ALTER TABLE — safe to run multiple times)
-if ($action === 'add_avatar_column') {
-    try {
-        $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', $config['db_host'], $config['db_name']);
-        $pdo = new PDO($dsn, $config['db_user'], $config['db_pass'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-        // Check if column already exists
-        $stmt = $pdo->prepare("SHOW COLUMNS FROM users LIKE 'avatar_url'");
-        $stmt->execute();
-        if (!$stmt->fetch()) {
-            $pdo->exec("ALTER TABLE users ADD COLUMN avatar_url VARCHAR(500) NULL");
-        }
-        echo json_encode(['success' => true]);
-    } catch (Throwable $e) {
-        http_response_code(500);
-        echo json_encode(['success' => false, 'error' => 'DB error']);
-    }
-    exit;
-}
-
 if ($action === 'upload_chunk') {
     $uploadId    = preg_replace('/[^a-zA-Z0-9_-]/', '', $body['uploadId'] ?? '');
     $chunkIndex  = (int)($body['chunkIndex'] ?? -1);
@@ -215,6 +154,46 @@ if ($action === 'upload_chunk') {
     $url     = $baseUrl ? ($baseUrl . $path) : $path;
 
     echo json_encode(['success' => true, 'url' => $url, 'path' => $path]);
+    exit;
+}
+
+if ($action === 'migrate') {
+    try {
+        $dsn = sprintf(
+            'mysql:host=%s;dbname=%s;charset=utf8mb4',
+            $config['db_host'],
+            $config['db_name']
+        );
+        $pdo = new PDO($dsn, $config['db_user'], $config['db_pass'], [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        ]);
+
+        $pdo->exec("CREATE TABLE IF NOT EXISTS crm_messages (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            sender_id INT NOT NULL,
+            message TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            INDEX idx_created (created_at)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        $pdo->exec("CREATE TABLE IF NOT EXISTS broker_restrictions (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            page_slug VARCHAR(64) NOT NULL,
+            UNIQUE KEY uniq_user_page (user_id, page_slug),
+            INDEX idx_user (user_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        $cols = $pdo->query("SHOW COLUMNS FROM users LIKE 'avatar_url'")->fetchAll();
+        if (count($cols) === 0) {
+            $pdo->exec("ALTER TABLE users ADD COLUMN avatar_url VARCHAR(512) NULL DEFAULT NULL");
+        }
+
+        echo json_encode(['success' => true]);
+    } catch (Throwable $e) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Migration failed']);
+    }
     exit;
 }
 

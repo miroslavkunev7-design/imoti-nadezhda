@@ -11,9 +11,9 @@ interface LogoProps {
 
 // PNG is 499x1024. Houses span roughly y 5%–53% of height.
 const sizes = {
-  sm: { iconW: 48,  textTop: 7.5, textBot: 8.5 },
-  md: { iconW: 60,  textTop: 9,   textBot: 10  },
-  lg: { iconW: 76,  textTop: 11,  textBot: 12.5 },
+  sm: { iconW: 56,  textTop: 8.5,  textBot: 9.5  },
+  md: { iconW: 76,  textTop: 10.5, textBot: 11.5 },
+  lg: { iconW: 96,  textTop: 12.5, textBot: 14   },
 }
 
 export default function Logo({ size = 'md', className = '' }: LogoProps) {

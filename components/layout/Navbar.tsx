@@ -53,7 +53,7 @@ export default function Navbar({ cityName }: NavbarProps) {
       <header
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         style={{
-          height: 76,
+          height: 84,
           background: solid ? 'rgba(0,0,0,0.06)' : 'transparent',
           backdropFilter:       solid ? (isLight ? 'none' : 'blur(14px) saturate(1.6)') : 'none',
           WebkitBackdropFilter: solid ? (isLight ? 'none' : 'blur(14px) saturate(1.6)') : 'none',
@@ -63,7 +63,7 @@ export default function Navbar({ cityName }: NavbarProps) {
         <div className="max-w-[1280px] mx-auto px-5 h-full flex items-center gap-4">
 
           {/* Logo */}
-          <Logo size="md" />
+          <Logo size="lg" />
 
           {/* City / page name — shown on interior pages (right of logo) */}
           {cityName && (

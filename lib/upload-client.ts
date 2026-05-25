@@ -1,39 +1,72 @@
 /**
- * Browser → Cloudinary (unsigned upload preset ml_default)
+ * Image upload — runtime config from /api/admin/upload-config
  */
 
-const CLOUDINARY_UPLOAD_URL =
-  'https://api.cloudinary.com/v1_1/djh3tkfuu/image/upload'
-const UPLOAD_PRESET = 'ml_default'
+type UploadConfig =
+  | { provider: 'cloudinary'; cloudName: string; uploadPreset: string }
+  | { provider: 'bridge' }
 
-export async function uploadPropertyImage(
+let _configCache: UploadConfig | null = null
+
+async function getUploadConfig(): Promise<UploadConfig> {
+  if (_configCache) return _configCache
+  try {
+    const res = await fetch('/api/admin/upload-config', { cache: 'no-store' })
+    _configCache = await res.json() as UploadConfig
+    return _configCache
+  } catch {
+    return { provider: 'bridge' }
+  }
+}
+
+async function uploadToCloudinary(
+  cfg: { cloudName: string; uploadPreset: string },
   file: File | Blob,
-  fileName: string
+  fileName: string,
+  folder: string
 ): Promise<string> {
   const form = new FormData()
   form.append('file', file, fileName)
-  form.append('upload_preset', UPLOAD_PRESET)
+  form.append('upload_preset', cfg.uploadPreset)
+  form.append('folder', folder)
 
-  const res = await fetch(CLOUDINARY_UPLOAD_URL, { method: 'POST', body: form })
-  const json = await res.json() as {
-    secure_url?: string
-    error?: { message?: string }
-  }
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${cfg.cloudName}/image/upload`,
+    { method: 'POST', body: form }
+  )
 
-  if (!res.ok || !json.secure_url) {
+  const json = await res.json() as { secure_url?: string; error?: { message?: string } }
+  if (!json.secure_url) {
     throw new Error(json.error?.message ?? `Cloudinary грешка (HTTP ${res.status})`)
   }
-
-  // Запиши URL в базата (uploads таблица — optional)
-  void fetch('/api/admin/upload/record', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      url: json.secure_url,
-      fileName: file instanceof File ? file.name : fileName,
-      fileSize: file instanceof File ? file.size : 0,
-    }),
-  }).catch(() => {})
-
   return json.secure_url
+}
+
+export async function uploadPropertyImage(
+  file: File | Blob,
+  fileName: string,
+  folder = 'imoti-nadezhda/properties'
+): Promise<string> {
+  const config = await getUploadConfig()
+
+  if (config.provider === 'cloudinary') {
+    return uploadToCloudinary(config, file, fileName, folder)
+  }
+
+  const form = new FormData()
+  form.append('file', file, fileName)
+  const res = await fetch('/api/admin/upload', { method: 'POST', body: form })
+
+  let json: { success: boolean; url?: string; error?: string }
+  try {
+    json = await res.json() as typeof json
+  } catch {
+    throw new Error(`Невалиден отговор от сървъра (HTTP ${res.status})`)
+  }
+  if (!json.success || !json.url) throw new Error(json.error ?? 'Upload failed')
+  return json.url
+}
+
+export async function uploadAvatarImage(file: File | Blob, fileName: string): Promise<string> {
+  return uploadPropertyImage(file, fileName, 'imoti-nadezhda/avatars')
 }

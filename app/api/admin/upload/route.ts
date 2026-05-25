@@ -2,18 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { writeFile, mkdir } from 'fs/promises'
 import path from 'path'
 import sharp from 'sharp'
+import { execute } from '@/lib/db'
+import { isRemoteUploadConfigured, uploadImageViaApiBridge } from '@/lib/upload-bridge'
 
-/** Local dev fallback — production uses direct Cloudinary upload from browser */
-const MAX_SIZE = 10 * 1024 * 1024
+const MAX_SIZE = 8 * 1024 * 1024
+const ALLOWED = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
 
 export async function POST(req: NextRequest) {
-  if (process.env.VERCEL) {
-    return NextResponse.json({
-      success: false,
-      error: 'На production качвай директно към Cloudinary (unsigned preset ml_default)',
-    }, { status: 400 })
-  }
-
   try {
     const formData = await req.formData()
     const file = formData.get('file') as File | null
@@ -21,11 +16,13 @@ export async function POST(req: NextRequest) {
     if (!file) {
       return NextResponse.json({ success: false, error: 'Няма избран файл' }, { status: 400 })
     }
-    if (!file.type.startsWith('image/')) {
-      return NextResponse.json({ success: false, error: 'Само снимки' }, { status: 400 })
+
+    if (!ALLOWED.includes(file.type) && !file.type.startsWith('image/')) {
+      return NextResponse.json({ success: false, error: 'Само снимки (JPG, PNG, WEBP)' }, { status: 400 })
     }
+
     if (file.size > MAX_SIZE) {
-      return NextResponse.json({ success: false, error: 'Максимален размер: 10 MB' }, { status: 400 })
+      return NextResponse.json({ success: false, error: 'Максимален размер: 8 MB' }, { status: 400 })
     }
 
     const bytes = Buffer.from(await file.arrayBuffer())
@@ -35,13 +32,47 @@ export async function POST(req: NextRequest) {
       .webp({ quality: 85 })
       .toBuffer()
 
-    const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`
-    const dir = path.join(process.cwd(), 'public', 'uploads', 'properties')
-    await mkdir(dir, { recursive: true })
-    await writeFile(path.join(dir, fileName), webpBuffer)
+    const baseName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    const fileName = `${baseName}.webp`
 
-    const publicUrl = `/uploads/properties/${fileName}`
-    return NextResponse.json({ success: true, url: publicUrl, path: publicUrl })
+    let publicPath: string
+    let publicUrl: string
+
+    const onVercel = Boolean(process.env.VERCEL)
+
+    if (isRemoteUploadConfigured()) {
+      const uploaded = await uploadImageViaApiBridge(webpBuffer, fileName)
+      publicUrl = uploaded.url
+      publicPath = uploaded.path.startsWith('http') ? uploaded.path : uploaded.url
+    } else if (onVercel) {
+      return NextResponse.json({
+        success: false,
+        error: 'Снимките не са настроени на Vercel. Добави DB_BRIDGE_URL + DB_BRIDGE_KEY, качи api.php на InfinityFree, после Redeploy.',
+      }, { status: 503 })
+    } else {
+      const dir = path.join(process.cwd(), 'public', 'uploads', 'properties')
+      await mkdir(dir, { recursive: true })
+      const filePath = path.join(dir, fileName)
+      await writeFile(filePath, webpBuffer)
+      publicPath = `/uploads/properties/${fileName}`
+      publicUrl = publicPath
+    }
+
+    try {
+      await execute(
+        `INSERT INTO uploads (user_id, file_name, file_path, file_type, file_size, module)
+         VALUES (?, ?, ?, ?, ?, 'property')`,
+        [1, file.name, publicUrl, 'image/webp', String(file.size)]
+      )
+    } catch {
+      // uploads table optional
+    }
+
+    return NextResponse.json({
+      success: true,
+      url: publicUrl,
+      path: publicPath,
+    })
   } catch (error) {
     console.error('[POST /api/admin/upload]', error)
     const msg = error instanceof Error ? error.message : 'Грешка при качване'

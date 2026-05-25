@@ -12,6 +12,7 @@ const BREADCRUMB: Record<string, string> = {
   '/admin/brokers':       'Брокери',
   '/admin/inquiries':     'Запитвания',
   '/admin/chat':          'Чат',
+  '/admin/profile':       'Профил',
   '/admin/tasks':         'Задачи',
   '/admin/settings':      'Настройки',
 }
@@ -62,7 +63,7 @@ export default function AdminTopbar() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-5"
+      className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-5 admin-topbar"
       style={{
         height: 56,
         marginLeft: 200,
