@@ -1,109 +1,165 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { cardStyle, PageHeader } from '@/components/admin/AdminCard'
 
-const CONTACTS = [
-  { id: 1, name: 'Георги Иванов',    last: 'Здравейте, интересувам се...', time: '10:32', unread: 2 },
-  { id: 2, name: 'Мария Николова',   last: 'Благодаря за информацията!',   time: '09:15', unread: 0 },
-  { id: 3, name: 'Александър Петров',last: 'Кога можем да уговорим оглед?', time: 'Вчера', unread: 0 },
-  { id: 4, name: 'Елена Стоянова',   last: 'Добре, ще се свържа утре.',    time: 'Вчера', unread: 0 },
-  { id: 5, name: 'Димитър Димитров', last: 'Имате ли нещо в Тракия?',      time: 'Пон',   unread: 0 },
-]
+interface Msg {
+  id: number
+  sender_id: number
+  sender_name: string
+  message: string
+  created_at: string
+}
 
-const MESSAGES: Record<number, { text: string; mine: boolean; time: string }[]> = {
-  1: [
-    { text: 'Здравейте, интересувам се от тристаен апартамент в центъра.', mine: false, time: '10:30' },
-    { text: 'Здравейте! Имаме няколко подходящи имота. Кой квартал предпочитате?', mine: true, time: '10:31' },
-    { text: 'Предпочитам Боян Българов или Добруджански.', mine: false, time: '10:32' },
-    { text: 'Отличен избор! Ще ви изпратя линкове към актуалните ни обяви.', mine: true, time: '10:33' },
-  ],
+function fmtTime(iso: string) {
+  try {
+    return new Date(iso).toLocaleTimeString('bg-BG', { hour: '2-digit', minute: '2-digit' })
+  } catch { return '' }
 }
 
 export default function ChatPage() {
-  const [active,  setActive]  = useState(1)
-  const [message, setMessage] = useState('')
-  const [chats,   setChats]   = useState(MESSAGES)
+  const [messages, setMessages] = useState<Msg[]>([])
+  const [message, setMessage]   = useState('')
+  const [sending, setSending]   = useState(false)
+  const [myId, setMyId]         = useState<number | null>(null)
+  const [error, setError]       = useState<string | null>(null)
+  const bottomRef               = useRef<HTMLDivElement>(null)
+  const latestRef               = useRef<string | null>(null)
 
-  const contact  = CONTACTS.find(c => c.id === active)!
-  const messages = chats[active] ?? []
+  const scrollBottom = () =>
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
 
-  function send() {
-    if (!message.trim()) return
-    setChats(prev => ({ ...prev, [active]: [...(prev[active] ?? []), { text: message, mine: true, time: new Date().toLocaleTimeString('bg-BG', { hour: '2-digit', minute: '2-digit' }) }] }))
+  // Load initial messages
+  useEffect(() => {
+    fetch('/api/admin/chat')
+      .then(r => r.json())
+      .then(json => {
+        if (json.success) {
+          setMessages(json.messages)
+          if (json.messages.length) {
+            latestRef.current = json.messages[json.messages.length - 1].created_at
+          }
+        }
+      })
+      .catch(() => setError('Грешка при зареждане'))
+  }, [])
+
+  // Determine own sender_id from first message or from a cookie decode (not possible client-side)
+  // We'll mark "mine" optimistically after send
+  const poll = useCallback(() => {
+    const since = latestRef.current
+    if (!since) return
+    fetch(`/api/admin/chat?since=${encodeURIComponent(since)}`)
+      .then(r => r.json())
+      .then(json => {
+        if (json.success && json.messages?.length) {
+          setMessages(prev => {
+            const ids = new Set(prev.map(m => m.id))
+            const fresh = json.messages.filter((m: Msg) => !ids.has(m.id))
+            if (!fresh.length) return prev
+            latestRef.current = json.messages[json.messages.length - 1].created_at
+            return [...prev, ...fresh]
+          })
+        }
+      })
+      .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    const t = setInterval(poll, 3000)
+    return () => clearInterval(t)
+  }, [poll])
+
+  useEffect(() => { scrollBottom() }, [messages])
+
+  async function send() {
+    const text = message.trim()
+    if (!text || sending) return
+    setSending(true)
     setMessage('')
+    try {
+      const res = await fetch('/api/admin/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text }),
+      })
+      const json = await res.json()
+      if (json.success && json.message) {
+        setMyId(json.message.sender_id)
+        setMessages(prev => {
+          const ids = new Set(prev.map(m => m.id))
+          return ids.has(json.message.id) ? prev : [...prev, json.message]
+        })
+        latestRef.current = json.message.created_at
+      } else {
+        setError(json.error ?? 'Грешка')
+      }
+    } catch {
+      setError('Грешка при изпращане')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
     <div>
-      <PageHeader title="Чат" />
-      <div className="flex gap-4" style={{ height: 'calc(100vh - 160px)' }}>
+      <PageHeader title="Екипен чат" />
+      <div className="flex flex-col rounded-xl overflow-hidden" style={{ ...cardStyle, height: 'calc(100vh - 160px)' }}>
 
-        {/* Contact list */}
-        <div className="w-64 flex-shrink-0 rounded-xl overflow-hidden flex flex-col" style={cardStyle}>
-          <div className="px-3 py-2.5" style={{ borderBottom: '1px solid rgba(196,30,58,0.15)' }}>
-            <input className="input-dark text-sm w-full" placeholder="Търси..." />
-          </div>
-          <div className="flex-1 overflow-y-auto">
-            {CONTACTS.map(c => (
-              <div key={c.id} onClick={() => setActive(c.id)}
-                className={`flex items-start gap-2.5 px-3 py-3 cursor-pointer transition-colors ${active === c.id ? 'bg-[rgba(196,30,58,0.15)]' : 'hover:bg-[rgba(255,255,255,0.04)]'}`}
-                style={{ borderBottom: '1px solid rgba(196,30,58,0.07)' }}>
-                <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
-                  style={{ background: '#c41e3a' }}>{c.name[0]}</div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs text-white font-medium truncate">{c.name}</p>
-                    <span className="text-[10px] text-[rgba(255,255,255,0.35)] ml-1 flex-shrink-0">{c.time}</span>
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-3">
+          {messages.length === 0 && (
+            <p className="text-center text-[rgba(255,255,255,0.3)] text-sm mt-8">
+              Няма съобщения — започни разговора
+            </p>
+          )}
+          {messages.map(msg => {
+            const mine = myId !== null ? msg.sender_id === myId : false
+            return (
+              <div key={msg.id} className={`flex ${mine ? 'justify-end' : 'justify-start'} gap-2`}>
+                {!mine && (
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0 self-end mb-1"
+                    style={{ background: '#c41e3a' }}>
+                    {msg.sender_name.charAt(0).toUpperCase()}
                   </div>
-                  <p className="text-[11px] text-[rgba(255,255,255,0.4)] truncate">{c.last}</p>
-                </div>
-                {c.unread > 0 && (
-                  <span className="w-4 h-4 rounded-full bg-crimson-700 text-white text-[9px] flex items-center justify-center font-bold flex-shrink-0">{c.unread}</span>
                 )}
+                <div style={{ maxWidth: '68%' }}>
+                  {!mine && (
+                    <p className="text-[10px] text-[rgba(255,255,255,0.4)] mb-1 ml-1">{msg.sender_name}</p>
+                  )}
+                  <div className="px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed"
+                    style={mine
+                      ? { background: '#c41e3a', color: '#fff', borderBottomRightRadius: 4 }
+                      : { background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.9)', borderBottomLeftRadius: 4 }}>
+                    <p>{msg.message}</p>
+                    <p className="text-[10px] mt-1 opacity-60 text-right">{fmtTime(msg.created_at)}</p>
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
+            )
+          })}
+          <div ref={bottomRef} />
         </div>
 
-        {/* Chat area */}
-        <div className="flex-1 flex flex-col rounded-xl overflow-hidden" style={cardStyle}>
-          {/* Header */}
-          <div className="flex items-center gap-3 px-4 py-3" style={{ borderBottom: '1px solid rgba(196,30,58,0.15)' }}>
-            <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white" style={{ background: '#c41e3a' }}>
-              {contact.name[0]}
-            </div>
-            <div>
-              <p className="text-white font-semibold text-sm">{contact.name}</p>
-              <p className="text-[10px] text-green-400">Онлайн</p>
-            </div>
+        {/* Error */}
+        {error && (
+          <div className="mx-4 mb-2 text-xs text-red-400 bg-red-900/20 px-3 py-2 rounded-lg">
+            {error} <button onClick={() => setError(null)} className="ml-2 underline">Скрий</button>
           </div>
+        )}
 
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
-            {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.mine ? 'justify-end' : 'justify-start'}`}>
-                <div className="max-w-[70%] px-3 py-2 rounded-xl text-sm"
-                  style={msg.mine
-                    ? { background: '#c41e3a', color: '#fff' }
-                    : { background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.9)' }}>
-                  <p>{msg.text}</p>
-                  <p className="text-[10px] mt-0.5 opacity-60 text-right">{msg.time}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Input */}
-          <div className="flex gap-2 p-3" style={{ borderTop: '1px solid rgba(196,30,58,0.15)' }}>
-            <input
-              className="input-dark flex-1 text-sm"
-              placeholder="Напишете съобщение..."
-              value={message}
-              onChange={e => setMessage(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && send()}
-            />
-            <button onClick={send} className="btn-crimson px-4 py-2 text-sm">Изпрати</button>
-          </div>
+        {/* Input */}
+        <div className="flex gap-2 p-3" style={{ borderTop: '1px solid rgba(196,30,58,0.18)' }}>
+          <input
+            className="input-dark flex-1 text-sm"
+            placeholder="Напишете съобщение до екипа..."
+            value={message}
+            onChange={e => setMessage(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
+            disabled={sending}
+          />
+          <button onClick={send} disabled={sending || !message.trim()} className="btn-crimson px-4 py-2 text-sm disabled:opacity-50">
+            {sending ? '...' : 'Изпрати'}
+          </button>
         </div>
       </div>
     </div>

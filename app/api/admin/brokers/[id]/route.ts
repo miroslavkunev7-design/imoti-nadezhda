@@ -28,6 +28,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       fields.push('status = ?')
       values.push(body.is_active ? 'active' : 'inactive')
     }
+    if (body.avatar_url !== undefined) {
+      fields.push('avatar_url = ?')
+      values.push(body.avatar_url || null)
+    }
 
     if (fields.length) {
       values.push(id)

@@ -63,7 +63,7 @@ export default function Navbar({ cityName }: NavbarProps) {
         <div className="max-w-[1280px] mx-auto px-5 h-full flex items-center gap-4">
 
           {/* Logo */}
-          <Logo size="sm" />
+          <Logo size="md" />
 
           {/* City / page name — shown on interior pages (right of logo) */}
           {cityName && (
@@ -111,7 +111,7 @@ export default function Navbar({ cityName }: NavbarProps) {
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <Link
-              href="/auth/login"
+              href="/admin/login"
               className={[
                 'w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-200',
                 isLight

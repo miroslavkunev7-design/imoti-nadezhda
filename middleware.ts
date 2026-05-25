@@ -2,10 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 
 const ADMIN_COOKIE = 'admin_session'
 
+// Pages that can be restricted for brokers (matches /admin/<slug>)
+const BROKER_RESTRICTABLE = new Set([
+  'finance', 'marketing', 'contracts', 'settings', 'documents', 'brokers'
+])
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
-  // Protect all /admin routes EXCEPT /admin/login
   if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')) {
     const session = req.cookies.get(ADMIN_COOKIE)?.value
 
@@ -15,26 +19,34 @@ export function middleware(req: NextRequest) {
       return NextResponse.redirect(loginUrl)
     }
 
-    // Validate session format: base64(userId:role:secret_hash)
+    let userId = ''
+    let role   = ''
     try {
       const decoded = Buffer.from(session, 'base64').toString('utf-8')
-      const [userId, role, hash] = decoded.split(':')
+      const parts = decoded.split(':')
+      userId = parts[0]
+      role   = parts[1]
+      const hash = parts[2]
       const expectedHash = Buffer.from(
         `${userId}${role}${process.env.NEXTAUTH_SECRET ?? 'dev_secret'}`
       ).toString('base64').slice(0, 16)
 
       if (!userId || !role || hash !== expectedHash) {
-        const loginUrl = new URL('/admin/login', req.url)
-        return NextResponse.redirect(loginUrl)
+        return NextResponse.redirect(new URL('/admin/login', req.url))
       }
 
       if (!['admin', 'agent', 'broker'].includes(role)) {
         return NextResponse.redirect(new URL('/', req.url))
       }
     } catch {
-      const loginUrl = new URL('/admin/login', req.url)
-      return NextResponse.redirect(loginUrl)
+      return NextResponse.redirect(new URL('/admin/login', req.url))
     }
+
+    // Pass user info to the app via headers (for server components)
+    const res = NextResponse.next()
+    res.headers.set('x-user-id', userId)
+    res.headers.set('x-user-role', role)
+    return res
   }
 
   return NextResponse.next()

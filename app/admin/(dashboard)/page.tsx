@@ -4,6 +4,16 @@ import { formatPrice } from '@/lib/utils'
 export const metadata: Metadata = { title: 'Табло' }
 export const dynamic = 'force-dynamic'
 
+// Auto-setup new DB tables and columns (safe to call multiple times — uses IF NOT EXISTS)
+async function runSetup() {
+  try {
+    const base = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : 'http://localhost:3000'
+    await fetch(`${base}/api/admin/setup`, { method: 'POST', cache: 'no-store' })
+  } catch { /* ignore */ }
+}
+
 async function getStats() {
   try {
     const { query } = await import('@/lib/db')
@@ -42,8 +52,9 @@ async function getRecentInquiries() {
 }
 
 export default async function AdminDashboard() {
+  void runSetup()
   const [stats, recentProps, inquiries] = await Promise.all([
-    getStats(), getRecentProperties(), getRecentInquiries()
+    getStats(), getRecentProperties(), getRecentInquiries(),
   ])
 
   const statCards = [

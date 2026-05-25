@@ -45,9 +45,11 @@ const NAV: Array<{
 
 interface Props {
   badges: SidebarBadges
+  restrictedPages?: string[]
+  role?: string
 }
 
-export default function AdminSidebar({ badges }: Props) {
+export default function AdminSidebar({ badges, restrictedPages = [], role = 'admin' }: Props) {
   const pathname  = usePathname()
   const router    = useRouter()
   const clickRef  = useRef(0)
@@ -104,6 +106,10 @@ export default function AdminSidebar({ badges }: Props) {
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto py-2 px-2" style={{ scrollbarWidth: 'none' }}>
         {NAV.map(item => {
+          // Extract slug from href (e.g. /admin/finance → finance)
+          const slug = item.href.replace('/admin/', '').replace('/admin', '')
+          if (role !== 'admin' && restrictedPages.includes(slug)) return null
+
           const active = item.href === '/admin'
             ? pathname === '/admin'
             : pathname.startsWith(item.href)

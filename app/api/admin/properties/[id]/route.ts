@@ -108,12 +108,17 @@ export async function DELETE(
       return NextResponse.json({ success: true })
     }
 
-    try {
-      await execute(`DELETE FROM property_images WHERE property_id = ?`, [id])
-    } catch { /* optional table */ }
-    try {
-      await execute(`DELETE FROM property_features WHERE property_id = ?`, [id])
-    } catch { /* optional table */ }
+    // Remove all FK-dependent rows before deleting the property
+    const related = [
+      `DELETE FROM property_images   WHERE property_id = ?`,
+      `DELETE FROM property_features WHERE property_id = ?`,
+      `DELETE FROM inquiries          WHERE property_id = ?`,
+      `DELETE FROM appointments       WHERE property_id = ?`,
+      `DELETE FROM contracts          WHERE property_id = ?`,
+    ]
+    for (const sql of related) {
+      try { await execute(sql, [id]) } catch { /* table may not exist */ }
+    }
     await execute(`DELETE FROM properties WHERE id = ?`, [id])
 
     return NextResponse.json({ success: true })
