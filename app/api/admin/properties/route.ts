@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { execute, queryOne } from '@/lib/db'
-import { isBridgeConfigured } from '@/lib/db-bridge'
+import { execute, queryOne, isDbConfigured } from '@/lib/db'
 import { createLocalProperty } from '@/lib/local-store/properties'
 import { toSlug } from '@/lib/utils'
 
@@ -20,7 +19,6 @@ export async function POST(req: NextRequest) {
       bedrooms, bathrooms, furnished, description, features, images,
     } = body
 
-    // Приоритет: имена от формата (fallback данни). После — търсене в DB.
     let city: { name: string; slug: string } | null = null
     let quarter: { name: string; slug: string } | null = null
 
@@ -49,13 +47,6 @@ export async function POST(req: NextRequest) {
         { success: false, error: 'Избери валиден град и квартал' },
         { status: 400 }
       )
-    }
-
-    if (!isBridgeConfigured() && process.env.VERCEL) {
-      return NextResponse.json({
-        success: false,
-        error: 'Базата не е свързана. В Vercel добави DB_BRIDGE_URL и DB_BRIDGE_KEY, после Redeploy.',
-      }, { status: 503 })
     }
 
     if (!title || !price_eur || !area_sqm) {
@@ -87,91 +78,85 @@ export async function POST(req: NextRequest) {
       mainImage,
     ] as const
 
-    try {
-      const result = await execute(`
-        INSERT INTO properties (
-          user_id, title, slug, description, price, city, quarter,
-          property_type, status, area, bedrooms, bathrooms,
-          floor, total_floors, furnished, main_image, views
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'available', ?, ?, ?, ?, ?, ?, ?, 0)`,
-        [...insertParams]
-      )
+    if (isDbConfigured()) {
+      try {
+        const result = await execute(`
+          INSERT INTO properties (
+            user_id, title, slug, description, price, city, quarter,
+            property_type, status, area, bedrooms, bathrooms,
+            floor, total_floors, furnished, main_image, views
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'available', ?, ?, ?, ?, ?, ?, ?, 0)`,
+          [...insertParams]
+        )
 
-      const propertyId = result.insertId
+        const propertyId = result.insertId
 
-      if (images?.length) {
-        for (let i = 0; i < images.length; i++) {
-          if (images[i]) {
-            await execute(
-              `INSERT INTO property_images (property_id, image_path, sort_order) VALUES (?, ?, ?)`,
-              [propertyId, images[i], i]
-            )
+        if (images?.length) {
+          for (let i = 0; i < images.length; i++) {
+            if (images[i]) {
+              await execute(
+                `INSERT INTO property_images (property_id, image_path, sort_order) VALUES (?, ?, ?)`,
+                [propertyId, images[i], i]
+              )
+            }
           }
         }
-      }
 
-      if (features?.length) {
-        for (const feature of features) {
-          try {
-            await execute(
-              `INSERT INTO property_features (property_id, feature_name) VALUES (?, ?)`,
-              [propertyId, feature]
-            )
-          } catch {
-            // property_features table optional
+        if (features?.length) {
+          for (const feature of features) {
+            try {
+              await execute(
+                `INSERT INTO property_features (property_id, feature_name) VALUES (?, ?)`,
+                [propertyId, feature]
+              )
+            } catch { /* property_features table optional */ }
           }
         }
+
+        return NextResponse.json({
+          success: true,
+          propertyId,
+          redirectUrl: `/cities/${city.slug}/${quarter.slug}/property/${propertyId}`,
+        })
+      } catch (dbError) {
+        if (!isDbUnreachable(dbError)) throw dbError
       }
-
-      return NextResponse.json({
-        success: true,
-        propertyId,
-        redirectUrl: `/cities/${city.slug}/${quarter.slug}/property/${propertyId}`,
-      })
-    } catch (dbError) {
-      if (isBridgeConfigured()) throw dbError
-      if (!isDbUnreachable(dbError)) throw dbError
-
-      const saved = await createLocalProperty({
-        user_id: 1,
-        title,
-        slug,
-        description: description || null,
-        price: parseFloat(price_eur),
-        city: city.name,
-        quarter: quarter.name,
-        city_slug: city.slug,
-        quarter_slug: quarter.slug,
-        property_type: propType,
-        status: 'available',
-        area: parseFloat(area_sqm),
-        bedrooms: bedrooms ? parseInt(bedrooms, 10) : null,
-        bathrooms: bathrooms ? parseInt(bathrooms, 10) : null,
-        floor: floor ? parseInt(floor, 10) : null,
-        total_floors: total_floors ? parseInt(total_floors, 10) : null,
-        furnished: furnished ? 'yes' : 'no',
-        main_image: mainImage,
-        images: images?.filter(Boolean) ?? [],
-        features: features ?? [],
-      })
-
-      return NextResponse.json({
-        success: true,
-        propertyId: saved.id,
-        redirectUrl: `/cities/${city.slug}/${quarter.slug}/property/${saved.id}`,
-        local: true,
-      })
     }
+
+    const saved = await createLocalProperty({
+      user_id: 1,
+      title,
+      slug,
+      description: description || null,
+      price: parseFloat(price_eur),
+      city: city.name,
+      quarter: quarter.name,
+      city_slug: city.slug,
+      quarter_slug: quarter.slug,
+      property_type: propType,
+      status: 'available',
+      area: parseFloat(area_sqm),
+      bedrooms: bedrooms ? parseInt(bedrooms, 10) : null,
+      bathrooms: bathrooms ? parseInt(bathrooms, 10) : null,
+      floor: floor ? parseInt(floor, 10) : null,
+      total_floors: total_floors ? parseInt(total_floors, 10) : null,
+      furnished: furnished ? 'yes' : 'no',
+      main_image: mainImage,
+      images: images?.filter(Boolean) ?? [],
+      features: features ?? [],
+    })
+
+    return NextResponse.json({
+      success: true,
+      propertyId: saved.id,
+      redirectUrl: `/cities/${city.slug}/${quarter.slug}/property/${saved.id}`,
+      local: true,
+    })
   } catch (error) {
     console.error('[POST /api/admin/properties]', error)
     const msg = error instanceof Error ? error.message : 'Грешка при запазване'
     return NextResponse.json(
-      {
-        success: false,
-        error: isDbUnreachable(error)
-          ? 'Базата данни не е достъпна от този компютър. Опитай отново или качи сайта на хостинга.'
-          : msg || 'Грешка при запазване на имота',
-      },
+      { success: false, error: msg || 'Грешка при запазване на имота' },
       { status: 500 }
     )
   }

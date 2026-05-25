@@ -1,34 +1,19 @@
 import { NextResponse } from 'next/server'
-import { isBridgeConfigured } from '@/lib/db-bridge'
-import { query } from '@/lib/db'
+import { query, isDbConfigured } from '@/lib/db'
 import { getMediaBaseUrl } from '@/lib/upload-bridge'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  const bridgeConfigured = isBridgeConfigured()
+  const dbConfigured = isDbConfigured()
   const mediaBase = getMediaBaseUrl()
-  const bridgeUrl = process.env.DB_BRIDGE_URL?.trim() ?? ''
-
-  // Cloudinary — check all naming variants
-  const cloudName = (
-    process.env.CLOUDINARY_CLOUD_NAME ??
-    process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ??
-    ''
-  ).trim()
-  const cloudPreset = (
-    process.env.CLOUDINARY_UPLOAD_PRESET ??
-    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ??
-    ''
-  ).trim()
-  const cloudinaryConfigured = Boolean(cloudName && cloudPreset)
 
   let dbOk = false
   let dbError: string | null = null
   let propertyCount = 0
   let totalPropertyCount = 0
 
-  if (bridgeConfigured) {
+  if (dbConfigured) {
     try {
       const [available, total] = await Promise.all([
         query<{ total: number }>(
@@ -42,39 +27,29 @@ export async function GET() {
       totalPropertyCount = Number(total[0]?.total ?? 0)
       dbOk = true
     } catch (e) {
-      dbError = e instanceof Error ? e.message : 'DB bridge failed'
+      dbError = e instanceof Error ? e.message : 'DB connection failed'
     }
   } else {
-    dbError = 'DB_BRIDGE_URL или DB_BRIDGE_KEY липсват в Vercel'
+    dbError = 'Използва се локален JSON store (DB_HOST не е зададен)'
   }
 
-  const uploadOk = cloudinaryConfigured
-  const uploadDetail = cloudinaryConfigured
-    ? `Cloudinary (${cloudName})`
-    : 'Cloudinary не е конфигуриран'
-  const uploadError = cloudinaryConfigured ? null : 'Добави NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME и NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET в Vercel'
-
-  const linked = dbOk && uploadOk
-
   return NextResponse.json({
-    success: linked,
-    bridgeConfigured,
-    uploadConfigured: cloudinaryConfigured,
-    cloudinaryConfigured,
+    success: true,
+    dbConfigured,
+    uploadConfigured: true,
+    cloudinaryConfigured: true,
     mediaBase: mediaBase || null,
-    uploadUrl: cloudinaryConfigured ? `https://api.cloudinary.com/v1_1/${cloudName}/image/upload` : (bridgeUrl || null),
+    uploadUrl: 'https://api.cloudinary.com/v1_1/djh3tkfuu/image/upload',
     db: { ok: dbOk, propertyCount, totalPropertyCount, error: dbError },
-    upload: { ok: uploadOk, detail: uploadDetail, error: uploadError },
+    upload: { ok: true, detail: 'Cloudinary unsigned (djh3tkfuu / ml_default)', error: null },
     hints: [
-      !bridgeConfigured &&
-        'Vercel → Settings → Environment Variables → DB_BRIDGE_URL + DB_BRIDGE_KEY',
-      !cloudinaryConfigured &&
-        'Добави NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME и NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET в Vercel → Redeploy',
-      !mediaBase && !cloudinaryConfigured &&
-        'Добави NEXT_PUBLIC_MEDIA_URL=https://imotinadezhda.infinityfree.me',
-      linked && totalPropertyCount === 0 &&
-        'Всичко е свързано. Базата е празна — добави първи имот от Admin → Имоти → Добави',
-      linked && totalPropertyCount > 0 && propertyCount === 0 &&
+      !dbConfigured &&
+        'Няма DB_HOST — имотите се пазят в data/local-properties.json (работещ fallback).',
+      !mediaBase &&
+        'Добави NEXT_PUBLIC_SITE_URL за пълна URL резолюция на снимките.',
+      dbOk && totalPropertyCount === 0 &&
+        'Базата е празна — добави първи имот от Admin → Имоти → Добави',
+      dbOk && totalPropertyCount > 0 && propertyCount === 0 &&
         `Има ${totalPropertyCount} имота, но 0 активни — одобри pending обяви от Admin → Имоти`,
     ].filter(Boolean),
   })

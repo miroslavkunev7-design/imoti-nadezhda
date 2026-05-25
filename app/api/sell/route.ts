@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { execute, queryOne } from '@/lib/db'
-import { isBridgeConfigured } from '@/lib/db-bridge'
+import { execute, queryOne, isDbConfigured } from '@/lib/db'
 import { createLocalProperty } from '@/lib/local-store/properties'
 import { toSlug } from '@/lib/utils'
 
@@ -81,16 +80,6 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    if (!isBridgeConfigured() && process.env.VERCEL) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'В момента не можем да приемем заявката онлайн. Обадете се на +359899620262.',
-        },
-        { status: 503 }
-      )
-    }
-
     const slug = toSlug(title)
     const mainImage = images?.filter(Boolean)?.[0] ?? null
     const ownerBlock =
@@ -116,71 +105,72 @@ export async function POST(req: NextRequest) {
       mainImage,
     ] as const
 
-    try {
-      const result = await execute(
-        `INSERT INTO properties (
-          user_id, title, slug, description, price, city, quarter,
-          property_type, status, area, bedrooms, bathrooms,
-          floor, total_floors, furnished, main_image, views
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?, ?, ?, 0)`,
-        [...insertParams]
-      )
+    if (isDbConfigured()) {
+      try {
+        const result = await execute(
+          `INSERT INTO properties (
+            user_id, title, slug, description, price, city, quarter,
+            property_type, status, area, bedrooms, bathrooms,
+            floor, total_floors, furnished, main_image, views
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?, ?, ?, 0)`,
+          [...insertParams]
+        )
 
-      const propertyId = result.insertId
+        const propertyId = result.insertId
 
-      if (images?.length) {
-        for (let i = 0; i < images.length; i++) {
-          if (images[i]) {
-            await execute(
-              `INSERT INTO property_images (property_id, image_path, sort_order) VALUES (?, ?, ?)`,
-              [propertyId, images[i], i]
-            )
+        if (images?.length) {
+          for (let i = 0; i < images.length; i++) {
+            if (images[i]) {
+              await execute(
+                `INSERT INTO property_images (property_id, image_path, sort_order) VALUES (?, ?, ?)`,
+                [propertyId, images[i], i]
+              )
+            }
           }
         }
+
+        await execute(
+          `INSERT INTO inquiries (property_id, name, email, phone, message, status)
+           VALUES (?, ?, ?, ?, ?, 'new')`,
+          [
+            propertyId,
+            owner_name,
+            owner_email,
+            owner_phone,
+            `Нова заявка за продажба: ${title}, ${quarter.name}, ${city.name} — ${price_eur} €`,
+          ]
+        )
+
+        return NextResponse.json({ success: true, propertyId })
+      } catch (dbError) {
+        if (!isDbUnreachable(dbError)) throw dbError
       }
-
-      await execute(
-        `INSERT INTO inquiries (property_id, name, email, phone, message, status)
-         VALUES (?, ?, ?, ?, ?, 'new')`,
-        [
-          propertyId,
-          owner_name,
-          owner_email,
-          owner_phone,
-          `Нова заявка за продажба: ${title}, ${quarter.name}, ${city.name} — ${price_eur} €`,
-        ]
-      )
-
-      return NextResponse.json({ success: true, propertyId })
-    } catch (dbError) {
-      if (isBridgeConfigured()) throw dbError
-      if (!isDbUnreachable(dbError)) throw dbError
-
-      await createLocalProperty({
-        user_id: 1,
-        title,
-        slug,
-        description: fullDescription,
-        price: parseFloat(price_eur),
-        city: city.name,
-        quarter: quarter.name,
-        city_slug: city.slug,
-        quarter_slug: quarter.slug,
-        property_type: type || 'Апартамент',
-        status: 'pending',
-        area: parseFloat(area_sqm),
-        bedrooms: bedrooms ? parseInt(bedrooms, 10) : null,
-        bathrooms: bathrooms ? parseInt(bathrooms, 10) : null,
-        floor: null,
-        total_floors: null,
-        furnished: 'no',
-        main_image: mainImage,
-        images: images?.filter(Boolean) ?? [],
-        features: [],
-      })
-
-      return NextResponse.json({ success: true, local: true })
     }
+
+    await createLocalProperty({
+      user_id: 1,
+      title,
+      slug,
+      description: fullDescription,
+      price: parseFloat(price_eur),
+      city: city.name,
+      quarter: quarter.name,
+      city_slug: city.slug,
+      quarter_slug: quarter.slug,
+      property_type: type || 'Апартамент',
+      status: 'pending',
+      area: parseFloat(area_sqm),
+      bedrooms: bedrooms ? parseInt(bedrooms, 10) : null,
+      bathrooms: bathrooms ? parseInt(bathrooms, 10) : null,
+      floor: null,
+      total_floors: null,
+      furnished: 'no',
+      main_image: mainImage,
+      images: images?.filter(Boolean) ?? [],
+      features: [],
+    })
+
+    return NextResponse.json({ success: true, local: true })
   } catch (error) {
     console.error('[POST /api/sell]', error)
     return NextResponse.json(
