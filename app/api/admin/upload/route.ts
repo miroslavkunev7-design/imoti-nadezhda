@@ -2,11 +2,52 @@ import { NextRequest, NextResponse } from 'next/server'
 import { writeFile, mkdir } from 'fs/promises'
 import path from 'path'
 import sharp from 'sharp'
+import crypto from 'crypto'
 import { execute } from '@/lib/db'
-import { isRemoteUploadConfigured, uploadImageViaApiBridge } from '@/lib/upload-bridge'
 
-const MAX_SIZE = 8 * 1024 * 1024
-const ALLOWED = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
+const MAX_SIZE = 10 * 1024 * 1024
+
+function getCloudinaryConfig() {
+  const cloudName = (
+    process.env.CLOUDINARY_CLOUD_NAME ??
+    process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? ''
+  ).trim()
+  const apiKey    = (process.env.CLOUDINARY_API_KEY ?? '').trim()
+  const apiSecret = (process.env.CLOUDINARY_API_SECRET ?? '').trim()
+  if (cloudName && apiKey && apiSecret) return { cloudName, apiKey, apiSecret }
+  return null
+}
+
+async function uploadToCloudinary(
+  buffer: Buffer,
+  fileName: string
+): Promise<string> {
+  const cfg = getCloudinaryConfig()!
+  const timestamp = Math.floor(Date.now() / 1000).toString()
+
+  // Cloudinary signed upload: SHA1("timestamp=VALUE" + apiSecret)
+  const signature = crypto
+    .createHash('sha1')
+    .update(`timestamp=${timestamp}${cfg.apiSecret}`)
+    .digest('hex')
+
+  const form = new FormData()
+  form.append('file', new Blob([new Uint8Array(buffer)], { type: 'image/webp' }), fileName)
+  form.append('api_key', cfg.apiKey)
+  form.append('timestamp', timestamp)
+  form.append('signature', signature)
+
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${cfg.cloudName}/image/upload`,
+    { method: 'POST', body: form }
+  )
+
+  const json = await res.json() as { secure_url?: string; error?: { message?: string } }
+  if (!json.secure_url) {
+    throw new Error(json.error?.message ?? `Cloudinary грешка (HTTP ${res.status})`)
+  }
+  return json.secure_url
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,13 +57,11 @@ export async function POST(req: NextRequest) {
     if (!file) {
       return NextResponse.json({ success: false, error: 'Няма избран файл' }, { status: 400 })
     }
-
-    if (!ALLOWED.includes(file.type) && !file.type.startsWith('image/')) {
-      return NextResponse.json({ success: false, error: 'Само снимки (JPG, PNG, WEBP)' }, { status: 400 })
+    if (!file.type.startsWith('image/')) {
+      return NextResponse.json({ success: false, error: 'Само снимки' }, { status: 400 })
     }
-
     if (file.size > MAX_SIZE) {
-      return NextResponse.json({ success: false, error: 'Максимален размер: 8 MB' }, { status: 400 })
+      return NextResponse.json({ success: false, error: 'Максимален размер: 10 MB' }, { status: 400 })
     }
 
     const bytes = Buffer.from(await file.arrayBuffer())
@@ -32,30 +71,25 @@ export async function POST(req: NextRequest) {
       .webp({ quality: 85 })
       .toBuffer()
 
-    const baseName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
-    const fileName = `${baseName}.webp`
+    const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`
 
-    let publicPath: string
     let publicUrl: string
 
-    const onVercel = Boolean(process.env.VERCEL)
-
-    if (isRemoteUploadConfigured()) {
-      const uploaded = await uploadImageViaApiBridge(webpBuffer, fileName)
-      publicUrl = uploaded.url
-      publicPath = uploaded.path.startsWith('http') ? uploaded.path : uploaded.url
-    } else if (onVercel) {
+    const cloudinary = getCloudinaryConfig()
+    if (cloudinary) {
+      // Server-side upload to Cloudinary (API secret stays on server)
+      publicUrl = await uploadToCloudinary(webpBuffer, fileName)
+    } else if (process.env.VERCEL) {
       return NextResponse.json({
         success: false,
-        error: 'Снимките не са настроени на Vercel. Добави DB_BRIDGE_URL + DB_BRIDGE_KEY, качи api.php на InfinityFree, после Redeploy.',
+        error: 'Добави CLOUDINARY_CLOUD_NAME + CLOUDINARY_API_KEY + CLOUDINARY_API_SECRET в Vercel',
       }, { status: 503 })
     } else {
+      // Local dev — write to public/uploads
       const dir = path.join(process.cwd(), 'public', 'uploads', 'properties')
       await mkdir(dir, { recursive: true })
-      const filePath = path.join(dir, fileName)
-      await writeFile(filePath, webpBuffer)
-      publicPath = `/uploads/properties/${fileName}`
-      publicUrl = publicPath
+      await writeFile(path.join(dir, fileName), webpBuffer)
+      publicUrl = `/uploads/properties/${fileName}`
     }
 
     try {
@@ -64,15 +98,9 @@ export async function POST(req: NextRequest) {
          VALUES (?, ?, ?, ?, ?, 'property')`,
         [1, file.name, publicUrl, 'image/webp', String(file.size)]
       )
-    } catch {
-      // uploads table optional
-    }
+    } catch { /* uploads table optional */ }
 
-    return NextResponse.json({
-      success: true,
-      url: publicUrl,
-      path: publicPath,
-    })
+    return NextResponse.json({ success: true, url: publicUrl, path: publicUrl })
   } catch (error) {
     console.error('[POST /api/admin/upload]', error)
     const msg = error instanceof Error ? error.message : 'Грешка при качване'
