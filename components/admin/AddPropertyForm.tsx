@@ -8,6 +8,7 @@ import { ORIENTATION_OPTIONS, CONSTRUCTION_OPTIONS, CONDITION_OPTIONS, HEATING_O
 import MatchNotification from '@/components/admin/MatchNotification'
 import PublishResultsModal from '@/components/admin/PublishResultsModal'
 import { PUBLISH_CHANNELS, buildListingText, getPublishLinks } from '@/lib/publish/channels'
+import { uploadPropertyImage } from '@/lib/upload-client'
 
 interface Quarter { id: number; city_id: number; name: string; slug: string; city_slug?: string }
 interface Props { cities: City[]; allQuarters: Quarter[] }
@@ -160,22 +161,13 @@ export default function AddPropertyForm({ cities, allQuarters }: Props) {
       setImages(prev => prev.map(i => i.id === img.id ? { ...i, uploading: true, error: undefined } : i))
 
       try {
-        const fd = new FormData()
-        if (img.file) {
-          fd.append('file', img.file, img.file.name)
-        } else {
-          const blob = await fetch(img.preview).then(r => r.blob())
-          fd.append('file', blob, `photo-${img.id}.jpg`)
-        }
+        const file: Blob = img.file ?? await fetch(img.preview).then(r => r.blob())
+        const name = img.file?.name ?? `photo-${img.id}.jpg`
+        const url = await uploadPropertyImage(file, name)
 
-        const res = await fetch('/api/admin/upload', { method: 'POST', body: fd })
-        const json = await res.json()
-
-        if (!json.success) throw new Error(json.error ?? 'Upload failed')
-
-        uploaded.push(json.url)
+        uploaded.push(url)
         setImages(prev => prev.map(i =>
-          i.id === img.id ? { ...i, url: json.url, uploading: false } : i
+          i.id === img.id ? { ...i, url, uploading: false } : i
         ))
       } catch (err) {
         const msg = err instanceof Error ? err.message : 'Грешка'
