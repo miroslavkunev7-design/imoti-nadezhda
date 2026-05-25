@@ -1,4 +1,5 @@
 import mysql from 'mysql2/promise'
+import { bridgeExecute, bridgeQuery, isBridgeConfigured } from '@/lib/db-bridge'
 
 declare global {
   // eslint-disable-next-line no-var
@@ -10,7 +11,7 @@ function isDirectDbConfigured(): boolean {
 }
 
 export function isDbConfigured(): boolean {
-  return isDirectDbConfigured()
+  return isBridgeConfigured() || isDirectDbConfigured()
 }
 
 function createPool(): mysql.Pool {
@@ -39,7 +40,7 @@ function getPool(): mysql.Pool {
 
 export default getPool
 
-const QUERY_TIMEOUT_MS = 5000
+const QUERY_TIMEOUT_MS = 8000
 
 let dbCircuitOpenUntil = 0
 
@@ -60,12 +61,21 @@ async function withTimeout<T>(promise: Promise<T>, ms = QUERY_TIMEOUT_MS): Promi
   ])
 }
 
-/** Execute a SELECT query and return typed rows. Returns [] if DB is unavailable. */
 export async function query<T = Record<string, unknown>>(
   sql: string,
   params?: (string | number | boolean | null)[]
 ): Promise<T[]> {
   if (!isDbConfigured() || isDbCircuitOpen()) return []
+
+  if (isBridgeConfigured()) {
+    try {
+      return await bridgeQuery<T>(sql, params)
+    } catch (error) {
+      openDbCircuit()
+      console.error('[DB bridge query]', error instanceof Error ? error.message : error)
+      return []
+    }
+  }
 
   try {
     const [rows] = await withTimeout(getPool().execute(sql, params ?? []))
@@ -77,13 +87,16 @@ export async function query<T = Record<string, unknown>>(
   }
 }
 
-/** Execute an INSERT/UPDATE/DELETE and return result metadata. */
 export async function execute(
   sql: string,
   params?: (string | number | boolean | null)[]
 ): Promise<mysql.ResultSetHeader> {
   if (!isDbConfigured()) {
     throw new Error('Database is not configured')
+  }
+
+  if (isBridgeConfigured()) {
+    return bridgeExecute(sql, params)
   }
 
   try {
@@ -95,7 +108,6 @@ export async function execute(
   }
 }
 
-/** Get a single row or null. */
 export async function queryOne<T = Record<string, unknown>>(
   sql: string,
   params?: (string | number | boolean | null)[]
@@ -104,10 +116,12 @@ export async function queryOne<T = Record<string, unknown>>(
   return rows[0] ?? null
 }
 
-/** Run multiple statements inside a transaction. */
 export async function withTransaction<T>(
   fn: (conn: mysql.PoolConnection) => Promise<T>
 ): Promise<T> {
+  if (isBridgeConfigured()) {
+    throw new Error('Transactions not supported via DB bridge')
+  }
   const conn = await getPool().getConnection()
   await conn.beginTransaction()
   try {

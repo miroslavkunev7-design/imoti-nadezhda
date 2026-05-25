@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server'
+import { isBridgeConfigured } from '@/lib/db-bridge'
 import { query, isDbConfigured } from '@/lib/db'
 import { getMediaBaseUrl } from '@/lib/upload-bridge'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
+  const bridgeConfigured = isBridgeConfigured()
   const dbConfigured = isDbConfigured()
   const mediaBase = getMediaBaseUrl()
 
@@ -30,27 +32,24 @@ export async function GET() {
       dbError = e instanceof Error ? e.message : 'DB connection failed'
     }
   } else {
-    dbError = 'Използва се локален JSON store (DB_HOST не е зададен)'
+    dbError = 'DB_BRIDGE_URL/DB_BRIDGE_KEY или DB_HOST не са зададени в Vercel'
   }
 
   return NextResponse.json({
-    success: true,
+    success: dbOk,
+    bridgeConfigured,
     dbConfigured,
     uploadConfigured: true,
     cloudinaryConfigured: true,
-    mediaBase: mediaBase || null,
+    mediaBase: mediaBase || 'https://res.cloudinary.com/djh3tkfuu',
     uploadUrl: 'https://api.cloudinary.com/v1_1/djh3tkfuu/image/upload',
     db: { ok: dbOk, propertyCount, totalPropertyCount, error: dbError },
-    upload: { ok: true, detail: 'Cloudinary unsigned (djh3tkfuu / ml_default)', error: null },
+    upload: { ok: true, detail: 'Cloudinary (djh3tkfuu / ml_default)', error: null },
     hints: [
-      !dbConfigured &&
-        'Няма DB_HOST — имотите се пазят в data/local-properties.json (работещ fallback).',
-      !mediaBase &&
-        'Добави NEXT_PUBLIC_SITE_URL за пълна URL резолюция на снимките.',
+      !bridgeConfigured && !process.env.DB_HOST &&
+        'Добави DB_BRIDGE_URL + DB_BRIDGE_KEY в Vercel (виж scripts/sync-vercel-env.ps1)',
       dbOk && totalPropertyCount === 0 &&
         'Базата е празна — добави първи имот от Admin → Имоти → Добави',
-      dbOk && totalPropertyCount > 0 && propertyCount === 0 &&
-        `Има ${totalPropertyCount} имота, но 0 активни — одобри pending обяви от Admin → Имоти`,
     ].filter(Boolean),
   })
 }
