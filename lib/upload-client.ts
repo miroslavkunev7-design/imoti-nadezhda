@@ -6,10 +6,7 @@
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/djh3tkfuu/image/upload'
 const UPLOAD_PRESET = 'ml_default'
 
-export async function uploadPropertyImage(
-  file: File | Blob,
-  fileName: string
-): Promise<string> {
+async function uploadToCloudinary(file: File | Blob, fileName: string): Promise<string> {
   const form = new FormData()
   form.append('file', file, fileName)
   form.append('upload_preset', UPLOAD_PRESET)
@@ -25,7 +22,14 @@ export async function uploadPropertyImage(
     throw new Error(json.error?.message ?? 'Cloudinary не върна URL')
   }
 
-  const secureUrl = json.secure_url
+  return json.secure_url
+}
+
+export async function uploadPropertyImage(
+  file: File | Blob,
+  fileName: string
+): Promise<string> {
+  const secureUrl = await uploadToCloudinary(file, fileName)
 
   try {
     await fetch('/api/admin/upload', {
@@ -33,9 +37,14 @@ export async function uploadPropertyImage(
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ url: secureUrl, fileName }),
     })
-  } catch {
-    /* DB save is best-effort — the URL is still valid */
-  }
+  } catch { /* DB save is best-effort */ }
 
   return secureUrl
+}
+
+export async function uploadAvatarImage(
+  file: File | Blob,
+  fileName: string
+): Promise<string> {
+  return uploadToCloudinary(file, fileName)
 }
