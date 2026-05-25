@@ -8,7 +8,7 @@ type Health = {
   bridgeConfigured: boolean
   uploadConfigured: boolean
   mediaBase: string | null
-  db: { ok: boolean; propertyCount: number; error: string | null }
+  db: { ok: boolean; propertyCount: number; totalPropertyCount?: number; error: string | null }
   upload: { ok: boolean; error: string | null }
   hints: string[]
 }
@@ -41,20 +41,29 @@ export default function ConnectionStatus() {
     )
   }
 
-  const allOk = health.db.ok && health.upload.ok
+  const linked = health.success
+  const hasListings = (health.db.totalPropertyCount ?? health.db.propertyCount) > 0
 
   return (
     <div
       className="mb-5 rounded-xl p-5"
       style={{
         ...cardStyle,
-        border: allOk ? '1px solid rgba(74,222,128,0.35)' : '1px solid rgba(248,113,113,0.45)',
+        border: linked
+          ? hasListings
+            ? '1px solid rgba(74,222,128,0.35)'
+            : '1px solid rgba(234,179,8,0.45)'
+          : '1px solid rgba(248,113,113,0.45)',
       }}
     >
       <div className="flex items-center gap-2 mb-4">
-        <span className={`w-2.5 h-2.5 rounded-full ${allOk ? 'bg-green-400' : 'bg-red-400'}`} />
+        <span className={`w-2.5 h-2.5 rounded-full ${linked ? (hasListings ? 'bg-green-400' : 'bg-yellow-400') : 'bg-red-400'}`} />
         <h2 className="font-display text-white font-semibold text-sm">
-          {allOk ? 'Базата и снимките са свързани' : 'Базата или снимките НЕ са свързани правилно'}
+          {linked
+            ? hasListings
+              ? 'Базата и снимките са свързани'
+              : 'Връзката работи — базата е празна'
+            : 'Базата или снимките НЕ са свързани правилно'}
         </h2>
       </div>
 
@@ -62,7 +71,11 @@ export default function ConnectionStatus() {
         <StatusRow
           label="MySQL (InfinityFree)"
           ok={health.db.ok}
-          detail={health.db.ok ? `${health.db.propertyCount} обяви в базата` : (health.db.error ?? 'Грешка')}
+          detail={
+            health.db.ok
+              ? `${health.db.propertyCount} активни / ${health.db.totalPropertyCount ?? health.db.propertyCount} общо`
+              : (health.db.error ?? 'Грешка')
+          }
         />
         <StatusRow
           label="Качване на снимки"
