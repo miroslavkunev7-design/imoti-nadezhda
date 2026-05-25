@@ -10,9 +10,17 @@ export async function GET() {
   const mediaBase = getMediaBaseUrl()
   const bridgeUrl = process.env.DB_BRIDGE_URL?.trim() ?? ''
 
-  // Cloudinary takes priority for uploads (browser-side, no server check needed)
-  const cloudName = (process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? '').trim()
-  const cloudPreset = (process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ?? '').trim()
+  // Cloudinary — check all naming variants
+  const cloudName = (
+    process.env.CLOUDINARY_CLOUD_NAME ??
+    process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ??
+    ''
+  ).trim()
+  const cloudPreset = (
+    process.env.CLOUDINARY_UPLOAD_PRESET ??
+    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ??
+    ''
+  ).trim()
   const cloudinaryConfigured = Boolean(cloudName && cloudPreset)
 
   let dbOk = false

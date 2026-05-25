@@ -1,18 +1,33 @@
 /**
- * Image upload — browser → Cloudinary (direct, no InfinityFree involved).
- * Falls back to /api/admin/upload for local dev without Cloudinary.
+ * Image upload:
+ *   Production → browser fetches config from /api/admin/upload-config at runtime
+ *                → if Cloudinary configured: browser → Cloudinary (direct, no InfinityFree)
+ *   Local dev    → fallback to /api/admin/upload (local filesystem)
  */
 
-function getCloudinaryConfig(): { cloudName: string; uploadPreset: string } | null {
-  const cloudName = (process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? '').trim()
-  const uploadPreset = (process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ?? '').trim()
-  if (!cloudName || !uploadPreset) return null
-  return { cloudName, uploadPreset }
+type UploadConfig =
+  | { provider: 'cloudinary'; cloudName: string; uploadPreset: string }
+  | { provider: 'bridge' }
+
+let _configCache: UploadConfig | null = null
+
+async function getUploadConfig(): Promise<UploadConfig> {
+  if (_configCache) return _configCache
+  try {
+    const res = await fetch('/api/admin/upload-config', { cache: 'no-store' })
+    const json = await res.json() as UploadConfig
+    _configCache = json
+    return json
+  } catch {
+    return { provider: 'bridge' }
+  }
 }
 
-async function uploadToCloudinary(file: File | Blob, fileName: string): Promise<string> {
-  const cfg = getCloudinaryConfig()!
-
+async function uploadToCloudinary(
+  cfg: { cloudName: string; uploadPreset: string },
+  file: File | Blob,
+  fileName: string
+): Promise<string> {
   const form = new FormData()
   form.append('file', file, fileName)
   form.append('upload_preset', cfg.uploadPreset)
@@ -30,18 +45,18 @@ async function uploadToCloudinary(file: File | Blob, fileName: string): Promise<
   return json.secure_url
 }
 
-/** Upload one image. Uses Cloudinary if configured, otherwise same-origin server fallback. */
+/** Upload one image. Auto-selects provider at runtime — no rebuild needed. */
 export async function uploadPropertyImage(
   file: File | Blob,
   fileName: string
 ): Promise<string> {
-  const cloudinary = getCloudinaryConfig()
+  const config = await getUploadConfig()
 
-  if (cloudinary) {
-    return uploadToCloudinary(file, fileName)
+  if (config.provider === 'cloudinary') {
+    return uploadToCloudinary(config, file, fileName)
   }
 
-  // Local dev fallback — server route writes to public/uploads
+  // Local dev fallback
   const form = new FormData()
   form.append('file', file, fileName)
   const res = await fetch('/api/admin/upload', { method: 'POST', body: form })
