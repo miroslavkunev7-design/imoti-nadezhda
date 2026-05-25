@@ -4,14 +4,22 @@ import { formatPrice } from '@/lib/utils'
 export const metadata: Metadata = { title: 'Табло' }
 export const dynamic = 'force-dynamic'
 
-// Auto-setup new DB tables and columns (safe to call multiple times — uses IF NOT EXISTS)
+// Auto-setup new DB tables and columns directly via bridge (safe — uses IF NOT EXISTS)
 async function runSetup() {
-  try {
-    const base = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : 'http://localhost:3000'
-    await fetch(`${base}/api/admin/setup`, { method: 'POST', cache: 'no-store' })
-  } catch { /* ignore */ }
+  const url = process.env.DB_BRIDGE_URL?.trim()
+  const key = process.env.DB_BRIDGE_KEY?.trim()
+  if (!url || !key) return
+  const post = (body: object) => fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ key, ...body }),
+    cache: 'no-store',
+  }).catch(() => {})
+  await Promise.allSettled([
+    post({ action: 'create_table', table: 'crm_messages' }),
+    post({ action: 'create_table', table: 'broker_restrictions' }),
+    post({ action: 'add_avatar_column' }),
+  ])
 }
 
 async function getStats() {

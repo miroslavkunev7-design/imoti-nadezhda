@@ -2,11 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 
 const ADMIN_COOKIE = 'admin_session'
 
-// Pages that can be restricted for brokers (matches /admin/<slug>)
-const BROKER_RESTRICTABLE = new Set([
-  'finance', 'marketing', 'contracts', 'settings', 'documents', 'brokers'
-])
-
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
@@ -19,8 +14,8 @@ export function middleware(req: NextRequest) {
       return NextResponse.redirect(loginUrl)
     }
 
-    let userId = ''
-    let role   = ''
+    let userId = '0'
+    let role   = 'broker'
     try {
       const decoded = Buffer.from(session, 'base64').toString('utf-8')
       const parts = decoded.split(':')
@@ -42,11 +37,11 @@ export function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL('/admin/login', req.url))
     }
 
-    // Pass user info to the app via headers (for server components)
-    const res = NextResponse.next()
-    res.headers.set('x-user-id', userId)
-    res.headers.set('x-user-role', role)
-    return res
+    // Forward user info on the REQUEST (readable by server components via headers())
+    const requestHeaders = new Headers(req.headers)
+    requestHeaders.set('x-user-id', userId)
+    requestHeaders.set('x-user-role', role)
+    return NextResponse.next({ request: { headers: requestHeaders } })
   }
 
   return NextResponse.next()

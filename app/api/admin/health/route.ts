@@ -11,17 +11,26 @@ export async function GET() {
   const bridgeUrl = process.env.DB_BRIDGE_URL?.trim() ?? ''
 
   // Cloudinary — check all naming variants
-  const cloudName = (
-    process.env.CLOUDINARY_CLOUD_NAME ??
-    process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ??
-    ''
-  ).trim()
-  const cloudPreset = (
-    process.env.CLOUDINARY_UPLOAD_PRESET ??
-    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ??
-    ''
-  ).trim()
+  const cloudName = [
+    process.env.CLOUDINARY_CLOUD_NAME,
+    process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+    process.env.CLOUDINARY_NAME,
+    process.env.CLOUD_NAME,
+  ].map(v => (v ?? '').trim()).find(Boolean) ?? ''
+
+  const cloudPreset = [
+    process.env.CLOUDINARY_UPLOAD_PRESET,
+    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
+    process.env.CLOUDINARY_PRESET,
+    process.env.UPLOAD_PRESET,
+  ].map(v => (v ?? '').trim()).find(Boolean) ?? ''
+
   const cloudinaryConfigured = Boolean(cloudName && cloudPreset)
+
+  // Which Cloudinary-related env vars ARE present (names only — for diagnostics)
+  const cloudEnvFound = Object.keys(process.env)
+    .filter(k => k.toLowerCase().includes('cloud') || k.toLowerCase().includes('preset'))
+    .sort()
 
   let dbOk = false
   let dbError: string | null = null
@@ -51,8 +60,11 @@ export async function GET() {
   const uploadOk = cloudinaryConfigured
   const uploadDetail = cloudinaryConfigured
     ? `Cloudinary (${cloudName})`
-    : 'Cloudinary не е конфигуриран'
-  const uploadError = cloudinaryConfigured ? null : 'Добави NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME и NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET в Vercel'
+    : `Не е конфигуриран. Намерени cloud vars: ${cloudEnvFound.join(', ') || 'няма'}`
+  const uploadError = cloudinaryConfigured ? null
+    : cloudEnvFound.length
+      ? `Намерени vars: ${cloudEnvFound.join(', ')} — добави CLOUDINARY_UPLOAD_PRESET`
+      : 'Добави CLOUDINARY_CLOUD_NAME и CLOUDINARY_UPLOAD_PRESET в Vercel'
 
   const linked = dbOk && uploadOk
 
@@ -65,11 +77,14 @@ export async function GET() {
     uploadUrl: cloudinaryConfigured ? `https://api.cloudinary.com/v1_1/${cloudName}/image/upload` : (bridgeUrl || null),
     db: { ok: dbOk, propertyCount, totalPropertyCount, error: dbError },
     upload: { ok: uploadOk, detail: uploadDetail, error: uploadError },
+    cloudEnvFound,
     hints: [
       !bridgeConfigured &&
         'Vercel → Settings → Environment Variables → DB_BRIDGE_URL + DB_BRIDGE_KEY',
       !cloudinaryConfigured &&
-        'Добави NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME и NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET в Vercel → Redeploy',
+        (cloudEnvFound.length
+          ? `Намерени: ${cloudEnvFound.join(', ')} — добави CLOUDINARY_UPLOAD_PRESET`
+          : 'Добави CLOUDINARY_CLOUD_NAME и CLOUDINARY_UPLOAD_PRESET в Vercel'),
       !mediaBase && !cloudinaryConfigured &&
         'Добави NEXT_PUBLIC_MEDIA_URL=https://imotinadezhda.infinityfree.me',
       linked && totalPropertyCount === 0 &&
