@@ -80,7 +80,7 @@ export default function ConnectionStatus() {
         <StatusRow
           label="Качване на снимки"
           ok={health.upload.ok}
-          detail={health.upload.ok ? 'upload.php работи' : (health.upload.error ?? 'Не е настроено')}
+          detail={health.upload.ok ? 'api.php upload работи' : (health.upload.error ?? 'Не е настроено')}
         />
         {health.mediaBase && (
           <StatusRow label="URL на снимки" ok={true} detail={health.mediaBase} />

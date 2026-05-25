@@ -1,19 +1,16 @@
 import { NextResponse } from 'next/server'
 import { isBridgeConfigured } from '@/lib/db-bridge'
 import { query } from '@/lib/db'
-import { getMediaBaseUrl, getUploadBridgeUrl, isRemoteUploadConfigured } from '@/lib/upload-bridge'
+import { getMediaBaseUrl, isRemoteUploadConfigured } from '@/lib/upload-bridge'
 
 export const dynamic = 'force-dynamic'
-
-function isUploadEndpointReachable(status: number): boolean {
-  return status === 401 || status === 400 || status === 405 || status === 200
-}
 
 export async function GET() {
   const bridgeConfigured = isBridgeConfigured()
   const uploadConfigured = isRemoteUploadConfigured()
   const mediaBase = getMediaBaseUrl()
-  const uploadUrl = getUploadBridgeUrl()
+  const bridgeUrl = process.env.DB_BRIDGE_URL?.trim() ?? ''
+  const bridgeKey = process.env.DB_BRIDGE_KEY?.trim() ?? ''
 
   let dbOk = false
   let dbError: string | null = null
@@ -43,18 +40,29 @@ export async function GET() {
   let uploadReachable = false
   let uploadError: string | null = null
 
-  if (uploadUrl) {
+  if (bridgeUrl && bridgeKey) {
     try {
-      const res = await fetch(uploadUrl, { method: 'GET', cache: 'no-store' })
-      uploadReachable = isUploadEndpointReachable(res.status)
+      const res = await fetch(bridgeUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          key: bridgeKey,
+          action: 'upload',
+          fileName: 'health.webp',
+          data: '',
+        }),
+        cache: 'no-store',
+      })
+      const json = (await res.json()) as { success?: boolean; error?: string }
+      uploadReachable = res.status === 400 && json.success === false
       if (!uploadReachable) {
-        uploadError = `upload.php отговори с ${res.status} (очаква се 401/400/405)`
+        uploadError = `api.php upload отговори с ${res.status}`
       }
     } catch (e) {
-      uploadError = e instanceof Error ? e.message : 'upload.php недостъпен'
+      uploadError = e instanceof Error ? e.message : 'api.php upload недостъпен'
     }
   } else {
-    uploadError = 'upload.php URL липсва (задай DB_BRIDGE_URL)'
+    uploadError = 'DB_BRIDGE_URL липсва (задай в Vercel)'
   }
 
   const linked = dbOk && uploadConfigured && uploadReachable
@@ -64,18 +72,18 @@ export async function GET() {
     bridgeConfigured,
     uploadConfigured,
     mediaBase: mediaBase || null,
-    uploadUrl: uploadUrl || null,
+    uploadUrl: bridgeUrl || null,
     db: { ok: dbOk, propertyCount, totalPropertyCount, error: dbError },
     upload: { ok: uploadReachable && uploadConfigured, error: uploadError },
     hints: [
       !bridgeConfigured &&
         'Vercel → Settings → Environment Variables → DB_BRIDGE_URL=https://imotinadezhda.infinityfree.me/db-bridge/api.php + DB_BRIDGE_KEY=imotinadejda2026',
-      !uploadConfigured && 'Качи upload.php + config.php в db-bridge/ на InfinityFree',
+      !uploadConfigured && 'Качи обновения api.php + config.php в db-bridge/ на InfinityFree',
       !mediaBase &&
         'Добави NEXT_PUBLIC_MEDIA_URL=https://imotinadezhda.infinityfree.me',
       bridgeConfigured &&
-        uploadUrl &&
-        !uploadUrl.includes('imotinadezhda.infinityfree.me') &&
+        bridgeUrl &&
+        !bridgeUrl.includes('imotinadezhda.infinityfree.me') &&
         'DB_BRIDGE_URL изглежда с грешен домейн — използвай imotinadezhda.infinityfree.me',
       linked &&
         totalPropertyCount === 0 &&

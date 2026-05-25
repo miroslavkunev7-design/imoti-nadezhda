@@ -38,9 +38,49 @@ export function getUploadBridgeKey(): string | null {
 }
 
 export function isRemoteUploadConfigured(): boolean {
-  return Boolean(getUploadBridgeUrl() && getUploadBridgeKey())
+  const dbBridge = (process.env.DB_BRIDGE_URL ?? '').trim()
+  return Boolean(dbBridge && getUploadBridgeKey())
 }
 
+export async function uploadImageViaApiBridge(
+  buffer: Buffer,
+  fileName: string
+): Promise<{ url: string; path: string }> {
+  const url = (process.env.DB_BRIDGE_URL ?? '').trim()
+  const key = getUploadBridgeKey()
+  if (!url || !key) throw new Error('Upload bridge not configured')
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      key,
+      action: 'upload',
+      fileName,
+      data: buffer.toString('base64'),
+    }),
+    cache: 'no-store',
+  })
+
+  const text = await res.text()
+  let json: { success: boolean; url?: string; path?: string; error?: string }
+  try {
+    json = JSON.parse(text) as typeof json
+  } catch {
+    const hint = text.trimStart().startsWith('<')
+      ? 'api.php връща HTML (bot protection или грешен URL). Провери DB_BRIDGE_URL.'
+      : 'api.php не връща JSON'
+    throw new Error(`${hint} (HTTP ${res.status})`)
+  }
+
+  if (!json.success || !json.url) {
+    throw new Error(json.error ?? 'Upload via api.php failed')
+  }
+
+  return { url: json.url, path: json.path ?? json.url }
+}
+
+/** @deprecated Prefer uploadImageViaApiBridge — upload.php often blocked by bot protection */
 export async function uploadToBridge(
   buffer: Buffer,
   fileName: string,

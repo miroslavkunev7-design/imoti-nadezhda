@@ -3,7 +3,7 @@ import { writeFile, mkdir } from 'fs/promises'
 import path from 'path'
 import sharp from 'sharp'
 import { execute } from '@/lib/db'
-import { isRemoteUploadConfigured, uploadToBridge } from '@/lib/upload-bridge'
+import { isRemoteUploadConfigured, uploadImageViaApiBridge } from '@/lib/upload-bridge'
 
 const MAX_SIZE = 8 * 1024 * 1024
 const ALLOWED = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
@@ -41,13 +41,13 @@ export async function POST(req: NextRequest) {
     const onVercel = Boolean(process.env.VERCEL)
 
     if (isRemoteUploadConfigured()) {
-      const uploaded = await uploadToBridge(webpBuffer, fileName, 'image/webp')
+      const uploaded = await uploadImageViaApiBridge(webpBuffer, fileName)
       publicUrl = uploaded.url
       publicPath = uploaded.path.startsWith('http') ? uploaded.path : uploaded.url
     } else if (onVercel) {
       return NextResponse.json({
         success: false,
-        error: 'Снимките не са настроени на Vercel. Добави DB_BRIDGE_URL + upload.php на InfinityFree, после Redeploy.',
+        error: 'Снимките не са настроени на Vercel. Добави DB_BRIDGE_URL + DB_BRIDGE_KEY, качи api.php на InfinityFree, после Redeploy.',
       }, { status: 503 })
     } else {
       const dir = path.join(process.cwd(), 'public', 'uploads', 'properties')
