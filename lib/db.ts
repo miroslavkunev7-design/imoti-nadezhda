@@ -1,5 +1,4 @@
 import mysql from 'mysql2/promise'
-import { bridgeExecute, bridgeQuery, isBridgeConfigured } from '@/lib/db-bridge'
 
 declare global {
   // eslint-disable-next-line no-var
@@ -11,7 +10,7 @@ function isDirectDbConfigured(): boolean {
 }
 
 export function isDbConfigured(): boolean {
-  return isBridgeConfigured() || isDirectDbConfigured()
+  return isDirectDbConfigured()
 }
 
 function createPool(): mysql.Pool {
@@ -26,7 +25,7 @@ function createPool(): mysql.Pool {
     queueLimit:         0,
     timezone:           '+00:00',
     charset:            'utf8mb4',
-    connectTimeout:  1200,
+    connectTimeout:  5000,
     idleTimeout:     60000,
   })
 }
@@ -40,7 +39,7 @@ function getPool(): mysql.Pool {
 
 export default getPool
 
-const QUERY_TIMEOUT_MS = 800
+const QUERY_TIMEOUT_MS = 5000
 
 let dbCircuitOpenUntil = 0
 
@@ -68,16 +67,6 @@ export async function query<T = Record<string, unknown>>(
 ): Promise<T[]> {
   if (!isDbConfigured() || isDbCircuitOpen()) return []
 
-  if (isBridgeConfigured()) {
-    try {
-      return await bridgeQuery<T>(sql, params)
-    } catch (error) {
-      openDbCircuit()
-      console.error('[DB bridge query]', error instanceof Error ? error.message : error)
-      return []
-    }
-  }
-
   try {
     const [rows] = await withTimeout(getPool().execute(sql, params ?? []))
     return rows as T[]
@@ -95,10 +84,6 @@ export async function execute(
 ): Promise<mysql.ResultSetHeader> {
   if (!isDbConfigured()) {
     throw new Error('Database is not configured')
-  }
-
-  if (isBridgeConfigured()) {
-    return bridgeExecute(sql, params)
   }
 
   try {
@@ -123,9 +108,6 @@ export async function queryOne<T = Record<string, unknown>>(
 export async function withTransaction<T>(
   fn: (conn: mysql.PoolConnection) => Promise<T>
 ): Promise<T> {
-  if (isBridgeConfigured()) {
-    throw new Error('Transactions not supported via DB bridge')
-  }
   const conn = await getPool().getConnection()
   await conn.beginTransaction()
   try {

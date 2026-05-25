@@ -1,7 +1,10 @@
 /**
- * Browser → /api/admin/upload (Vercel) → Cloudinary (server-side signed)
- * API secret never leaves the server.
+ * Browser → Cloudinary (unsigned upload with preset 'ml_default')
+ * After successful upload, saves the URL to the database via /api/admin/upload.
  */
+
+const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/djh3tkfuu/image/upload'
+const UPLOAD_PRESET = 'ml_default'
 
 export async function uploadPropertyImage(
   file: File | Blob,
@@ -9,18 +12,30 @@ export async function uploadPropertyImage(
 ): Promise<string> {
   const form = new FormData()
   form.append('file', file, fileName)
+  form.append('upload_preset', UPLOAD_PRESET)
 
-  const res = await fetch('/api/admin/upload', { method: 'POST', body: form })
+  const res = await fetch(CLOUDINARY_UPLOAD_URL, { method: 'POST', body: form })
 
-  let json: { success: boolean; url?: string; error?: string }
+  if (!res.ok) {
+    throw new Error(`Cloudinary грешка (HTTP ${res.status})`)
+  }
+
+  const json = await res.json() as { secure_url?: string; error?: { message?: string } }
+  if (!json.secure_url) {
+    throw new Error(json.error?.message ?? 'Cloudinary не върна URL')
+  }
+
+  const secureUrl = json.secure_url
+
   try {
-    json = await res.json() as typeof json
+    await fetch('/api/admin/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: secureUrl, fileName }),
+    })
   } catch {
-    throw new Error(`Невалиден отговор от сървъра (HTTP ${res.status})`)
+    /* DB save is best-effort — the URL is still valid */
   }
 
-  if (!json.success || !json.url) {
-    throw new Error(json.error ?? 'Грешка при качване')
-  }
-  return json.url
+  return secureUrl
 }

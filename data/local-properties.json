@@ -1,6 +1,65 @@
 [
   {
     "user_id": 1,
+    "title": "Тестов апартамент с Cloudinary снимки",
+    "slug": "тестов-апартамент-с-cloudinary-снимки",
+    "description": "Тест на новата система за качване",
+    "price": 85000,
+    "city": "Шумен",
+    "quarter": "Добруджански",
+    "city_slug": "shumen",
+    "quarter_slug": "dobrudzhanski",
+    "property_type": "Апартамент",
+    "status": "available",
+    "area": 75,
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "floor": null,
+    "total_floors": null,
+    "furnished": "no",
+    "main_image": "https://res.cloudinary.com/djh3tkfuu/image/upload/v1779687206/test-upload_lgnsrj.png",
+    "images": [
+      "https://res.cloudinary.com/djh3tkfuu/image/upload/v1779687206/test-upload_lgnsrj.png"
+    ],
+    "features": [
+      "terrace",
+      "garage"
+    ],
+    "id": 900004,
+    "views": 0,
+    "created_at": "2026-05-25T06:04:17.950Z",
+    "updated_at": "2026-05-25T06:04:17.950Z"
+  },
+  {
+    "user_id": 1,
+    "title": "ТТсТов имот Cloudinary",
+    "slug": "ттстов-имот-cloudinary",
+    "description": null,
+    "price": 50000,
+    "city": "Шумен",
+    "quarter": "Център",
+    "city_slug": "shumen",
+    "quarter_slug": "centar",
+    "property_type": "Апартамент",
+    "status": "available",
+    "area": 65,
+    "bedrooms": null,
+    "bathrooms": null,
+    "floor": null,
+    "total_floors": null,
+    "furnished": "no",
+    "main_image": "https://res.cloudinary.com/djh3tkfuu/image/upload/v1779688238/test-upload_kccrii.png",
+    "images": [
+      "https://res.cloudinary.com/djh3tkfuu/image/upload/v1779688238/test-upload_kccrii.png"
+    ],
+    "features": [],
+    "id": 900003,
+    "views": 0,
+    "created_at": "2026-05-25T05:50:39.294Z",
+    "updated_at": "2026-05-25T05:50:39.294Z"
+  },
+  {
+    "user_id": 1,
     "title": "2стаен",
     "slug": "2стаен",
     "description": "ЕКСКЛУЗИВНА ОФЕРТА! Двустаен апартамент – НОВО строителство, ТОП локация! 🔥\n📍 гр. Шумен, район Сити Център / кв. Добруджа\n💰 Цена: 135 000 €\n📐 Чиста площ: 55 кв.м | С общи части: ~65 кв.м\n🏢 Етаж: 2\nПредлагаме Ви изключително уютен и стилно обзаведен двустаен апартамент, разположен на втори етаж в модерна нова сграда в един от най-предпочитаните райони на града – в близост до центъра, магазини, училища, заведения и градски транспорт.\n🏡 Разпределение:\n •  Дневна с кухненски бокс и излаз на тераса\n • Спалня с тераса – светла и комфортна\n • Санитарен възел\n • Маза към имота\n✨ Предимства на имота:\n✔️ НОВО строителство\n✔️ Напълно обзаведен – готов за нанасяне или отдаване под наем\n✔️ Функционално разпределение\n✔️ Две тераси\n✔️ Тих и комуникативен район\n✔️ Отлична инвестиция\n🔑 Подходящ както за лично ползване, така и за инвестиция с висока възвръщаемост!\n📞 Не пропускайте тази възможност!",

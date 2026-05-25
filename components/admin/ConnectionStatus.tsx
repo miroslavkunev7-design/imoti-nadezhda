@@ -5,7 +5,7 @@ import { cardStyle } from '@/components/admin/AdminCard'
 
 type Health = {
   success: boolean
-  bridgeConfigured: boolean
+  dbConfigured: boolean
   uploadConfigured: boolean
   cloudinaryConfigured: boolean
   mediaBase: string | null
