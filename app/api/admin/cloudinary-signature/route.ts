@@ -16,10 +16,10 @@ export async function GET() {
   }
 
   const timestamp = Math.floor(Date.now() / 1000).toString()
-  const folder = 'imoti-nadezhda/properties'
 
-  // Signature = SHA1 of sorted params string + api_secret
-  const toSign = `folder=${folder}&timestamp=${timestamp}${apiSecret}`
+  // Signature = SHA1("timestamp=VALUE" + api_secret)
+  // Keeping params minimal to avoid encoding issues
+  const toSign = `timestamp=${timestamp}${apiSecret}`
   const signature = crypto.createHash('sha1').update(toSign).digest('hex')
 
   return NextResponse.json({
@@ -28,6 +28,5 @@ export async function GET() {
     apiKey,
     timestamp,
     signature,
-    folder,
   })
 }

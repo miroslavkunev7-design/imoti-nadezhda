@@ -29,7 +29,7 @@ async function signedCloudinaryUpload(file: File | Blob, fileName: string): Prom
   const sig = await sigRes.json() as {
     configured: boolean
     cloudName?: string; apiKey?: string
-    timestamp?: string; signature?: string; folder?: string
+    timestamp?: string; signature?: string
   }
 
   if (!sig.configured || !sig.cloudName) {
@@ -41,7 +41,6 @@ async function signedCloudinaryUpload(file: File | Blob, fileName: string): Prom
   form.append('api_key', sig.apiKey!)
   form.append('timestamp', sig.timestamp!)
   form.append('signature', sig.signature!)
-  form.append('folder', sig.folder!)
 
   const res = await fetch(
     `https://api.cloudinary.com/v1_1/${sig.cloudName}/image/upload`,
