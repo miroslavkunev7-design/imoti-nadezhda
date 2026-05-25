@@ -14,6 +14,12 @@ if (!file_exists($configFile)) {
 
 $config = require $configFile;
 
+if ($_SERVER['REQUEST_METHOD'] === 'GET' || $_SERVER['REQUEST_METHOD'] === 'HEAD') {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'error' => 'POST required with key and file']);
+    exit;
+}
+
 $key = $_POST['key'] ?? '';
 if (!hash_equals($config['api_key'], $key)) {
     http_response_code(401);
@@ -37,7 +43,7 @@ if ($file['size'] > $maxSize) {
 
 $finfo = new finfo(FILEINFO_MIME_TYPE);
 $mime = $finfo->file($file['tmp_name']);
-$allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+$allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/x-webp'];
 if (!in_array($mime, $allowed, true)) {
     http_response_code(400);
     echo json_encode(['success' => false, 'error' => 'Invalid image type']);
