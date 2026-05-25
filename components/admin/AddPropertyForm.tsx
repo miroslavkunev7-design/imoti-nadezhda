@@ -127,18 +127,24 @@ export default function AddPropertyForm({ cities, allQuarters }: Props) {
     )
   }
 
+  const MAX_IMAGES = 50
+
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? [])
     if (!files.length) return
 
-    const newImages: LocalImage[] = files.map(file => ({
-      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-      file,
-      preview: URL.createObjectURL(file),
-      uploading: false,
-    }))
-
-    setImages(prev => [...prev, ...newImages])
+    setImages(prev => {
+      const remaining = MAX_IMAGES - prev.length
+      if (remaining <= 0) return prev
+      const accepted = files.slice(0, remaining)
+      const newImages: LocalImage[] = accepted.map(file => ({
+        id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        file,
+        preview: URL.createObjectURL(file),
+        uploading: false,
+      }))
+      return [...prev, ...newImages]
+    })
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
@@ -504,7 +510,7 @@ export default function AddPropertyForm({ cities, allQuarters }: Props) {
               <polyline points="21 15 16 10 5 21"/>
             </svg>
             <span className="text-sm font-medium text-themed-primary">Качи снимки</span>
-            <span className="text-xs">JPG · PNG · WEBP · до 8 MB</span>
+            <span className="text-xs">Всички формати · до 50 снимки</span>
           </div>
         </button>
 
