@@ -1,12 +1,13 @@
 /**
- * Image upload:
- *   Production → browser fetches config from /api/admin/upload-config at runtime
- *                → if Cloudinary configured: browser → Cloudinary (direct, no InfinityFree)
- *   Local dev    → fallback to /api/admin/upload (local filesystem)
+ * Image upload strategy (in priority order):
+ *  1. Cloudinary signed upload  — uses CLOUDINARY_API_KEY + CLOUDINARY_API_SECRET (server-side)
+ *  2. Cloudinary unsigned upload — uses CLOUDINARY_UPLOAD_PRESET (if set)
+ *  3. Local server fallback      — /api/admin/upload (local dev only)
  */
 
 type UploadConfig =
   | { provider: 'cloudinary'; cloudName: string; uploadPreset: string }
+  | { provider: 'cloudinary-signed'; cloudName: string }
   | { provider: 'bridge' }
 
 let _configCache: UploadConfig | null = null
@@ -23,7 +24,37 @@ async function getUploadConfig(): Promise<UploadConfig> {
   }
 }
 
-async function uploadToCloudinary(
+async function signedCloudinaryUpload(file: File | Blob, fileName: string): Promise<string> {
+  const sigRes = await fetch('/api/admin/cloudinary-signature', { cache: 'no-store' })
+  const sig = await sigRes.json() as {
+    configured: boolean
+    cloudName?: string; apiKey?: string
+    timestamp?: string; signature?: string; folder?: string
+  }
+
+  if (!sig.configured || !sig.cloudName) {
+    throw new Error('Cloudinary не е конфигуриран на сървъра')
+  }
+
+  const form = new FormData()
+  form.append('file', file, fileName)
+  form.append('api_key', sig.apiKey!)
+  form.append('timestamp', sig.timestamp!)
+  form.append('signature', sig.signature!)
+  form.append('folder', sig.folder!)
+
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${sig.cloudName}/image/upload`,
+    { method: 'POST', body: form }
+  )
+  const json = await res.json() as { secure_url?: string; error?: { message?: string } }
+  if (!json.secure_url) {
+    throw new Error(json.error?.message ?? `Cloudinary грешка (HTTP ${res.status})`)
+  }
+  return json.secure_url
+}
+
+async function unsignedCloudinaryUpload(
   cfg: { cloudName: string; uploadPreset: string },
   file: File | Blob,
   fileName: string
@@ -37,7 +68,6 @@ async function uploadToCloudinary(
     `https://api.cloudinary.com/v1_1/${cfg.cloudName}/image/upload`,
     { method: 'POST', body: form }
   )
-
   const json = await res.json() as { secure_url?: string; error?: { message?: string } }
   if (!json.secure_url) {
     throw new Error(json.error?.message ?? `Cloudinary грешка (HTTP ${res.status})`)
@@ -45,7 +75,7 @@ async function uploadToCloudinary(
   return json.secure_url
 }
 
-/** Upload one image. Auto-selects provider at runtime — no rebuild needed. */
+/** Upload one image — auto-selects best available method. */
 export async function uploadPropertyImage(
   file: File | Blob,
   fileName: string
@@ -53,20 +83,20 @@ export async function uploadPropertyImage(
   const config = await getUploadConfig()
 
   if (config.provider === 'cloudinary') {
-    return uploadToCloudinary(config, file, fileName)
+    return unsignedCloudinaryUpload(config, file, fileName)
+  }
+
+  if (config.provider === 'cloudinary-signed') {
+    return signedCloudinaryUpload(file, fileName)
   }
 
   // Local dev fallback
   const form = new FormData()
   form.append('file', file, fileName)
   const res = await fetch('/api/admin/upload', { method: 'POST', body: form })
-
   let json: { success: boolean; url?: string; error?: string }
-  try {
-    json = await res.json() as typeof json
-  } catch {
-    throw new Error(`Невалиден отговор от сървъра (HTTP ${res.status})`)
-  }
+  try { json = await res.json() as typeof json }
+  catch { throw new Error(`Невалиден отговор (HTTP ${res.status})`) }
   if (!json.success || !json.url) throw new Error(json.error ?? 'Upload failed')
   return json.url
 }
