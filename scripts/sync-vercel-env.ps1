@@ -1,5 +1,5 @@
 # Sync production env vars to Vercel and deploy
-# Usage: powershell -ExecutionPolicy Bypass -File scripts/sync-vercel-env.ps1
+# Requires .env.vercel with POSTGRES_URL, SUPABASE keys, NEXTAUTH_SECRET, etc.
 
 $ErrorActionPreference = "Continue"
 $root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)

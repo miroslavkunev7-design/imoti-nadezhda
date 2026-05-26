@@ -39,7 +39,7 @@ export default function EditPropertyForm({ property }: { property: PropertyData 
     city_name: property.city,
     quarter_name: property.quarter,
     type: property.property_type,
-    status: property.status === 'available' ? 'active' : property.status,
+    status: property.status === 'available' ? 'active' : (property.status === 'active' ? 'active' : property.status),
     bedrooms: property.bedrooms ? String(property.bedrooms) : '',
     bathrooms: property.bathrooms ? String(property.bathrooms) : '',
   })

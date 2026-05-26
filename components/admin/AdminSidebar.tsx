@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { SidebarBadges } from '@/lib/queries/admin-sidebar'
 import { pathnameToPageSlug } from '@/lib/auth/pages'
 import type { SessionUser } from '@/lib/auth/session'
+import { useAdminAi } from '@/components/admin/AdminAiContext'
 
 const ip = { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: '1.8', strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
 const DashIcon   = () => <svg {...ip}><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -21,7 +22,8 @@ const MegaIcon   = () => <svg {...ip}><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
 const TaskIcon   = () => <svg {...ip}><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
 const FolderIcon = () => <svg {...ip}><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
 const GearIcon   = () => <svg {...ip}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-const UserIcon   = () => <svg {...ip}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+const AiIcon     = () => <svg {...ip}><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7v1a2 2 0 01-2 2h-1v1.27a2 2 0 11-4 0V17h-1a2 2 0 01-2-2v-1H8a7 7 0 017-7h1V5.73A2 2 0 0112 2z"/><path d="M9 21h6"/></svg>
+const MarketIcon = () => <svg {...ip}><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
 
 type NavKey = keyof SidebarBadges
 
@@ -34,6 +36,7 @@ const NAV: Array<{
 }> = [
   { href: '/admin',                  label: 'Дашборд',    icon: <DashIcon /> },
   { href: '/admin/properties',       label: 'Имоти',      icon: <HomeIcon />,     badgeKey: 'properties' },
+  { href: '/admin/marketplace',      label: 'Извлечени имоти', icon: <MarketIcon />, adminOnly: true, badgeKey: 'extractedLeads' },
   { href: '/admin/brokers',          label: 'Брокери',    icon: <BrokerIcon />,   badgeKey: 'brokers', adminOnly: true },
   { href: '/admin/clients',          label: 'Клиенти',    icon: <CrmIcon />,      badgeKey: 'clients' },
   { href: '/admin/inquiries',        label: 'Запитвания', icon: <MailIcon />,     badgeKey: 'inquiries' },
@@ -56,6 +59,7 @@ interface Props {
 export default function AdminSidebar({ badges, session, restrictedPages }: Props) {
   const pathname  = usePathname()
   const router    = useRouter()
+  const { open: aiOpen, setOpen: setAiOpen } = useAdminAi()
   const clickRef  = useRef(0)
   const timerRef  = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [systemOk, setSystemOk] = useState<boolean | null>(null)
@@ -171,10 +175,29 @@ export default function AdminSidebar({ badges, session, restrictedPages }: Props
       </nav>
 
       <div className="px-2 pb-3">
-        <div className="rounded-lg px-3 py-2 mb-1 flex items-center gap-2"
+        <button
+          type="button"
+          onClick={() => setAiOpen(!aiOpen)}
+          className={[
+            'w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg mb-2 text-[13px] font-semibold transition-all',
+            aiOpen
+              ? 'text-white'
+              : 'text-[rgba(255,255,255,0.55)] hover:text-white hover:bg-[rgba(196,30,58,0.08)]',
+          ].join(' ')}
+          style={aiOpen ? {
+            background: 'linear-gradient(135deg, rgba(196,30,58,0.45), rgba(100,10,25,0.5))',
+            border: '1px solid rgba(196,30,58,0.4)',
+          } : { border: '1px solid rgba(196,30,58,0.2)' }}
+        >
+          <span className={aiOpen ? 'text-white' : 'text-crimson-700'} style={{ flexShrink: 0 }}>
+            <AiIcon />
+          </span>
+          <span className="flex-1 text-left truncate">AI Асистент</span>
+        </button>
+        <div className="rounded-lg px-3 py-2 mb-1 flex items-center gap-2 admin-sidebar-status"
           style={{ background: 'rgba(196,30,58,0.08)', border: '1px solid rgba(196,30,58,0.15)' }}>
           <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 animate-pulse ${statusColor}`} />
-          <span className="text-[10px] text-white font-medium">{statusText}</span>
+          <span className="text-[10px] admin-sidebar-status-text font-medium">{statusText}</span>
         </div>
         <LogoutButton />
       </div>

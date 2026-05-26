@@ -1,11 +1,11 @@
-// Shared card style for admin pages
+// Shared card style for admin pages (background via .admin-card in globals.css)
 export const cardStyle = {
-  background: 'rgba(4,2,14,0.82)',
-  border: '1px solid rgba(196,30,58,0.28)',
   backdropFilter: 'blur(12px)',
   WebkitBackdropFilter: 'blur(12px)',
   borderRadius: 10,
 } as const
+
+export const adminCardClass = 'admin-card'
 
 export const tableHeaderStyle = {
   borderBottom: '1px solid rgba(196,30,58,0.20)',
@@ -44,7 +44,7 @@ export function StatusBadge({ status }: { status: string }) {
 export function PageHeader({ title, action }: { title: string; action?: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between mb-5">
-      <h1 className="font-display text-white text-xl font-bold">{title}</h1>
+      <h1 className="font-display admin-heading text-xl font-bold">{title}</h1>
       {action}
     </div>
   )

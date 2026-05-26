@@ -1,0 +1,58 @@
+{
+  "shumen": [
+    { "name": "Център", "image": "https://static.realistimo.com/images/335c655a9d65950f4814eac03a00f0fe510181ae.jpg" },
+    { "name": "Тракия", "image": "https://static.realistimo.com/images/f9bd77daf66d71442e63658f6eb8981280a880d5.jpg" },
+    { "name": "Добруджански", "image": "https://static.realistimo.com/images/f675b48e76678dd7ab05ed044984602a01c92c16.jpg" },
+    { "name": "Пазара", "image": "https://static.realistimo.com/images/38bd47b738f7da1f4e60835224bb6936cd36a787.jpg" },
+    { "name": "Болницата", "image": "https://static.realistimo.com/images/e3561a4f72403bab00a8716c55639c72a839430b.jpg" },
+    { "name": "Пети полк", "image": "https://static.realistimo.com/images/66a57705dcd8646d4df6f0a538b38518f7de8f64.jpg" },
+    { "name": "Военно училище", "image": "https://static.realistimo.com/images/7672107b7305b85f20775e42f9cc6399ca430043.jpg" },
+    { "name": "Боян Българанов 2", "image": "https://static.realistimo.com/images/c6542d83826b52da0770bf2f2670b0129c015a9a.jpg" },
+    { "name": "Дивдядово", "image": "https://static.realistimo.com/images/eaa714a5747e92443c4bcb755d8f310b11dcbd8d.jpg" },
+    { "name": "Боян Българанов 1", "image": "https://static.realistimo.com/images/2950e04c6887abcc57906a0bb90b2575c199f779.jpg" },
+    { "name": "Пожарната", "image": "https://static.realistimo.com/images/ebbd666d3413e3b574b9c3310ac84033c0c1c2f5.jpg" },
+    { "name": "Херсон", "image": "https://static.realistimo.com/images/f8f8082943620dfc4de22697b30650189d34410a.jpg" },
+    { "name": "Под манастира", "image": "https://static.realistimo.com/images/b370ca22a94d51f1869661a1134023bd08e98dbf.jpg" },
+    { "name": "Втори корпус", "image": "https://static.realistimo.com/images/8382a551296d688df967a8388c5108afe1d38abd.jpg" },
+    { "name": "Гривица", "image": "https://static.realistimo.com/images/472db01900ea378da775641fdbc78d76ee9e60dd.jpg" },
+    { "name": "Дивизионна болница", "image": "https://static.realistimo.com/images/cef9c2c802a394a6d364198662e8f7f9ae88fdee.jpg" },
+    { "name": "Математическата гимназия", "image": "https://static.realistimo.com/images/632dbe18f3f225cccfbb58dd8a5cc0391ff03b55.jpg" },
+    { "name": "Томбул Джамия", "image": "https://static.realistimo.com/images/14b4e40db8f15fd86909fc053e1ebdc066d5bff2.jpg" },
+    { "name": "Еверест", "image": "https://static.realistimo.com/images/b033b3f2028b1f4084a9607a2b0b6d5f152dfd00.jpg" }
+  ],
+  "varna": [
+    { "name": "Виница", "image": "https://static.realistimo.com/images/7ca962f3245bd0ee46c410692c205f317c2b12e7.jpg" },
+    { "name": "Владиславово", "image": "https://static.realistimo.com/images/3c7ad7cf52be149cdf4ce540d68e17475a704787.jpg" },
+    { "name": "Аспарухово", "image": "https://static.realistimo.com/images/42490332dc865189a052b9ea04b6d0f90fab27f9.jpg" },
+    { "name": "Кайсиева градина", "image": "https://static.realistimo.com/images/242f685bbfdefef7460953a7f56e600482c8555e.jpg" },
+    { "name": "Бриз", "image": "https://static.realistimo.com/images/9b0b57cc60519e5979aac1f7c70df9ef864df584.jpg" },
+    { "name": "Младост 1", "image": "https://static.realistimo.com/images/811b61d5d9ab349e29e65fe5f76129b24aa4eee3.jpg" },
+    { "name": "Ален мак", "image": "https://static.realistimo.com/images/af923f6695d06c7b02af66ed13751030f89e9075.jpg" },
+    { "name": "Левски", "image": "https://static.realistimo.com/images/da6702f70650f151f65283f7bf1d65239e128e60.jpg" },
+    { "name": "Център", "image": "https://static.realistimo.com/images/413ea3d0a8780c4f48054d1642652ad0ab8fe679.jpg" },
+    { "name": "Трошево", "image": "https://static.realistimo.com/images/5ecd1341782c2d34bfc43281173654a3cb620377.jpg" },
+    { "name": "Изгрев", "image": "https://static.realistimo.com/images/d2d80fba66ac754079736b45424ced9f9cae1feb.jpg" },
+    { "name": "Чайка", "image": "https://static.realistimo.com/images/d9ff587e4a2f61abc8dc3655a24b7d8e6af45a52.jpg" },
+    { "name": "Галата", "image": "https://static.realistimo.com/images/4405fe4b7d49151a5294d221e835b0675bfb064e.jpg" },
+    { "name": "Младост 2", "image": "https://static.realistimo.com/images/589548c167541d37e9fea75cafd9bd442dba1ae7.jpg" },
+    { "name": "Победа", "image": "https://static.realistimo.com/images/7589fed3ae1bfeb9a7fa778e5622df9556ba4f2b.jpg" },
+    { "name": "Слънчев ден", "image": "https://static.realistimo.com/images/fa1a0a24074a7304fafe555b8cca901e0e152131.jpg" },
+    { "name": "Пчелина", "image": "https://static.realistimo.com/images/2dfec251fc872d692bd895d88837d84989b833c6.jpg" },
+    { "name": "Лятно кино Тракия", "image": "https://static.realistimo.com/images/4e8e841ab0a8242d3e16a98661894afcb9a27ee5.jpg" }
+  ],
+  "burgas": [
+    { "name": "Меден Рудник", "image": "https://static.realistimo.com/images/40c80a8d28c243f790287aa3de978d8c93bbb34b.jpg" },
+    { "name": "Сарафово", "image": "https://static.realistimo.com/images/5b37f2a42ff1c02e542e754c9fdea246120af9cb.jpg" },
+    { "name": "Изгрев", "image": "https://static.realistimo.com/images/01d5ab364ac5be2db6dae7de4f15851c087848c9.jpg" },
+    { "name": "Славейков", "image": "https://static.realistimo.com/images/3c55eb7974396fe925c225dcca6de3e6b5b9b6d7.jpg" },
+    { "name": "Център", "image": "https://static.realistimo.com/images/d88537b07bcf61afd18cc996c94b867bb345d24f.jpg" },
+    { "name": "Братя Миладинови", "image": "https://static.realistimo.com/images/77adeb3736d2b414be19b4213f4489e0f7ca972c.jpg" },
+    { "name": "Възраждане", "image": "https://static.realistimo.com/images/8dff184dc0f255ff5e971ee4e9441aede1dae403.jpg" },
+    { "name": "Зорница", "image": "https://static.realistimo.com/images/beaa5f1778e2735560d38880bf0144dc53b967e9.jpg" },
+    { "name": "Лазур", "image": "https://static.realistimo.com/images/c68fd3282fa1f28342a2a0314be9ce6833fa4487.jpg" },
+    { "name": "Хоризонт", "image": "https://static.realistimo.com/images/53c7f8abc89aa2f12c2421ad9f896f28b7647393.jpg" },
+    { "name": "Крайморие", "image": "https://static.realistimo.com/images/e15a263bd038c0c5c6c29b1c03409bfeee2cedf5.jpg" }
+  ],
+  "novi-pazar": []
+}
+

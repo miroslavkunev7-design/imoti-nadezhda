@@ -1,47 +1,48 @@
-import mysql from 'mysql2/promise'
-import { bridgeExecute, bridgeQuery, isBridgeConfigured } from '@/lib/db-bridge'
+import postgres from 'postgres'
+
+export type ResultSetHeader = {
+  insertId: number
+  affectedRows: number
+}
 
 declare global {
   // eslint-disable-next-line no-var
-  var _mysqlPool: mysql.Pool | undefined
+  var _postgres: ReturnType<typeof postgres> | undefined
 }
 
-function isDirectDbConfigured(): boolean {
-  return Boolean(process.env.DB_HOST && process.env.DB_USER && process.env.DB_NAME)
+function getDatabaseUrl(): string | null {
+  const url =
+    process.env.DATABASE_URL?.trim() ||
+    process.env.POSTGRES_URL?.trim() ||
+    process.env.SUPABASE_DB_URL?.trim()
+  return url || null
 }
 
 export function isDbConfigured(): boolean {
-  return isBridgeConfigured() || isDirectDbConfigured()
+  return Boolean(getDatabaseUrl())
 }
 
-function createPool(): mysql.Pool {
-  return mysql.createPool({
-    host:            process.env.DB_HOST!,
-    port:            parseInt(process.env.DB_PORT || '3306'),
-    user:            process.env.DB_USER!,
-    password:        process.env.DB_PASSWORD!,
-    database:        process.env.DB_NAME!,
-    waitForConnections: true,
-    connectionLimit:    10,
-    queueLimit:         0,
-    timezone:           '+00:00',
-    charset:            'utf8mb4',
-    connectTimeout:  5000,
-    idleTimeout:     60000,
-  })
-}
-
-function getPool(): mysql.Pool {
-  if (!isDirectDbConfigured()) {
-    throw new Error('Database is not configured')
+function getSql(): ReturnType<typeof postgres> {
+  const url = getDatabaseUrl()
+  if (!url) throw new Error('Database is not configured')
+  if (!global._postgres) {
+    global._postgres = postgres(url, {
+      ssl: 'require',
+      max: 10,
+      idle_timeout: 60,
+      connect_timeout: 8,
+      prepare: false,
+    })
   }
-  return (global._mysqlPool ??= createPool())
+  return global._postgres
 }
 
-export default getPool
+function toPgSql(sql: string): string {
+  let i = 0
+  return sql.replace(/\?/g, () => `$${++i}`)
+}
 
 const QUERY_TIMEOUT_MS = 8000
-
 let dbCircuitOpenUntil = 0
 
 function isDbCircuitOpen(): boolean {
@@ -67,22 +68,13 @@ export async function query<T = Record<string, unknown>>(
 ): Promise<T[]> {
   if (!isDbConfigured() || isDbCircuitOpen()) return []
 
-  if (isBridgeConfigured()) {
-    try {
-      return await bridgeQuery<T>(sql, params)
-    } catch (error) {
-      openDbCircuit()
-      console.error('[DB bridge query]', error instanceof Error ? error.message : error)
-      return []
-    }
-  }
-
   try {
-    const [rows] = await withTimeout(getPool().execute(sql, params ?? []))
-    return rows as T[]
+    const pgSql = toPgSql(sql)
+    const rows = await withTimeout(getSql().unsafe(pgSql, params ?? []))
+    return rows as unknown as T[]
   } catch (error) {
     openDbCircuit()
-    console.error('[DB query]', (error as NodeJS.ErrnoException).message ?? error)
+    console.error('[DB query]', error instanceof Error ? error.message : error)
     return []
   }
 }
@@ -90,20 +82,33 @@ export async function query<T = Record<string, unknown>>(
 export async function execute(
   sql: string,
   params?: (string | number | boolean | null)[]
-): Promise<mysql.ResultSetHeader> {
+): Promise<ResultSetHeader> {
   if (!isDbConfigured()) {
     throw new Error('Database is not configured')
   }
 
-  if (isBridgeConfigured()) {
-    return bridgeExecute(sql, params)
-  }
+  const pgSql = toPgSql(sql)
+  const isInsert = /^\s*INSERT\s/i.test(sql)
 
   try {
-    const [result] = await withTimeout(getPool().execute(sql, params ?? []))
-    return result as mysql.ResultSetHeader
+    if (isInsert && !/\bRETURNING\b/i.test(pgSql)) {
+      const rows = await withTimeout(
+        getSql().unsafe(`${pgSql} RETURNING id`, params ?? [])
+      )
+      return {
+        insertId: Number(rows[0]?.id ?? 0),
+        affectedRows: rows.length,
+      }
+    }
+
+    const result = await withTimeout(getSql().unsafe(pgSql, params ?? []))
+    const count = (result as unknown as { count?: number }).count
+    return {
+      insertId: Number(result[0]?.id ?? 0),
+      affectedRows: count ?? result.length,
+    }
   } catch (error) {
-    console.error('[DB execute]', (error as NodeJS.ErrnoException).message ?? error)
+    console.error('[DB execute]', error instanceof Error ? error.message : error)
     throw error
   }
 }
@@ -116,22 +121,4 @@ export async function queryOne<T = Record<string, unknown>>(
   return rows[0] ?? null
 }
 
-export async function withTransaction<T>(
-  fn: (conn: mysql.PoolConnection) => Promise<T>
-): Promise<T> {
-  if (isBridgeConfigured()) {
-    throw new Error('Transactions not supported via DB bridge')
-  }
-  const conn = await getPool().getConnection()
-  await conn.beginTransaction()
-  try {
-    const result = await fn(conn)
-    await conn.commit()
-    return result
-  } catch (err) {
-    await conn.rollback()
-    throw err
-  } finally {
-    conn.release()
-  }
-}
+export default getSql

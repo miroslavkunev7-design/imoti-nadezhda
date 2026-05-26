@@ -16,7 +16,7 @@ export const FALLBACK_CITIES: City[] = [
     region: 'Североизток',
     sort_order: 1,
     property_count: 0,
-    quarter_count: 8,
+    quarter_count: 28,
   },
   {
     id: 2,
@@ -30,7 +30,7 @@ export const FALLBACK_CITIES: City[] = [
     region: 'Черноморие',
     sort_order: 2,
     property_count: 0,
-    quarter_count: 12,
+    quarter_count: 18,
   },
   {
     id: 3,
@@ -44,7 +44,7 @@ export const FALLBACK_CITIES: City[] = [
     region: 'Черноморие',
     sort_order: 3,
     property_count: 0,
-    quarter_count: 9,
+    quarter_count: 11,
   },
   {
     id: 4,

@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       await execute(
         `INSERT INTO uploads (user_id, file_name, file_path, file_type, file_size, module)
          VALUES (?, ?, ?, ?, ?, 'property')`,
-        [1, fileName || 'image.webp', url, 'image/webp', '0']
+        [1, fileName || 'image.webp', url, 'image/webp', 0]
       )
     } catch { /* uploads table optional */ }
 

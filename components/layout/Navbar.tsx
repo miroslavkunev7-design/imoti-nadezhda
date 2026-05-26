@@ -60,15 +60,15 @@ export default function Navbar({ cityName }: NavbarProps) {
           borderBottom: solid ? '1px solid rgba(196,30,58,0.15)' : 'none',
         }}
       >
-        <div className="max-w-[1280px] mx-auto px-5 h-full flex items-center gap-4">
+        <div className="max-w-[1280px] mx-auto px-5 h-full flex items-center gap-3 pt-1">
 
-          {/* Logo */}
-          <Logo size="lg" />
+          {/* Logo — по-голямо, по-високо, без дублиран черен надпис */}
+          <Logo size="lg" className="flex-shrink-0" />
 
           {/* City / page name — shown on interior pages (right of logo) */}
           {cityName && (
             <div
-              className="flex items-center gap-1.5 pl-3 ml-1"
+              className="flex items-center gap-1.5 pl-3 ml-0 self-center"
               style={{ borderLeft: '1px solid rgba(196,30,58,0.3)' }}
             >
               <svg className="text-crimson-700 flex-shrink-0" width="13" height="13" viewBox="0 0 24 24" fill="currentColor">

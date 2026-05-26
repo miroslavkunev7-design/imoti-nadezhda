@@ -1,0 +1,195 @@
+-- Imoti Nadezhda — PostgreSQL schema (migrated from MySQL/InfinityFree)
+-- Applied to Supabase project bxtxygakafwusstpptkg
+
+CREATE TABLE IF NOT EXISTS cities (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(128) NOT NULL,
+  slug VARCHAR(128) NOT NULL UNIQUE,
+  description TEXT,
+  image VARCHAR(512),
+  image_url VARCHAR(512),
+  population INTEGER,
+  area_km2 NUMERIC(10,2),
+  region VARCHAR(128),
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS quarters (
+  id SERIAL PRIMARY KEY,
+  city_id INTEGER NOT NULL REFERENCES cities(id) ON DELETE CASCADE,
+  name VARCHAR(128) NOT NULL,
+  slug VARCHAR(128) NOT NULL,
+  description TEXT,
+  image VARCHAR(512),
+  image_url VARCHAR(512),
+  population INTEGER,
+  area_km2 NUMERIC(10,2),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (city_id, slug)
+);
+
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL DEFAULT '',
+  role VARCHAR(32) NOT NULL DEFAULT 'broker',
+  phone VARCHAR(64),
+  status VARCHAR(32) NOT NULL DEFAULT 'active',
+  avatar_url VARCHAR(512),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS broker_restrictions (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  page_slug VARCHAR(64) NOT NULL,
+  UNIQUE (user_id, page_slug)
+);
+
+CREATE TABLE IF NOT EXISTS properties (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL DEFAULT 1 REFERENCES users(id),
+  title VARCHAR(512) NOT NULL,
+  slug VARCHAR(512),
+  description TEXT,
+  price NUMERIC(12,2) NOT NULL DEFAULT 0,
+  city VARCHAR(128) NOT NULL,
+  quarter VARCHAR(128) NOT NULL,
+  property_type VARCHAR(128) NOT NULL DEFAULT 'Апартамент',
+  status VARCHAR(32) NOT NULL DEFAULT 'available',
+  area NUMERIC(10,2),
+  bedrooms INTEGER,
+  bathrooms INTEGER,
+  floor INTEGER,
+  total_floors INTEGER,
+  furnished VARCHAR(8) DEFAULT 'no',
+  main_image VARCHAR(512),
+  views INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_properties_status ON properties(status);
+CREATE INDEX IF NOT EXISTS idx_properties_city ON properties(city);
+CREATE INDEX IF NOT EXISTS idx_properties_quarter ON properties(quarter);
+
+CREATE TABLE IF NOT EXISTS property_images (
+  id SERIAL PRIMARY KEY,
+  property_id INTEGER NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
+  image_path VARCHAR(512) NOT NULL,
+  sort_order INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS property_features (
+  id SERIAL PRIMARY KEY,
+  property_id INTEGER NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
+  feature_name VARCHAR(128) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS inquiries (
+  id SERIAL PRIMARY KEY,
+  property_id INTEGER REFERENCES properties(id) ON DELETE SET NULL,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255),
+  phone VARCHAR(64),
+  message TEXT,
+  status VARCHAR(32) NOT NULL DEFAULT 'new',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS crm_clients (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255),
+  phone VARCHAR(64),
+  status VARCHAR(32) NOT NULL DEFAULT 'active',
+  budget_min NUMERIC(12,2),
+  budget_max NUMERIC(12,2),
+  agent_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS crm_notes (
+  id SERIAL PRIMARY KEY,
+  client_id INTEGER NOT NULL REFERENCES crm_clients(id) ON DELETE CASCADE,
+  note TEXT NOT NULL,
+  created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS crm_tasks (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  due_date DATE,
+  priority VARCHAR(16) NOT NULL DEFAULT 'medium',
+  status VARCHAR(32) NOT NULL DEFAULT 'pending',
+  assigned_to INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  property_id INTEGER REFERENCES properties(id) ON DELETE SET NULL,
+  client_id INTEGER REFERENCES crm_clients(id) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS crm_messages (
+  id SERIAL PRIMARY KEY,
+  sender_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  message TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS appointments (
+  id SERIAL PRIMARY KEY,
+  appointment_date DATE NOT NULL,
+  appointment_time TIME DEFAULT '09:00:00',
+  client_id INTEGER REFERENCES crm_clients(id) ON DELETE SET NULL,
+  property_id INTEGER REFERENCES properties(id) ON DELETE SET NULL,
+  status VARCHAR(32) NOT NULL DEFAULT 'scheduled',
+  notes TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS uploads (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  file_name VARCHAR(255) NOT NULL,
+  file_path VARCHAR(512) NOT NULL,
+  file_type VARCHAR(64),
+  file_size INTEGER,
+  module VARCHAR(64),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS transactions (
+  id SERIAL PRIMARY KEY,
+  description VARCHAR(512),
+  type VARCHAR(32) NOT NULL DEFAULT 'income',
+  amount NUMERIC(12,2) NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS favorites (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER,
+  property_id INTEGER NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE cities ENABLE ROW LEVEL SECURITY;
+ALTER TABLE quarters ENABLE ROW LEVEL SECURITY;
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE broker_restrictions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE properties ENABLE ROW LEVEL SECURITY;
+ALTER TABLE property_images ENABLE ROW LEVEL SECURITY;
+ALTER TABLE property_features ENABLE ROW LEVEL SECURITY;
+ALTER TABLE inquiries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE crm_clients ENABLE ROW LEVEL SECURITY;
+ALTER TABLE crm_notes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE crm_tasks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE crm_messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE appointments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE uploads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE favorites ENABLE ROW LEVEL SECURITY;

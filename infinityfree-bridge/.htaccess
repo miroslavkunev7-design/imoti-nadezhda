@@ -1,4 +1,0 @@
-# Забрани директен достъп до config
-<Files "config.php">
-  Require all denied
-</Files>

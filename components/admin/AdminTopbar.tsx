@@ -91,7 +91,7 @@ export default function AdminTopbar() {
         <button
           onClick={toggleTheme}
           title={theme === 'dark' ? 'Светъл режим' : 'Тъмен режим'}
-          className="w-8 h-8 rounded-lg flex items-center justify-center transition-all text-[rgba(255,255,255,0.45)] hover:text-white"
+          className="w-8 h-8 rounded-lg flex items-center justify-center transition-all admin-theme-toggle"
           style={{ border: '1px solid rgba(255,255,255,0.08)' }}
         >
           {theme === 'dark' ? <SunIcon /> : <MoonIcon />}

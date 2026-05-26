@@ -1,7 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { execute, query, queryOne } from '@/lib/db'
-import { toHostPropertyStatus } from '@/lib/db/mappers'
+import { toHostPropertyStatus, mapPropertyStatus } from '@/lib/db/mappers'
+import { resolveMediaUrl } from '@/lib/upload-bridge'
 import { deleteLocalProperty } from '@/lib/local-store/properties'
+
+function numOrNull(v: unknown): number | null {
+  if (v === '' || v === null || v === undefined) return null
+  const n = Number(v)
+  return Number.isFinite(n) ? n : null
+}
+
+function numRequired(v: unknown): number {
+  const n = Number(v)
+  return Number.isFinite(n) ? n : 0
+}
 
 async function deleteRelatedPropertyRows(id: number): Promise<void> {
   const stmts = [
@@ -11,7 +23,7 @@ async function deleteRelatedPropertyRows(id: number): Promise<void> {
     `UPDATE crm_tasks SET property_id = NULL WHERE property_id = ?`,
   ]
   for (const sql of stmts) {
-    try { await execute(sql, [id]) } catch { /* optional tables/columns */ }
+    await execute(sql, [id])
   }
 }
 
@@ -33,17 +45,14 @@ export async function GET(
       return NextResponse.json({ success: false, error: 'Имотът не е намерен' }, { status: 404 })
     }
 
-    let images: string[] = []
-    try {
-      const imgRows = await query<{ image_path: string }>(
-        `SELECT image_path FROM property_images WHERE property_id = ? ORDER BY sort_order ASC`,
-        [id]
-      )
-      images = imgRows.map(r => r.image_path).filter(Boolean)
-    } catch { /* optional */ }
+    const imgRows = await query<{ image_path: string }>(
+      `SELECT image_path FROM property_images WHERE property_id = ? ORDER BY sort_order ASC`,
+      [id]
+    )
+    let images = imgRows.map(r => resolveMediaUrl(r.image_path) ?? r.image_path).filter(Boolean)
 
     if (!images.length && row.main_image) {
-      images = [String(row.main_image)]
+      images = [resolveMediaUrl(String(row.main_image)) ?? String(row.main_image)]
     }
 
     return NextResponse.json({
@@ -57,12 +66,12 @@ export async function GET(
         city: row.city,
         quarter: row.quarter,
         property_type: row.property_type,
-        status: row.status,
+        status: mapPropertyStatus(String(row.status ?? 'available')),
         bedrooms: row.bedrooms,
         bathrooms: row.bathrooms,
         floor: row.floor,
         total_floors: row.total_floors,
-        main_image: row.main_image,
+        main_image: resolveMediaUrl(row.main_image ? String(row.main_image) : null),
         images,
       },
     })
@@ -82,43 +91,64 @@ export async function PATCH(
     const fields: string[] = []
     const values: (string | number | null)[] = []
 
-    const allowed: Record<string, string> = {
-      title: 'title',
-      description: 'description',
-      price_eur: 'price',
-      area_sqm: 'area',
-      city_name: 'city',
-      quarter_name: 'quarter',
-      type: 'property_type',
-      bedrooms: 'bedrooms',
-      bathrooms: 'bathrooms',
-      floor: 'floor',
-      total_floors: 'total_floors',
+    if (body.title !== undefined) {
+      fields.push('title = ?')
+      values.push(String(body.title).trim())
     }
-
-    for (const [key, col] of Object.entries(allowed)) {
-      if (body[key] !== undefined) {
-        fields.push(`${col} = ?`)
-        values.push(body[key] === '' ? null : body[key])
-      }
+    if (body.description !== undefined) {
+      fields.push('description = ?')
+      values.push(body.description ? String(body.description) : null)
     }
-
+    if (body.price_eur !== undefined) {
+      fields.push('price = ?')
+      values.push(numRequired(body.price_eur))
+    }
+    if (body.area_sqm !== undefined) {
+      fields.push('area = ?')
+      values.push(numRequired(body.area_sqm))
+    }
+    if (body.city_name !== undefined) {
+      fields.push('city = ?')
+      values.push(String(body.city_name).trim())
+    }
+    if (body.quarter_name !== undefined) {
+      fields.push('quarter = ?')
+      values.push(String(body.quarter_name).trim())
+    }
+    if (body.type !== undefined) {
+      fields.push('property_type = ?')
+      values.push(String(body.type).trim())
+    }
+    if (body.bedrooms !== undefined) {
+      fields.push('bedrooms = ?')
+      values.push(numOrNull(body.bedrooms))
+    }
+    if (body.bathrooms !== undefined) {
+      fields.push('bathrooms = ?')
+      values.push(numOrNull(body.bathrooms))
+    }
+    if (body.floor !== undefined) {
+      fields.push('floor = ?')
+      values.push(numOrNull(body.floor))
+    }
+    if (body.total_floors !== undefined) {
+      fields.push('total_floors = ?')
+      values.push(numOrNull(body.total_floors))
+    }
     if (body.status !== undefined) {
       fields.push('status = ?')
-      values.push(toHostPropertyStatus(body.status))
+      values.push(toHostPropertyStatus(String(body.status)))
     }
 
     if (Array.isArray(body.images)) {
-      const imgs = body.images.filter(Boolean).slice(0, 50)
-      try {
-        await execute(`DELETE FROM property_images WHERE property_id = ?`, [id])
-        for (let i = 0; i < imgs.length; i++) {
-          await execute(
-            `INSERT INTO property_images (property_id, image_path, sort_order) VALUES (?, ?, ?)`,
-            [id, imgs[i], i]
-          )
-        }
-      } catch { /* optional table */ }
+      const imgs = body.images.filter(Boolean).slice(0, 50) as string[]
+      await execute(`DELETE FROM property_images WHERE property_id = ?`, [id])
+      for (let i = 0; i < imgs.length; i++) {
+        await execute(
+          `INSERT INTO property_images (property_id, image_path, sort_order) VALUES (?, ?, ?)`,
+          [id, imgs[i], i]
+        )
+      }
       fields.push('main_image = ?')
       values.push(imgs[0] ?? null)
     }
@@ -127,6 +157,7 @@ export async function PATCH(
       return NextResponse.json({ success: false, error: 'Няма полета за обновяване' }, { status: 400 })
     }
 
+    fields.push('updated_at = NOW()')
     values.push(id)
     await execute(`UPDATE properties SET ${fields.join(', ')} WHERE id = ?`, values)
 
@@ -151,12 +182,7 @@ export async function DELETE(
     }
 
     await deleteRelatedPropertyRows(id)
-
-    try {
-      await execute(`DELETE FROM properties WHERE id = ?`, [id])
-    } catch {
-      await execute(`UPDATE properties SET status = 'draft' WHERE id = ?`, [id])
-    }
+    await execute(`DELETE FROM properties WHERE id = ?`, [id])
 
     return NextResponse.json({ success: true })
   } catch (error) {

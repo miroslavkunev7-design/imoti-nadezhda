@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import AdminSidebar from '@/components/admin/AdminSidebar'
-import AdminTopbar from '@/components/admin/AdminTopbar'
+import AdminDashboardShell from '@/components/admin/AdminDashboardShell'
 import { getSidebarBadges } from '@/lib/queries/admin-sidebar'
 import { isPathRestricted } from '@/lib/auth/pages'
 import { getBrokerRestrictions, getSession } from '@/lib/auth/session'
@@ -37,15 +36,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       />
       <div className="fixed inset-0 -z-10 admin-bg-overlay" style={{ background: 'rgba(6,4,14,0.88)' }} />
 
-      <AdminTopbar />
-      <AdminSidebar badges={badges} session={session} restrictedPages={restrictedPages} />
-
-      <main
-        className="min-h-screen overflow-y-auto admin-scroll-main"
-        style={{ marginLeft: 200, paddingTop: 56, paddingBottom: 80 }}
+      <AdminDashboardShell
+        badges={badges}
+        session={session}
+        restrictedPages={restrictedPages}
       >
-        <div className="p-7">{children}</div>
-      </main>
+        {children}
+      </AdminDashboardShell>
     </div>
   )
 }

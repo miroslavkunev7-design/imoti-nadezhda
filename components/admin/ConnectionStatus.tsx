@@ -70,7 +70,7 @@ export default function ConnectionStatus() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm mb-3">
         <StatusRow
-          label="MySQL (InfinityFree)"
+          label="Supabase (PostgreSQL)"
           ok={health.db.ok}
           detail={
             health.db.ok

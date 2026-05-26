@@ -5,20 +5,81 @@ import { mapClientStatus } from '@/lib/db/mappers'
 export const metadata: Metadata = { title: 'Клиенти' }
 export const dynamic = 'force-dynamic'
 
-async function getClients() {
-  try {
-    const { query } = await import('@/lib/db')
-    const rows = await query<{
-      id: number; name: string; email: string; phone: string
-      status: string; budget_min: number; budget_max: number; created_at: string
-    }>(`SELECT * FROM crm_clients ORDER BY created_at DESC`)
+type ClientRow = {
+  id: number
+  name: string
+  email: string
+  phone: string
+  status: string
+  budget_min: number
+  budget_max: number
+  created_at: string
+  source: string
+}
 
-    return rows.map(c => ({
-      ...c,
-      source: 'website',
-      status: mapClientStatus(c.status),
-    }))
-  } catch { return [] }
+function mapRow(c: {
+  id: number
+  name: string
+  email: string
+  phone: string | null
+  status: string
+  budget_min: number | null
+  budget_max: number | null
+  created_at: string
+  source?: string | null
+}): ClientRow {
+  return {
+    id: c.id,
+    name: c.name,
+    email: c.email ?? '',
+    phone: c.phone ?? '',
+    source: c.source ?? 'website',
+    status: mapClientStatus(c.status),
+    budget_min: Number(c.budget_min) || 0,
+    budget_max: Number(c.budget_max) || 0,
+    created_at: c.created_at,
+  }
+}
+
+async function getClients(): Promise<ClientRow[]> {
+  const { query, isDbConfigured } = await import('@/lib/db')
+  const { listLocalClients } = await import('@/lib/local-store/clients')
+
+  const byId = new Map<number, ClientRow>()
+
+  if (isDbConfigured()) {
+    try {
+      const rows = await query<{
+        id: number
+        name: string
+        email: string
+        phone: string
+        status: string
+        budget_min: number
+        budget_max: number
+        created_at: string
+        source: string | null
+      }>(`SELECT id, name, email, phone, status, budget_min, budget_max, created_at, source
+          FROM crm_clients ORDER BY created_at DESC`)
+
+      for (const row of rows) {
+        byId.set(row.id, mapRow(row))
+      }
+    } catch {
+      /* merge local below */
+    }
+  }
+
+  const local = await listLocalClients()
+  for (const c of local) {
+    if (!byId.has(c.id)) {
+      byId.set(c.id, mapRow({ ...c, phone: c.phone, source: c.source }))
+    }
+  }
+
+  return [...byId.values()].sort(
+    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  )
 }
 
 export default async function CrmClientsPage() {

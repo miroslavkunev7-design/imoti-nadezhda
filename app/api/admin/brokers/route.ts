@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('[POST /api/admin/brokers]', error)
     const msg = error instanceof Error ? error.message : ''
-    if (msg.toLowerCase().includes('duplicate') || msg.includes('1062')) {
+    if (msg.toLowerCase().includes('duplicate') || msg.includes('23505')) {
       return NextResponse.json({ success: false, error: 'Имейлът вече съществува' }, { status: 409 })
     }
     return NextResponse.json({ success: false, error: 'Грешка при запазване на брокер' }, { status: 500 })

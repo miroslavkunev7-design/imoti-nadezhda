@@ -16,7 +16,7 @@ async function getTasks() {
         '' AS client_name
       FROM crm_tasks t
       LEFT JOIN users u ON u.id = t.assigned_to
-      ORDER BY FIELD(t.priority,'high','medium','low'), t.due_date ASC`)
+      ORDER BY CASE t.priority WHEN 'high' THEN 1 WHEN 'medium' THEN 2 WHEN 'low' THEN 3 ELSE 4 END, t.due_date ASC`)
   } catch { return [] }
 }
 

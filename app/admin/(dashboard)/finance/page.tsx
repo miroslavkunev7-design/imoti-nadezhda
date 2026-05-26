@@ -11,11 +11,11 @@ async function getData() {
       query<{ id: number; description: string; type: string; amount: number; created_at: string }>(`
         SELECT * FROM transactions ORDER BY created_at DESC LIMIT 20`),
       query<{ month: string; income: number; expense: number }>(`
-        SELECT DATE_FORMAT(created_at,'%Y-%m') as month,
+        SELECT TO_CHAR(created_at, 'YYYY-MM') as month,
           SUM(CASE WHEN type='income' THEN amount ELSE 0 END) as income,
           SUM(CASE WHEN type='expense' THEN amount ELSE 0 END) as expense
         FROM transactions
-        GROUP BY month ORDER BY month DESC LIMIT 6`),
+        GROUP BY 1 ORDER BY month DESC LIMIT 6`),
     ])
     return { transactions, monthly: monthly.reverse() }
   } catch { return { transactions: [], monthly: [] } }

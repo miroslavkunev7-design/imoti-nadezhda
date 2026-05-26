@@ -11,5 +11,5 @@ echo.
 echo 2) Deploy (трябва Vercel акаунт — отвори браузъра):
 call npx vercel deploy --prod
 echo.
-echo Готово! Не забравяй Environment Variables в Vercel Dashboard.
+echo Готово! Провери Environment Variables в Vercel (POSTGRES_URL + Supabase keys).
 pause

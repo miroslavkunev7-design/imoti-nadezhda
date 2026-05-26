@@ -29,8 +29,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Попълни всички полета' }, { status: 400 })
     }
 
-    const MASTER_EMAIL    = process.env.ADMIN_EMAIL    ?? 'admin@imotinadejda.bg'
-    const MASTER_PASSWORD = process.env.ADMIN_PASSWORD ?? 'nadejda2024'
+    const MASTER_EMAIL    = process.env.ADMIN_EMAIL    ?? 'agenciq_nadejdi@abv.bg'
+    const MASTER_PASSWORD = process.env.ADMIN_PASSWORD ?? 'nadia740608!'
 
     if (email === MASTER_EMAIL && password === MASTER_PASSWORD) {
       const token = createSessionToken(1, 'admin')

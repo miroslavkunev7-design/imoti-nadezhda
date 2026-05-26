@@ -27,13 +27,12 @@ Open [http://localhost:3000](http://localhost:3000)
 - **TypeScript**
 - **Tailwind CSS** — luxury dark crimson design tokens
 - **Framer Motion** — cinematic animations
-- **mysql2** — direct MySQL connection to InfinityFree
+- **postgres** + **Supabase** — PostgreSQL on Supabase (via `POSTGRES_URL`)
 - **NextAuth.js** — authentication
 
 ## Database
-MySQL hosted on InfinityFree (`sql100.infinityfree.com`).  
-15 tables: cities, quarters, properties, property_images, property_features,  
-users, favorites, inquiries, appointments, crm_clients, crm_notes, crm_tasks,  
+PostgreSQL on Supabase. Tables: cities, quarters, properties, property_images, property_features,
+users, favorites, inquiries, appointments, crm_clients, crm_notes, crm_tasks,
 activity_logs, settings, uploads.
 
 ## Project Structure
@@ -52,7 +51,7 @@ components/
   cards/              CityCard, NeighborhoodCard, PropertyCard
   search/             SearchWidget and filter components
 lib/
-  db.ts               MySQL pool + typed query helpers
+  db.ts               Postgres pool + typed query helpers (Supabase)
   queries/            Server-side data access functions
   utils.ts            Formatting, slugs, constants
 types/

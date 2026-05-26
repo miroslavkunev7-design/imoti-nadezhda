@@ -639,18 +639,119 @@ html.light .city-bg-overlay { opacity: 0.18; }
   }
 }
 
-/* ── Admin CRM light mode ─────────────────────────────────────── */
-html.light .admin-sidebar {
-  background: rgba(255, 251, 245, 0.96) !important;
-  border-right-color: rgba(196, 30, 58, 0.18) !important;
+/* ── Admin CRM ────────────────────────────────────────────────── */
+.admin-card {
+  background: rgba(4, 2, 14, 0.82);
+  border: 1px solid rgba(196, 30, 58, 0.28);
 }
-html.light .admin-sidebar .text-white { color: var(--text-primary) !important; }
+.admin-heading {
+  color: #ffffff;
+}
+.admin-text {
+  color: rgba(255, 255, 255, 0.92);
+}
+.admin-text-muted {
+  color: rgba(255, 255, 255, 0.5);
+}
+.admin-text-faint {
+  color: rgba(255, 255, 255, 0.4);
+}
+.admin-table-head {
+  color: rgba(255, 255, 255, 0.4);
+}
+.admin-table-cell {
+  color: rgba(255, 255, 255, 0.65);
+}
+.admin-kanban-bg {
+  background: rgba(4, 2, 14, 0.7);
+}
+.admin-kanban-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(196, 30, 58, 0.12);
+}
+.admin-modal-panel {
+  background: rgba(8, 6, 18, 0.98);
+  border: 1.5px solid rgba(196, 30, 58, 0.4);
+}
+.admin-modal-backdrop {
+  background: rgba(4, 2, 12, 0.78);
+}
+
+/* Admin CRM light mode */
+html.light .admin-sidebar {
+  background: rgba(255, 251, 245, 0.98) !important;
+  border-right-color: rgba(196, 30, 58, 0.22) !important;
+}
+html.light .admin-sidebar .text-white,
+html.light .admin-sidebar .admin-sidebar-status-text {
+  color: var(--text-primary) !important;
+}
+html.light .admin-sidebar [class*='text-[rgba(255,255,255'] {
+  color: var(--text-secondary) !important;
+}
 html.light .admin-topbar {
-  background: rgba(255, 251, 245, 0.88) !important;
-  border-bottom-color: rgba(196, 30, 58, 0.15) !important;
+  background: rgba(255, 251, 245, 0.95) !important;
+  border-bottom-color: rgba(196, 30, 58, 0.18) !important;
+}
+html.light .admin-topbar button {
+  color: var(--text-secondary) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+html.light .admin-topbar button:hover {
+  color: var(--text-primary) !important;
+}
+html.light .admin-topbar .admin-theme-toggle {
+  color: var(--text-secondary) !important;
+}
+html.light .admin-topbar .admin-theme-toggle:hover {
+  color: var(--text-primary) !important;
 }
 html.light .admin-bg-overlay {
-  background: rgba(245, 240, 232, 0.90) !important;
+  background: rgba(245, 240, 232, 0.92) !important;
+}
+html.light .admin-panel .admin-card {
+  background: rgba(255, 255, 255, 0.97) !important;
+  border-color: rgba(196, 30, 58, 0.22) !important;
+}
+html.light .admin-panel .admin-heading {
+  color: var(--text-primary) !important;
+}
+html.light .admin-panel .admin-text {
+  color: var(--text-primary) !important;
+}
+html.light .admin-panel .admin-text-muted {
+  color: var(--text-secondary) !important;
+}
+html.light .admin-panel .admin-text-faint,
+html.light .admin-panel .admin-table-head {
+  color: var(--text-muted) !important;
+}
+html.light .admin-panel .admin-table-cell {
+  color: var(--text-secondary) !important;
+}
+html.light .admin-panel .admin-kanban-bg {
+  background: rgba(255, 255, 255, 0.85) !important;
+}
+html.light .admin-panel .admin-kanban-card {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(196, 30, 58, 0.15) !important;
+}
+html.light .admin-panel .admin-modal-panel {
+  background: #ffffff !important;
+  border-color: rgba(196, 30, 58, 0.35) !important;
+}
+html.light .admin-panel .admin-modal-backdrop {
+  background: rgba(30, 20, 30, 0.35) !important;
+}
+html.light .admin-panel .text-white {
+  color: var(--text-primary) !important;
+}
+html.light .admin-panel [class*='text-[rgba(255,255,255'] {
+  color: var(--text-secondary) !important;
+}
+html.light .admin-panel select {
+  color: var(--text-secondary) !important;
+  border-color: rgba(196, 30, 58, 0.25) !important;
 }
 html.light .property-card-surface {
   background: rgba(255, 255, 255, 0.88) !important;
