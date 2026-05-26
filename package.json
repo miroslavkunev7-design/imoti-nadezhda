@@ -6,7 +6,8 @@
     "dev":   "next dev",
     "build": "next build",
     "start": "next start",
-    "lint":  "next lint"
+    "lint":  "next lint",
+    "sync:quarters": "node scripts/strip-realistimo-branding.mjs && node scripts/generate-quarter-images-ts.mjs"
   },
   "dependencies": {
     "next":              "14.2.29",

@@ -1,0 +1,41 @@
+{
+  "shumen": {
+    "center": { "name": "Център", "image": "https://static.realistimo.com/images/492b61205a9f7342e436a7e5a9b2dfcb245cf61b.jpeg" },
+    "trakiya": { "name": "Тракия", "image": "https://static.realistimo.com/images/9b2a6003e30f2ac989e60f020ea16c36a31f7660.jpeg" },
+    "dobrudzhanski": { "name": "Добруджански", "image": "https://static.realistimo.com/images/232140c9d24f3e4f7fe7711c61ba4e7709f6dd9c.jpeg" },
+    "pazara": { "name": "Пазара", "image": "https://static.realistimo.com/images/f7f2fe17ce7baeb9d5c15d9da7beff5efb5441ef.jpeg" },
+    "bolnitsata": { "name": "Болницата", "image": "https://static.realistimo.com/images/6985d8452e277574d1bf4df97223938423e5c656.jpeg" },
+    "peti-polk": { "name": "Пети полк", "image": "https://static.realistimo.com/images/3f94b1ca5504a26e7ccf7c7f54eca57c7bd60639.jpeg" },
+    "voenno-uchilishte": { "name": "Военно училище", "image": "https://static.realistimo.com/images/03fbe3e4c1b30b62cde9dd62cfbbde11fdada52d.jpeg" },
+    "boyan-balgaranov-2": { "name": "Боян Българанов 2", "image": "https://static.realistimo.com/images/7f47ff1f1b2aa7d2f29d3ad5f674295306e14e6d.jpeg" },
+    "divdiadovo": { "name": "Дивдядово", "image": "https://static.realistimo.com/images/9800a9b4b943ee9b1f065a039f3bfc618b6c5ca8.jpeg" },
+    "boyan-balgaranov-1": { "name": "Боян Българанов 1", "image": "https://static.realistimo.com/images/42e33ee07bf0b00f0a9e6d46accfd2513611b1b4.jpeg" },
+    "pozharnata": { "name": "Пожарната", "image": "https://static.realistimo.com/images/3ab4a942649c4f9297bb97016f3003f2671ae833.jpeg" },
+    "herson": { "name": "Херсон", "image": "https://static.realistimo.com/images/2846be086854a36eda83af406eb44309e3519ed1.jpg" }
+  },
+  "varna": {
+    "vinica": { "name": "Виница", "image": "https://static.realistimo.com/images/b54b56b404a9dfe39397b66d6dae6e6e5d3ecc09.jpeg" },
+    "vladislavovo": { "name": "Владиславово", "image": "https://static.realistimo.com/images/9c26e24f8dac37b47cfcf76ef076abb139b0d0c3.jpeg" },
+    "asparuhovo": { "name": "Аспарухово", "image": "https://static.realistimo.com/images/e9972e734fecc5773d75a70a3d8e875341de7e09.jpeg" },
+    "kaysiyeva-gradina": { "name": "Кайсиева градина", "image": "https://static.realistimo.com/images/310242278f71083766756b6a8d80d90cfe01a20d.jpeg" },
+    "briz": { "name": "Бриз", "image": "https://static.realistimo.com/images/cb19798ff9d5efb00d5f9029b832ea363dbda160.jpeg" },
+    "mladost-1": { "name": "Младост 1", "image": "https://static.realistimo.com/images/ed75f1648c51228a11d23024067edc8c30841d3b.jpeg" },
+    "alen-mak": { "name": "Ален мак", "image": "https://static.realistimo.com/images/c38d6a3c10e69d3031110f1f3df9fa4b1801a80f.jpeg" },
+    "levski-1": { "name": "Левски", "image": "https://static.realistimo.com/images/df13644de2161a04aee438c5d03d082b52a9af81.jpeg" },
+    "center": { "name": "Център", "image": "https://static.realistimo.com/images/debe77bae40e074e7bdee896ccc9e62785e1cf25.jpeg" },
+    "troshevo": { "name": "Трошево", "image": "https://static.realistimo.com/images/99c3536cb25cd2a2d79b84b189346c1c851ba803.jpeg" }
+  },
+  "burgas": {
+    "meden-rudnik": { "name": "Меден Рудник", "image": "https://static.realistimo.com/images/ecdaba213b9ad2d120d136517f75e94daecc353d.jpeg" },
+    "sarafovo": { "name": "Сарафово", "image": "https://static.realistimo.com/images/46eaae7fde7cfdcbe54f94d6e463f9adb28ac415.jpeg" },
+    "izgrev": { "name": "Изгрев", "image": "https://static.realistimo.com/images/938008a03d1e3e61590294bbdb80e753cc0d8d0f.jpeg" },
+    "tsentr": { "name": "Център", "image": "https://static.realistimo.com/images/d8166c1175a7917062bad5f4e7667ecbcdb7f900.jpeg" },
+    "slaveykov": { "name": "Славейков", "image": "https://static.realistimo.com/images/28e85faeafbef1d22c1b3089f5704735acb7e13d.jpeg" },
+    "bratya-miladinovi": { "name": "Братя Миладинови", "image": "https://static.realistimo.com/images/6e03cd1a8607982a36f52264ccfbd9d1e0a6518a.jpeg" },
+    "vzrazhdane": { "name": "Възраждане", "image": "https://static.realistimo.com/images/aaf1738144936cc78e9e19003548ed112c2e1870.jpeg" },
+    "zornitsa": { "name": "Зорница", "image": "https://static.realistimo.com/images/37b2c6d80cc6bb10e4820f91cf19586ffa97f640.jpeg" },
+    "lazur": { "name": "Лазур", "image": "https://static.realistimo.com/images/ba99995f902da1b981054c7bd73e8ca3559c3313.jpeg" },
+    "horizont": { "name": "Хоризонт", "image": "https://static.realistimo.com/images/9e85065ef55acd78d93784a8fd7ec40f4bd566c2.jpg" },
+    "kraymoriye": { "name": "Крайморие", "image": "https://static.realistimo.com/images/f1d3945168c997e83c14ef84e4b9ed7ecfb2cd1e.jpeg" }
+  }
+}

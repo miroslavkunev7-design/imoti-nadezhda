@@ -1,6 +1,7 @@
 /**
+ * @deprecated Use scripts/strip-realistimo-branding.mjs instead (clean photos without Realistimo overlays).
  * Downloads quarter images from static.realistimo.com (source: realistimo.bg / realistimo.com).
- * Run: node scripts/sync-realistimo-images.mjs
+ * Run: node scripts/strip-realistimo-branding.mjs && node scripts/generate-quarter-images-ts.mjs
  */
 import fs from 'fs'
 import path from 'path'
