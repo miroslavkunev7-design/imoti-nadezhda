@@ -100,7 +100,7 @@ export default function MatchNotification({
             </div>
 
             <p className="text-sm text-themed-secondary mt-3">
-              Новият имот <span className="text-themed-primary font-medium">„{propertyTitle}"</span> съвпада с критериите на следните клиенти:
+              Новият имот <span className="text-themed-primary font-medium">{'„'}{propertyTitle}{'"'}</span> съвпада с критериите на следните клиенти:
             </p>
           </div>
 

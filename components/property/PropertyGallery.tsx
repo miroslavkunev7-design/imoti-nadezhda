@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import type { PropertyImage } from '@/types'
 import { resolveMediaUrl } from '@/lib/upload-bridge'
 
@@ -37,7 +38,7 @@ export default function PropertyGallery({
       <div className="pd-gallery-wrap">
         <div className="pd-gallery-main">
           {currentUrl ? (
-            <img src={currentUrl} alt={title} loading="eager" decoding="async" />
+            <Image src={currentUrl} alt={title} fill className="object-contain" priority />
           ) : (
             <div
               className="pd-gallery-bg"
@@ -78,7 +79,7 @@ export default function PropertyGallery({
                     onClick={() => setActiveIndex(i)}
                   >
                     {thumbUrl ? (
-                      <img src={thumbUrl} alt="" loading="lazy" decoding="async" />
+                      <Image src={thumbUrl} alt="" width={72} height={48} className="w-full h-full object-cover" loading="lazy" />
                     ) : (
                       <span className="pd-gallery-bg" style={{ background: '#1a1a1a' }} />
                     )}
@@ -108,12 +109,12 @@ export default function PropertyGallery({
                 <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             </button>
-            <img
-              src={currentUrl}
-              alt={title}
-              className="max-w-[92vw] max-h-[92vh] object-contain"
+            <div
+              className="relative w-[92vw] h-[92vh]"
               onClick={e => e.stopPropagation()}
-            />
+            >
+              <Image src={currentUrl} alt={title} fill className="object-contain" />
+            </div>
           </div>
         )}
       </div>
