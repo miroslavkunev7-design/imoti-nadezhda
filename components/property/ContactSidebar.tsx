@@ -73,9 +73,14 @@ export default function ContactSidebar({
               <button type="button" onClick={() => setShowForm(false)} style={{ fontSize: 11, color: 'var(--pd-text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}>Отказ</button>
             </form>
           ) : (
-            <button type="button" className="pd-btn" onClick={() => setShowForm(true)}>
-              Запази оглед
-            </button>
+            <>
+              <button type="button" className="pd-btn" onClick={() => setShowForm(true)}>
+                Запази час за оглед
+              </button>
+              <button type="button" className="lux-btn-outline-gold" style={{ marginTop: 8 }} onClick={() => setShowForm(true)}>
+                Запитване
+              </button>
+            </>
           )}
         </div>
 

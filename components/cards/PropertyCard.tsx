@@ -10,9 +10,10 @@ import FavoriteButton from '@/components/ui/FavoriteButton'
 interface PropertyCardProps {
   property: Property
   index?: number
+  luxury?: boolean
 }
 
-export default function PropertyCard({ property, index = 0 }: PropertyCardProps) {
+export default function PropertyCard({ property, index = 0, luxury = false }: PropertyCardProps) {
   const href = `/cities/${property.city_slug}/${property.quarter_slug}/property/${property.id}`
   const imageUrl = resolveMediaUrl(property.primary_image)
 

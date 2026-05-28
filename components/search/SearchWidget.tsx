@@ -12,6 +12,8 @@ interface SearchWidgetProps {
   initialQuarter?: string
   initialQuarters?: Quarter[]
   compact?: boolean
+  variant?: 'marble' | 'burgundy' | 'default'
+  onCityChange?: (slug: string) => void
 }
 
 const BATHROOMS = ['1', '2', '3', '4', '4+']

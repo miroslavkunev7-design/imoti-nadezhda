@@ -17,10 +17,17 @@ const config: Config = {
           400: '#ff5070',
           500: '#f91742',
           600: '#e4002b',
-          700: '#c41e3a',  // primary CTA
-          800: '#8b0000',  // deep brand
-          900: '#7b0d1e',  // logo / logo dark
-          950: '#4a0010',  // deepest
+          700: '#6B001C',  // luxury burgundy primary
+          800: '#7A0D28',  // light burgundy
+          900: '#6B001C',
+          950: '#4a0010',
+        },
+        gold: {
+          DEFAULT: '#CFA54A',
+          deep: '#A97A1F',
+        },
+        marble: {
+          DEFAULT: '#FAF7F2',
         },
         brand: {
           bg:       '#080810',  // page background

@@ -1,0 +1,444 @@
+/* Имоти ИЛДЖ.ИА — luxury burgundy + marble + gold design system */
+
+:root {
+  --lux-burgundy: #6b001c;
+  --lux-burgundy-light: #7a0d28;
+  --lux-marble: #faf7f2;
+  --lux-gold: #cfa54a;
+  --lux-gold-deep: #a97a1f;
+  --lux-header-h: 92px;
+  --lux-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lux-page-bg {
+  background-color: var(--lux-marble);
+  background-image:
+    radial-gradient(ellipse 120% 80% at 12% 8%, rgba(207, 165, 74, 0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 90% 70% at 88% 92%, rgba(107, 0, 28, 0.06) 0%, transparent 50%),
+    linear-gradient(165deg, #fffefb 0%, #faf7f2 42%, #f3ede4 100%);
+  min-height: 100vh;
+}
+
+.lux-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--lux-header-h);
+  pointer-events: none;
+}
+
+.lux-header__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  padding: 0 20px 0 0;
+  pointer-events: auto;
+}
+
+.lux-header__brand {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 320px;
+  max-width: 420px;
+  padding: 0 28px 0 24px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.lux-header__marble {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #fffefb 0%, #faf7f2 45%, #f0e8dc 100%);
+  border-radius: 0 0 48px 0;
+  box-shadow:
+    0 8px 32px rgba(107, 0, 28, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.lux-header__ribbon {
+  position: absolute;
+  right: -18px;
+  top: 0;
+  bottom: 0;
+  width: 28px;
+  background: linear-gradient(
+    105deg,
+    var(--lux-gold-deep) 0%,
+    var(--lux-gold) 35%,
+    #e8c878 55%,
+    var(--lux-gold) 75%,
+    var(--lux-gold-deep) 100%
+  );
+  clip-path: polygon(0 0, 100% 8%, 100% 92%, 0 100%);
+  box-shadow: 4px 0 16px rgba(169, 122, 31, 0.35);
+}
+
+.lux-header__logo-wrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lux-header__logo-icon {
+  width: 52px;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.lux-header__logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.lux-header__logo-sub {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--lux-gold-deep);
+  font-weight: 600;
+}
+
+.lux-header__logo-main {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--lux-burgundy);
+  letter-spacing: 0.04em;
+}
+
+.lux-header__nav {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 12px;
+}
+
+.lux-header__link {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lux-marble);
+  text-decoration: none;
+  padding: 10px 18px;
+  border-radius: 4px;
+  transition: color 0.25s var(--lux-ease);
+}
+
+.lux-header__link:hover {
+  color: var(--lux-gold);
+}
+
+.lux-header__link--active {
+  color: #fff;
+  background: rgba(107, 0, 28, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(207, 165, 74, 0.35);
+}
+
+.lux-header__profile {
+  width: 40px;
+  height: 40px;
+  margin-left: 8px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(207, 165, 74, 0.65);
+  background: rgba(107, 0, 28, 0.35);
+  color: var(--lux-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s var(--lux-ease);
+  text-decoration: none;
+}
+
+.lux-header__profile:hover {
+  background: var(--lux-burgundy);
+}
+
+.lux-header__bar {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 28%,
+    var(--lux-burgundy) 32%,
+    var(--lux-burgundy-light) 100%
+  );
+  box-shadow: 0 4px 24px rgba(107, 0, 28, 0.25);
+}
+
+.lux-panorama {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.lux-panorama__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  animation: luxPanoramaZoom 10s var(--lux-ease) forwards;
+  transform: scale(1.04);
+}
+
+@keyframes luxPanoramaZoom {
+  to { transform: scale(1); }
+}
+
+.lux-panorama__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(107, 0, 28, 0.35) 0%,
+    rgba(107, 0, 28, 0.15) 35%,
+    rgba(250, 247, 242, 0.55) 78%,
+    rgba(250, 247, 242, 0.92) 100%
+  );
+}
+
+.lux-panorama__gold-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--lux-gold-deep), var(--lux-gold), var(--lux-gold-deep), transparent);
+}
+
+.lux-search-strip {
+  background: linear-gradient(180deg, #fffefb 0%, #faf7f2 100%);
+  border: 1.5px solid rgba(207, 165, 74, 0.45);
+  border-radius: 6px;
+  box-shadow: 0 8px 32px rgba(107, 0, 28, 0.1);
+  padding: 16px 20px;
+}
+
+.lux-search-strip .filter-label { color: var(--lux-burgundy); font-size: 10px; letter-spacing: 0.12em; }
+.lux-search-strip .input-dark,
+.lux-search-strip select {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(207, 165, 74, 0.35);
+  color: #2a1520;
+}
+
+.lux-filter-panel {
+  background: linear-gradient(135deg, var(--lux-burgundy) 0%, var(--lux-burgundy-light) 100%);
+  border: 1.5px solid rgba(207, 165, 74, 0.4);
+  border-radius: 8px;
+  box-shadow: 0 8px 28px rgba(107, 0, 28, 0.28);
+  padding: 16px 20px;
+}
+
+.lux-filter-panel .filter-label { color: rgba(250, 247, 242, 0.75); }
+.lux-filter-panel .input-dark,
+.lux-filter-panel select {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(207, 165, 74, 0.35);
+  color: var(--lux-marble);
+}
+
+.lux-city-card {
+  position: relative;
+  display: block;
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid rgba(207, 165, 74, 0.55);
+  box-shadow: 0 6px 24px rgba(107, 0, 28, 0.18);
+  transition: box-shadow 0.35s var(--lux-ease), transform 0.35s var(--lux-ease);
+}
+
+.lux-city-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(107, 0, 28, 0.28);
+}
+
+.lux-city-card__img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s var(--lux-ease);
+}
+
+.lux-city-card:hover .lux-city-card__img { transform: scale(1.05); }
+
+.lux-city-card__dissolve {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(250, 247, 242, 0.97) 0%,
+    rgba(250, 247, 242, 0.82) 12%,
+    rgba(250, 247, 242, 0.45) 28%,
+    rgba(207, 165, 74, 0.22) 42%,
+    transparent 72%
+  );
+}
+
+.lux-city-card__particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 8% 50%, rgba(207, 165, 74, 0.35) 0, transparent 8px),
+    radial-gradient(circle at 18% 58%, rgba(207, 165, 74, 0.25) 0, transparent 5px),
+    radial-gradient(circle at 26% 52%, rgba(250, 247, 242, 0.5) 0, transparent 3px);
+  mask-image: linear-gradient(90deg, black 0%, black 35%, transparent 70%);
+}
+
+.lux-city-card__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  padding: 16px 18px;
+}
+
+.lux-city-card__title {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  font-weight: 700;
+  color: var(--lux-burgundy);
+}
+
+.lux-city-card__cta {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lux-gold-deep);
+  margin-top: 4px;
+}
+
+.lux-property-card {
+  background: linear-gradient(180deg, #fffefb 0%, #faf7f2 100%);
+  border: 1.5px solid rgba(207, 165, 74, 0.5);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: box-shadow 0.35s var(--lux-ease), transform 0.35s var(--lux-ease);
+}
+
+.lux-property-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 40px rgba(107, 0, 28, 0.22);
+  border-color: var(--lux-burgundy);
+}
+
+.lux-property-card__dissolve {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(250, 247, 242, 0.95) 0%, transparent 65%);
+}
+
+.lux-btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lux-burgundy);
+  background: linear-gradient(180deg, #e8c878, var(--lux-gold), var(--lux-gold-deep));
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.lux-btn-outline-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 11px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lux-gold);
+  background: transparent;
+  border: 1.5px solid rgba(207, 165, 74, 0.65);
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.lux-agent-panel {
+  background: linear-gradient(145deg, rgba(107, 0, 28, 0.92), rgba(122, 13, 40, 0.88));
+  border: 1.5px solid rgba(207, 165, 74, 0.45);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.lux-agent-panel h3 {
+  font-family: var(--font-playfair), Georgia, serif;
+  color: var(--lux-marble);
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.lux-main-offset { padding-top: var(--lux-header-h); }
+
+.property-detail-page.lux-detail {
+  --pd-bg: transparent;
+  --pd-card: #faf7f2;
+  --pd-accent: #6b001c;
+  --pd-text: #2a1520;
+  --pd-text-secondary: #5c4a52;
+  --pd-border: rgba(207, 165, 74, 0.35);
+  --pd-nav: 92px;
+  background: transparent;
+}
+
+.property-detail-page.lux-detail .pd-card {
+  border: 1.5px solid rgba(207, 165, 74, 0.45);
+}
+
+.property-detail-page.lux-detail .pd-btn {
+  background: linear-gradient(180deg, #e8c878, var(--lux-gold), var(--lux-gold-deep));
+  color: var(--lux-burgundy);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+}
+
+.property-detail-page.lux-detail .pd-contact {
+  background: linear-gradient(145deg, rgba(107, 0, 28, 0.94), rgba(122, 13, 40, 0.9));
+  border-color: rgba(207, 165, 74, 0.5);
+}
+
+.property-detail-page.lux-detail .pd-contact h3,
+.property-detail-page.lux-detail .pd-contact-row {
+  color: var(--lux-marble);
+}
+
+@media (max-width: 900px) {
+  .lux-header__brand { min-width: 240px; }
+  .lux-header__logo-main { font-size: 12px; }
+  .lux-header__link { padding: 8px 10px; font-size: 11px; }
+}

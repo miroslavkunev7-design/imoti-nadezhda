@@ -13,7 +13,7 @@
   --pd-radius: 10px;
   --pd-gap: 12px;
   --pd-nav: 84px;
-  --pd-foot: 68px;
+  --pd-foot: 32px;
 
   background: var(--pd-bg);
   color: var(--pd-text);

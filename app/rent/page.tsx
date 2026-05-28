@@ -6,7 +6,7 @@ import { FALLBACK_CITIES } from '@/lib/data/fallback'
 import type { Property } from '@/types'
 
 export const revalidate = 60
-export const metadata: Metadata = { title: 'За продажба' }
+export const metadata: Metadata = { title: 'Под наем' }
 
 async function getProperties(searchParams: Record<string, string>) {
   try {
@@ -17,16 +17,16 @@ async function getProperties(searchParams: Record<string, string>) {
   }
 }
 
-export default async function BuyPage({ searchParams }: { searchParams: Record<string, string> }) {
+export default async function RentPage({ searchParams }: { searchParams: Record<string, string> }) {
   const { data: properties, total } = await getProperties(searchParams)
 
   return (
-    <ListingPageLayout citySlug={searchParams.city ?? null} title="За продажба" subtitle={`${total} обяви`}>
+    <ListingPageLayout citySlug={searchParams.city ?? null} title="Под наем" subtitle={`${total} обяви`}>
       <div className="mb-6">
         <SearchWidget cities={FALLBACK_CITIES} initialCity={searchParams.city} compact variant="burgundy" />
       </div>
       {properties.length === 0 ? (
-        <div className="py-20 text-center" style={{ color: '#7A0D28' }}>Няма намерени имоти.</div>
+        <div className="py-20 text-center" style={{ color: '#7A0D28' }}>Няма намерени имоти под наем.</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {properties.map((p, i) => <PropertyCard key={p.id} property={p} index={i} luxury />)}
