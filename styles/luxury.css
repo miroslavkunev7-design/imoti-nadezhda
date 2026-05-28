@@ -1,0 +1,579 @@
+/* ── Имоти ИЛДЖ.ИА — luxury design system (collage 1:1) ───────── */
+
+:root {
+  --lux-burgundy: #6b001c;
+  --lux-burgundy-light: #7a0d28;
+  --lux-marble: #faf7f2;
+  --lux-marble-warm: #f5f0e8;
+  --lux-gold: #cfa54a;
+  --lux-gold-deep: #a97a1f;
+  --lux-text: #3d1520;
+  --lux-text-muted: #6b4a52;
+  --lux-header-h: 92px;
+  --lux-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.luxury-theme {
+  color-scheme: light;
+}
+
+html.luxury-theme body {
+  background-color: var(--lux-marble);
+  color: var(--lux-text);
+}
+
+/* Marble page background with gold veins */
+.lux-marble-page {
+  min-height: 100vh;
+  background-color: var(--lux-marble);
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 120% 80% at 15% 20%, rgba(207, 165, 74, 0.09) 0%, transparent 55%),
+    radial-gradient(ellipse 90% 70% at 88% 75%, rgba(207, 165, 74, 0.07) 0%, transparent 50%),
+    linear-gradient(168deg, #fdfbf7 0%, #faf7f2 42%, #f7f2ea 100%);
+  background-attachment: fixed;
+}
+
+/* ── Header ribbon ─────────────────────────────────────────── */
+.lux-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--lux-header-h);
+  pointer-events: none;
+}
+
+.lux-header__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  padding: 0 20px 0 0;
+  pointer-events: auto;
+}
+
+.lux-header__brand {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 10px 48px 10px 28px;
+  min-width: 280px;
+  background: linear-gradient(145deg, #fffefb 0%, #faf7f2 55%, #f3ece2 100%);
+  border-radius: 0 0 28px 0;
+  box-shadow:
+    0 8px 32px rgba(107, 0, 28, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(207, 165, 74, 0.15);
+  clip-path: polygon(0 0, calc(100% - 36px) 0, 100% 100%, 0 100%);
+}
+
+.lux-header__ribbon {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 44px;
+  background: linear-gradient(
+    175deg,
+    #e8c56a 0%,
+    #cfa54a 28%,
+    #a97a1f 55%,
+    #cfa54a 78%,
+    #f0d78a 100%
+  );
+  clip-path: polygon(0 0, 100% 8%, 100% 92%, 0 100%);
+  box-shadow: 2px 0 12px rgba(169, 122, 31, 0.35);
+}
+
+.lux-header__ribbon::after {
+  content: '';
+  position: absolute;
+  inset: 4px 6px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  opacity: 0.6;
+}
+
+.lux-header__logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.lux-header__logo-icon {
+  flex-shrink: 0;
+  width: 52px;
+  height: auto;
+  filter: drop-shadow(0 2px 4px rgba(107, 0, 28, 0.15));
+}
+
+.lux-header__logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.lux-header__logo-line1 {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--lux-gold-deep);
+}
+
+.lux-header__logo-line2 {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--lux-burgundy);
+  letter-spacing: 0.02em;
+}
+
+.lux-header__logo-line3 {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--lux-burgundy);
+  letter-spacing: 0.12em;
+}
+
+.lux-header__nav {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-left: 24px;
+}
+
+.lux-header__link {
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lux-marble);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: color 0.25s var(--lux-ease), background 0.25s var(--lux-ease);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.lux-header__link:hover {
+  color: var(--lux-gold);
+}
+
+.lux-header__link.is-active {
+  color: var(--lux-gold);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.lux-header__profile {
+  width: 40px;
+  height: 40px;
+  margin-left: 8px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(207, 165, 74, 0.65);
+  background: rgba(107, 0, 28, 0.35);
+  color: var(--lux-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+  text-decoration: none;
+}
+
+.lux-header__profile:hover {
+  border-color: var(--lux-gold);
+  box-shadow: 0 0 16px rgba(207, 165, 74, 0.35);
+  background: rgba(122, 13, 40, 0.55);
+}
+
+.lux-header__bar {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(107, 0, 28, 0.15) 22%,
+    var(--lux-burgundy) 38%,
+    var(--lux-burgundy-light) 100%
+  );
+  box-shadow: 0 4px 24px rgba(107, 0, 28, 0.25);
+}
+
+/* ── Terrace hero ────────────────────────────────────────────── */
+.lux-terrace {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.lux-terrace--full {
+  min-height: calc(100dvh - var(--lux-header-h));
+}
+
+.lux-terrace--band {
+  height: min(42vh, 420px);
+  min-height: 280px;
+}
+
+.lux-terrace__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 35%;
+  background-repeat: no-repeat;
+  transform: scale(1.04);
+  animation: luxHeroZoom 10s var(--lux-ease) forwards;
+}
+
+@keyframes luxHeroZoom {
+  to { transform: scale(1); }
+}
+
+.lux-terrace__veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(107, 0, 28, 0.25) 0%, rgba(61, 0, 16, 0.45) 55%, rgba(250, 247, 242, 0.92) 100%),
+    radial-gradient(ellipse at 50% 20%, transparent 0%, rgba(107, 0, 28, 0.2) 100%);
+}
+
+.lux-terrace__gold-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--lux-gold-deep) 20%,
+    var(--lux-gold) 50%,
+    var(--lux-gold-deep) 80%,
+    transparent
+  );
+}
+
+.lux-terrace__content {
+  position: relative;
+  z-index: 2;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: calc(var(--lux-header-h) + 24px) 24px 32px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Marble search strip ─────────────────────────────────────── */
+.lux-search-strip {
+  background: linear-gradient(180deg, #fffefb 0%, #faf7f2 100%);
+  border: 1.5px solid rgba(207, 165, 74, 0.45);
+  border-radius: 14px;
+  box-shadow:
+    0 12px 40px rgba(107, 0, 28, 0.14),
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset,
+    0 2px 0 rgba(207, 165, 74, 0.2);
+  padding: 18px 22px;
+}
+
+.lux-search-strip .lux-field-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lux-gold-deep);
+  margin-bottom: 6px;
+}
+
+.lux-search-strip select,
+.lux-search-strip input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(207, 165, 74, 0.35);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--lux-text);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.lux-search-strip select:focus,
+.lux-search-strip input:focus {
+  border-color: var(--lux-burgundy);
+  box-shadow: 0 0 0 3px rgba(107, 0, 28, 0.1);
+}
+
+.lux-btn-gold {
+  background: linear-gradient(180deg, #e8c56a 0%, #cfa54a 45%, #a97a1f 100%);
+  color: var(--lux-burgundy);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(169, 122, 31, 0.35);
+  transition: transform 0.2s var(--lux-ease), box-shadow 0.2s;
+}
+
+.lux-btn-gold:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(169, 122, 31, 0.45);
+}
+
+.lux-btn-burgundy {
+  background: linear-gradient(180deg, #7a0d28 0%, #6b001c 100%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  border: 1px solid rgba(207, 165, 74, 0.4);
+  border-radius: 8px;
+  padding: 12px 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(107, 0, 28, 0.35);
+  transition: box-shadow 0.25s, transform 0.2s;
+}
+
+.lux-btn-burgundy:hover {
+  box-shadow: 0 6px 28px rgba(107, 0, 28, 0.5);
+  transform: translateY(-1px);
+}
+
+/* ── Burgundy filter bar ─────────────────────────────────────── */
+.lux-filter-bar {
+  background: linear-gradient(135deg, #7a0d28 0%, #6b001c 55%, #5a0018 100%);
+  border: 1.5px solid rgba(207, 165, 74, 0.5);
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 8px 32px rgba(107, 0, 28, 0.3);
+}
+
+.lux-filter-bar .lux-field-label {
+  color: var(--lux-gold);
+}
+
+.lux-filter-bar select,
+.lux-filter-bar input {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(207, 165, 74, 0.4);
+  color: #fff;
+}
+
+.lux-filter-bar select option {
+  background: #6b001c;
+  color: #fff;
+}
+
+.lux-filter-icon {
+  color: var(--lux-gold);
+  flex-shrink: 0;
+}
+
+/* ── City cards with marble dissolve ─────────────────────────── */
+.lux-city-card {
+  position: relative;
+  display: block;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid rgba(207, 165, 74, 0.55);
+  box-shadow: 0 6px 24px rgba(107, 0, 28, 0.18);
+  transition: transform 0.35s var(--lux-ease), box-shadow 0.35s var(--lux-ease), border-color 0.35s;
+}
+
+.lux-city-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--lux-gold);
+  box-shadow: 0 14px 40px rgba(107, 0, 28, 0.28), 0 0 24px rgba(207, 165, 74, 0.2);
+}
+
+.lux-city-card__img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s var(--lux-ease);
+}
+
+.lux-city-card:hover .lux-city-card__img {
+  transform: scale(1.06);
+}
+
+.lux-city-card__dissolve {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(250, 247, 242, 0.95) 0%,
+      rgba(250, 247, 242, 0.72) 12%,
+      rgba(245, 236, 220, 0.45) 22%,
+      rgba(207, 165, 74, 0.18) 32%,
+      transparent 48%
+    ),
+    url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='12' r='1' fill='%23cfa54a' opacity='0.5'/%3E%3Ccircle cx='24' cy='28' r='0.8' fill='%23faf7f2' opacity='0.7'/%3E%3Ccircle cx='40' cy='8' r='1.2' fill='%23cfa54a' opacity='0.4'/%3E%3Ccircle cx='56' cy='44' r='0.6' fill='%23fff' opacity='0.6'/%3E%3Ccircle cx='18' cy='52' r='1' fill='%23a97a1f' opacity='0.35'/%3E%3C/svg%3E");
+  background-size: auto, 80px 80px;
+  mix-blend-mode: soft-light;
+}
+
+.lux-city-card__content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px 18px;
+}
+
+.lux-city-card__name {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  font-weight: 700;
+  color: var(--lux-burgundy);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.lux-city-card__cta {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lux-gold-deep);
+  margin-top: 4px;
+}
+
+/* ── Property marble cards ───────────────────────────────────── */
+.lux-property-card {
+  background: linear-gradient(165deg, #fffefb 0%, #faf7f2 100%);
+  border: 1.5px solid rgba(207, 165, 74, 0.5);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(107, 0, 28, 0.1);
+  transition: transform 0.3s var(--lux-ease), box-shadow 0.3s, border-color 0.3s;
+}
+
+.lux-property-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--lux-burgundy);
+  box-shadow: 0 12px 36px rgba(107, 0, 28, 0.22), 0 0 20px rgba(107, 0, 28, 0.08);
+}
+
+.lux-property-card__dissolve {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(250, 247, 242, 0.98) 0%,
+    rgba(250, 247, 242, 0.75) 25%,
+    rgba(207, 165, 74, 0.12) 50%,
+    transparent 100%
+  );
+}
+
+.lux-price {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--lux-burgundy);
+}
+
+/* ── Agent glass panel ───────────────────────────────────────── */
+.lux-agent-panel {
+  background: linear-gradient(
+    160deg,
+    rgba(107, 0, 28, 0.92) 0%,
+    rgba(122, 13, 40, 0.88) 100%
+  );
+  backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(207, 165, 74, 0.55);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 12px 40px rgba(107, 0, 28, 0.35);
+  color: #fff;
+}
+
+.lux-agent-panel h3 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lux-gold);
+  margin: 0 0 14px;
+}
+
+.lux-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.lux-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.lux-shimmer:hover::after {
+  transform: translateX(100%);
+}
+
+.lux-page-pad {
+  padding-top: var(--lux-header-h);
+}
+
+.lux-section-title {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  font-weight: 700;
+  color: var(--lux-burgundy);
+  margin: 0 0 8px;
+}
+
+.lux-content-card {
+  background: linear-gradient(165deg, #fffefb 0%, #faf7f2 100%);
+  border: 1.5px solid rgba(207, 165, 74, 0.45);
+  border-radius: 12px;
+  padding: 28px 32px;
+  box-shadow: 0 8px 28px rgba(107, 0, 28, 0.08);
+}
+
+@media (max-width: 767px) {
+  .lux-header__brand {
+    min-width: 200px;
+    padding-right: 36px;
+  }
+
+  .lux-header__logo-line2,
+  .lux-header__logo-line3 {
+    font-size: 14px;
+  }
+
+  .lux-header__link {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+}

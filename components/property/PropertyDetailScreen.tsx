@@ -9,6 +9,7 @@ import ContactSidebar from '@/components/property/ContactSidebar'
 import PropertyDescription from '@/components/property/PropertyDescription'
 import PropertyMap from '@/components/property/PropertyMap'
 import PropertyCharacteristics from '@/components/property/PropertyCharacteristics'
+import PropertyDetailHero from '@/components/property/PropertyDetailHero'
 
 interface Props {
   property: Property

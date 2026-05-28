@@ -1,23 +1,27 @@
 'use client'
 
+import { Suspense } from 'react'
 import { usePathname } from 'next/navigation'
-import NavbarWrapper from './NavbarWrapper'
-import BottomBar    from './BottomBar'
+import LuxuryHeader from './LuxuryHeader'
+import MarblePageShell from './MarblePageShell'
+import { CitySelectionProvider } from '@/components/providers/CitySelectionProvider'
 
 export default function ConditionalShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const isAdmin  = pathname.startsWith('/admin')
+  const isAdmin = pathname.startsWith('/admin')
 
   if (isAdmin) {
-    // Admin pages manage their own layout — no global nav
     return <>{children}</>
   }
 
   return (
-    <>
-      <NavbarWrapper />
-      <main className="min-h-screen">{children}</main>
-      <BottomBar />
-    </>
+    <CitySelectionProvider>
+      <MarblePageShell>
+        <Suspense fallback={null}>
+          <LuxuryHeader />
+        </Suspense>
+        <main>{children}</main>
+      </MarblePageShell>
+    </CitySelectionProvider>
   )
 }

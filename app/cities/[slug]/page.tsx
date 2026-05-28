@@ -1,8 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { cache } from 'react'
-import SearchWidget from '@/components/search/SearchWidget'
-import CityInfoCard from '@/components/city/CityInfoCard'
+import CityPageClient from '@/components/city/CityPageClient'
 import NeighborhoodCard from '@/components/cards/NeighborhoodCard'
 import Breadcrumb from '@/components/ui/Breadcrumb'
 import { FALLBACK_CITIES, getQuartersForCity } from '@/lib/data/fallback'
@@ -43,19 +42,14 @@ export default async function CityPage({ params }: PageProps) {
   const { city, quarters } = data
 
   return (
-    <div className="min-h-screen pb-[68px] relative overflow-x-hidden">
+    <>
+      <CityPageClient city={city} cities={FALLBACK_CITIES} quarters={quarters} />
 
-      <div className="fixed inset-0 -z-20" style={{ background: 'var(--bg-base)' }} />
-      {city.image_url && (
-        <div className="fixed inset-0 -z-20 bg-center bg-cover"
-          style={{ backgroundImage: `url(${city.image_url})` }} />
-      )}
-      <div className="fixed inset-0 -z-10 city-bg-overlay" style={{ background: 'var(--bg-base)' }} />
-
-      <div className="max-w-[1280px] mx-auto px-5 lg:px-8"
-        style={{ paddingTop: 88 }}>
-
-        <div className="mb-3">
+      <div
+        className="max-w-[1280px] mx-auto px-5 lg:px-8 pb-16"
+        style={{ marginTop: -32, position: 'relative', zIndex: 5 }}
+      >
+        <div className="mb-4">
           <Breadcrumb items={[
             { label: 'Начало', href: '/' },
             { label: 'Градове' },
@@ -63,21 +57,14 @@ export default async function CityPage({ params }: PageProps) {
           ]} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-4 mb-8">
-          <SearchWidget cities={FALLBACK_CITIES} initialCity={city.slug} initialQuarters={quarters} compact />
-          <CityInfoCard city={city} />
-        </div>
-
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-display text-themed-primary" style={{ fontSize: 'clamp(1.1rem,2vw,1.4rem)' }}>
-            Квартали в {city.name}
-          </h2>
-          <a href={`/buy?city=${city.slug}`}
-            className="text-xs text-crimson-700 hover:text-crimson-400 transition-colors flex items-center gap-1 font-medium">
-            Виж всички имоти
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
+          <h2 className="lux-section-title">Квартали в {city.name}</h2>
+          <a
+            href={`/buy?city=${city.slug}`}
+            className="text-xs font-semibold uppercase tracking-wider transition-colors"
+            style={{ color: 'var(--lux-gold-deep)' }}
+          >
+            Виж всички имоти →
           </a>
         </div>
 
@@ -86,17 +73,20 @@ export default async function CityPage({ params }: PageProps) {
           style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
         >
           {quarters.map((q, i) => (
-            <div key={q.id} className="flex-shrink-0"
-              style={{ scrollSnapAlign: 'start', width: 'clamp(180px, 20vw, 240px)', height: 200 }}>
+            <div
+              key={q.id}
+              className="flex-shrink-0"
+              style={{ scrollSnapAlign: 'start', width: 'clamp(180px, 20vw, 240px)', height: 200 }}
+            >
               <NeighborhoodCard quarter={q} index={i} />
             </div>
           ))}
         </div>
 
-        <p className="text-xs text-themed-muted mt-1 text-center pb-4">
+        <p className="text-xs text-center pb-4" style={{ color: 'var(--lux-text-muted)' }}>
           {quarters.length} квартала • плъзни настрани за повече
         </p>
       </div>
-    </div>
+    </>
   )
 }

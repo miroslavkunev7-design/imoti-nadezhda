@@ -48,8 +48,8 @@ export default function ContactSidebar({
   if (isDetail) {
     return (
       <>
-        <div className="pd-card pd-contact">
-          <h3>Свържи се с нас</h3>
+        <div className="pd-card pd-contact lux-agent-panel" style={{ background: undefined }}>
+          <h3>Брокер</h3>
 
           <a href={`tel:${phone.replace(/\s/g, '')}`} className="pd-contact-row">
             <span className="pd-contact-icon"><PhoneIcon /></span>

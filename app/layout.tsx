@@ -21,8 +21,8 @@ export const metadata: Metadata = {
   openGraph: {
     type:        'website',
     locale:      'bg_BG',
-    siteName:    'Имоти Надежда',
-    title:       'Имоти Надежда — Луксозни недвижими имоти',
+    siteName:    'Имоти ИЛДЖ.ИА',
+    title:       'Имоти ИЛДЖ.ИА — Луксозни недвижими имоти',
     description: 'Водещата агенция за недвижими имоти в Североизточна България.',
   },
   robots: {

@@ -36,7 +36,7 @@ html.light .property-detail-page {
   box-sizing: border-box;
   max-width: 1520px;
   margin: 0 auto;
-  padding: var(--pd-nav) 24px var(--pd-foot);
+  padding: 0 24px var(--pd-foot);
   min-height: 100dvh;
   height: auto;
   display: flex;
