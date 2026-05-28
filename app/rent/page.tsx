@@ -7,7 +7,7 @@ import { FALLBACK_CITIES } from '@/lib/data/fallback'
 import type { Property } from '@/types'
 
 export const revalidate = 60
-export const metadata: Metadata = { title: 'За продажба' }
+export const metadata: Metadata = { title: 'Под наем' }
 
 async function getProperties(searchParams: Record<string, string>) {
   try {
@@ -18,7 +18,7 @@ async function getProperties(searchParams: Record<string, string>) {
   }
 }
 
-export default async function BuyPage({ searchParams }: { searchParams: Record<string, string> }) {
+export default async function RentPage({ searchParams }: { searchParams: Record<string, string> }) {
   const { data: properties, total } = await getProperties(searchParams)
   const citySlug = searchParams.city ?? 'shumen'
 
@@ -42,7 +42,7 @@ export default async function BuyPage({ searchParams }: { searchParams: Record<s
 
         <div className="mb-6">
           <h1 className="font-display" style={{ fontSize: 'clamp(1.25rem,2vw,1.6rem)', color: '#6B001C' }}>
-            Имоти за продажба
+            Имоти под наем
           </h1>
           <p className="text-xs mt-1" style={{ color: '#7A0D28' }}>
             Намерени: <span className="font-semibold" style={{ color: '#6B001C' }}>{total} обяви</span>
@@ -51,7 +51,7 @@ export default async function BuyPage({ searchParams }: { searchParams: Record<s
 
         {properties.length === 0 ? (
           <div className="py-20 text-center">
-            <p style={{ color: '#7A0D28' }}>Няма намерени имоти по зададените критерии.</p>
+            <p style={{ color: '#7A0D28' }}>Няма намерени имоти под наем по зададените критерии.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">

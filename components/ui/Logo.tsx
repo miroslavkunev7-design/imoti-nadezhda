@@ -10,9 +10,9 @@ interface LogoProps {
 }
 
 const sizes = {
-  sm: { iconW: 72,  textSize: 11 },
-  md: { iconW: 96,  textSize: 13 },
-  lg: { iconW: 128, textSize: 15 },
+  sm: { iconW: 56,  line1: 9,  line2: 11 },
+  md: { iconW: 72,  line1: 10, line2: 13 },
+  lg: { iconW: 88,  line1: 11, line2: 15 },
 }
 
 export default function Logo({ size = 'md', className = '' }: LogoProps) {
@@ -41,27 +41,35 @@ export default function Logo({ size = 'md', className = '' }: LogoProps) {
     <Link
       href="/"
       onClick={handleLogoClick}
-      className={`flex flex-col items-center group select-none -mt-1 ${className}`}
-      aria-label="Имоти Надежда — начало"
+      className={`flex items-center gap-3 group select-none ${className}`}
+      aria-label="Недвижими Имоти ИЛДЖ.ИА — начало"
     >
       <div
-        className="flex-shrink-0 overflow-hidden transition-transform duration-300 group-hover:scale-[1.03]"
+        className="flex-shrink-0 overflow-hidden transition-transform duration-300 group-hover:scale-[1.02]"
         style={{ width: s.iconW, height: containerH }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/images/logo-icon-transparent.png"
-          alt="Имоти Надежда"
-          style={{ width: s.iconW, height: naturalH, display: 'block' }}
+          alt=""
+          style={{ width: s.iconW, height: naturalH, display: 'block', marginTop: -(naturalH - containerH) / 2 }}
         />
       </div>
 
-      <span
-        className="font-display font-bold text-crimson-700 uppercase leading-none mt-0.5"
-        style={{ fontSize: `${s.textSize}px`, letterSpacing: '0.14em' }}
-      >
-        «НАДЕЖДА»
-      </span>
+      <div className="flex flex-col leading-tight min-w-0">
+        <span
+          className="font-body font-medium uppercase tracking-[0.12em]"
+          style={{ fontSize: s.line1, color: '#7A0D28' }}
+        >
+          Недвижими Имоти
+        </span>
+        <span
+          className="font-display font-bold uppercase tracking-[0.08em]"
+          style={{ fontSize: s.line2, color: '#6B001C' }}
+        >
+          ИЛДЖ.ИА
+        </span>
+      </div>
     </Link>
   )
 }

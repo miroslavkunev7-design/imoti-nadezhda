@@ -5,6 +5,8 @@ import QuarterInfoCard from '@/components/city/QuarterInfoCard'
 import PropertyCard from '@/components/cards/PropertyCard'
 import Breadcrumb from '@/components/ui/Breadcrumb'
 import PropertyGridControls from '@/components/search/PropertyGridControls'
+import TerraceHero from '@/components/layout/TerraceHero'
+import CityPanoramaSync from '@/components/layout/CityPanoramaSync'
 import { FALLBACK_CITIES, getQuartersForCity } from '@/lib/data/fallback'
 import type { Quarter, Property } from '@/types'
 
@@ -52,40 +54,42 @@ export default async function NeighborhoodPage({ params, searchParams }: PagePro
   const quarterDisplay: Quarter = { ...quarter, property_count: total }
 
   return (
-    <div className="min-h-screen pb-[68px] relative">
-      <div className="fixed inset-0 -z-10" style={{ background: 'var(--bg-base)' }} />
-      <div className="max-w-[1280px] mx-auto px-5 lg:px-8" style={{ paddingTop: 88 }}>
+    <div className="min-h-screen">
+      <CityPanoramaSync citySlug={params.slug} />
 
-        {/* Breadcrumb */}
+      <div className="-mt-[96px]" style={{ marginTop: -96 }}>
+        <TerraceHero citySlug={params.slug} height={300} overlay="strong" />
+      </div>
+
+      <div className="max-w-[1280px] mx-auto px-5 lg:px-8 py-8">
         <div className="mb-3">
           <Breadcrumb items={[
             { label: 'Начало', href: '/' },
-            { label: 'Градове', href: '/cities' },
+            { label: 'За продажба', href: '/buy' },
             { label: city?.name ?? params.slug, href: `/cities/${params.slug}` },
             { label: quarterDisplay.name },
           ]} />
         </div>
 
-        {/* Search + Quarter info */}
-        <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-4 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-4 mb-6 -mt-12 relative z-10">
           <SearchWidget
             cities={FALLBACK_CITIES}
             initialCity={params.slug}
             initialQuarter={params.quarter}
             initialQuarters={allQuarters}
             compact
+            variant="burgundy"
           />
           <QuarterInfoCard quarter={quarterDisplay} />
         </div>
 
-        {/* Properties header */}
         <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
           <div>
-            <h2 className="font-display text-themed-primary" style={{ fontSize: 'clamp(1.1rem,2vw,1.4rem)' }}>
+            <h2 className="font-display" style={{ fontSize: 'clamp(1.1rem,2vw,1.4rem)', color: '#6B001C' }}>
               Имоти в {quarterDisplay.name}
             </h2>
-            <p className="text-xs text-themed-secondary mt-0.5">
-              Намерени: <span className="text-themed-primary font-medium">{total} обяви</span>
+            <p className="text-xs mt-0.5" style={{ color: '#7A0D28' }}>
+              Намерени: <span className="font-semibold" style={{ color: '#6B001C' }}>{total} обяви</span>
             </p>
           </div>
           <PropertyGridControls
@@ -95,10 +99,11 @@ export default async function NeighborhoodPage({ params, searchParams }: PagePro
           />
         </div>
 
-        {/* Properties grid — normal scroll */}
         {properties.length === 0 ? (
           <div className="py-20 text-center">
-            <p className="text-themed-secondary">Все още няма обяви в <span className="text-themed-primary">{quarterDisplay.name}</span>.</p>
+            <p style={{ color: '#7A0D28' }}>
+              Все още няма обяви в <span style={{ color: '#6B001C' }}>{quarterDisplay.name}</span>.
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">

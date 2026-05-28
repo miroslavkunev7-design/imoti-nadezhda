@@ -3,9 +3,9 @@ import HeroSection from '@/components/home/HeroSection'
 import { FALLBACK_CITIES } from '@/lib/data/fallback'
 
 export const metadata: Metadata = {
-  title: 'Имоти Надежда — Луксозни недвижими имоти',
+  title: 'Имоти ИЛДЖ.ИА — Луксозни недвижими имоти',
   description:
-    'Намерете мечтания си имот в Шумен, Варна, Бургас и Нови пазар. ' +
+    'Намерете мечтания си имот в Шумен, Варна, Бургас и Нови Пазар. ' +
     'Апартаменти, къщи, мезонети и парцели от водещата агенция.',
 }
 

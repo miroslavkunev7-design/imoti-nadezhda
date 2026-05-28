@@ -6,6 +6,7 @@ import { formatPrice, formatArea, formatFloor } from '@/lib/utils'
 import { resolveMediaUrl } from '@/lib/upload-bridge'
 import PropertyBadge from '@/components/ui/PropertyBadge'
 import FavoriteButton from '@/components/ui/FavoriteButton'
+import MarbleDissolveOverlay from '@/components/ui/MarbleDissolveOverlay'
 
 interface PropertyCardProps {
   property: Property
@@ -22,41 +23,41 @@ export default function PropertyCard({ property, index = 0 }: PropertyCardProps)
       style={{ '--card-i': index } as React.CSSProperties}
     >
       <Link href={href} className="block">
-        <div className="property-card-surface">
+        <div className="marble-property-card">
           <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
             <div
-              className="absolute inset-0 bg-center bg-cover transition-transform duration-300 group-hover:scale-105"
+              className="absolute inset-0 bg-center bg-cover transition-transform duration-500 group-hover:scale-105"
               style={{
                 backgroundImage: imageUrl
                   ? `url(${imageUrl})`
-                  : 'linear-gradient(135deg, #0f0a1a 0%, #1a0a14 100%)',
+                  : 'linear-gradient(135deg, #FAF7F2 0%, #F5F0E8 100%)',
               }}
             />
-            <div
-              className="absolute inset-0"
-              style={{ background: 'linear-gradient(to top, rgba(4,2,12,0.7) 0%, transparent 50%)' }}
-            />
+            <MarbleDissolveOverlay direction="bottom" intensity="card" />
 
-            <div className="absolute top-3 left-3 flex gap-2">
+            <div className="absolute top-3 left-3 flex gap-2 z-10">
               {property.is_featured && <PropertyBadge type="featured" />}
               {property.is_new && !property.is_featured && <PropertyBadge type="new" />}
             </div>
 
-            <div className="absolute top-3 right-3">
+            <div className="absolute top-3 right-3 z-10">
               <FavoriteButton propertyId={property.id} />
             </div>
           </div>
 
           <div className="p-4">
-            <p className="text-xs text-themed-secondary uppercase tracking-wider mb-1 font-medium">
+            <p
+              className="text-xs uppercase tracking-wider mb-1 font-medium"
+              style={{ color: '#7A0D28' }}
+            >
               {property.type}
             </p>
 
             <div className="flex items-center gap-1 mb-3">
-              <svg className="text-crimson-700 flex-shrink-0" width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="flex-shrink-0" width="11" height="11" viewBox="0 0 24 24" fill="#CFA54A">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
               </svg>
-              <span className="text-xs text-themed-secondary truncate">
+              <span className="text-xs truncate" style={{ color: '#9A7080' }}>
                 {property.quarter_name}, {property.city_name}
               </span>
             </div>
@@ -73,7 +74,7 @@ export default function PropertyCard({ property, index = 0 }: PropertyCardProps)
 
             <div className="flex items-center justify-between">
               <span className="price">{formatPrice(property.price_eur)}</span>
-              <span className="text-xs text-themed-muted">
+              <span className="text-xs" style={{ color: '#9A7080' }}>
                 {property.construction ?? ''}
               </span>
             </div>
@@ -86,8 +87,8 @@ export default function PropertyCard({ property, index = 0 }: PropertyCardProps)
 
 function SpecItem({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
-    <div className="flex items-center gap-1 text-themed-secondary">
-      <span className="text-crimson-700 opacity-70">{icon}</span>
+    <div className="flex items-center gap-1" style={{ color: '#7A0D28' }}>
+      <span style={{ color: '#CFA54A', opacity: 0.85 }}>{icon}</span>
       <span className="text-xs">{label}</span>
     </div>
   )

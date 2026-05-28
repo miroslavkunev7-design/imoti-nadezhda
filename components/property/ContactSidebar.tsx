@@ -15,7 +15,7 @@ interface ContactSidebarProps {
 export default function ContactSidebar({
   propertyId,
   phone = process.env.NEXT_PUBLIC_CONTACT_PHONE ?? '0877 123 456',
-  email = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? 'info@imotinadejda.bg',
+  email = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? 'info@ildjia.bg',
   compact = false,
   variant = 'default',
 }: ContactSidebarProps) {
@@ -48,8 +48,8 @@ export default function ContactSidebar({
   if (isDetail) {
     return (
       <>
-        <div className="pd-card pd-contact">
-          <h3>Свържи се с нас</h3>
+        <div className="agent-glass-panel pd-contact">
+          <h3>Агент</h3>
 
           <a href={`tel:${phone.replace(/\s/g, '')}`} className="pd-contact-row">
             <span className="pd-contact-icon"><PhoneIcon /></span>
@@ -62,20 +62,25 @@ export default function ContactSidebar({
           </a>
 
           {sent ? (
-            <p style={{ fontSize: 12, color: 'var(--pd-accent)', textAlign: 'center' }}>Запитването е изпратено!</p>
+            <p style={{ fontSize: 12, color: '#CFA54A', textAlign: 'center' }}>Запитването е изпратено!</p>
           ) : showForm ? (
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <input type="text" placeholder="Име" value={name} onChange={e => setName(e.target.value)} required className="input-dark text-sm" />
-              <input type="email" placeholder="Имейл" value={emailV} onChange={e => setEmailV(e.target.value)} required className="input-dark text-sm" />
-              <input type="tel" placeholder="Телефон" value={phoneV} onChange={e => setPhoneV(e.target.value)} className="input-dark text-sm" />
-              <textarea placeholder="Съобщение" value={message} onChange={e => setMessage(e.target.value)} rows={2} className="input-dark text-sm resize-none" />
+              <input type="text" placeholder="Име" value={name} onChange={e => setName(e.target.value)} required className="input-luxury text-sm" />
+              <input type="email" placeholder="Имейл" value={emailV} onChange={e => setEmailV(e.target.value)} required className="input-luxury text-sm" />
+              <input type="tel" placeholder="Телефон" value={phoneV} onChange={e => setPhoneV(e.target.value)} className="input-luxury text-sm" />
+              <textarea placeholder="Съобщение" value={message} onChange={e => setMessage(e.target.value)} rows={2} className="input-luxury text-sm resize-none" />
               <button type="submit" disabled={loading} className="pd-btn">{loading ? '...' : 'Изпрати'}</button>
-              <button type="button" onClick={() => setShowForm(false)} style={{ fontSize: 11, color: 'var(--pd-text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}>Отказ</button>
+              <button type="button" onClick={() => setShowForm(false)} style={{ fontSize: 11, color: 'rgba(250,247,242,0.6)', background: 'none', border: 'none', cursor: 'pointer' }}>Отказ</button>
             </form>
           ) : (
-            <button type="button" className="pd-btn" onClick={() => setShowForm(true)}>
-              Запази оглед
-            </button>
+            <>
+              <button type="button" className="pd-btn" onClick={() => setShowForm(true)}>
+                Запази час за оглед
+              </button>
+              <button type="button" className="pd-btn pd-btn-secondary" onClick={() => setShowForm(true)}>
+                Запитване
+              </button>
+            </>
           )}
         </div>
 
@@ -83,14 +88,14 @@ export default function ContactSidebar({
           <Logo size="sm" />
           <div className="pd-stars">
             {[1, 2, 3, 4, 5].map(i => (
-              <svg key={i} width="12" height="12" viewBox="0 0 24 24" fill="#d4a017">
+              <svg key={i} width="12" height="12" viewBox="0 0 24 24" fill="#CFA54A">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
               </svg>
             ))}
-            <strong style={{ marginLeft: 4, color: 'var(--pd-text)' }}>4.9</strong>
-            <span style={{ color: 'var(--pd-text-muted)' }}>(128 отзива)</span>
+            <strong style={{ marginLeft: 4, color: '#6B001C' }}>4.9</strong>
+            <span style={{ color: '#9A7080' }}>(128 отзива)</span>
           </div>
-          <Link href="/buy" className="pd-agency-link">Виж всички обяви на агенцията →</Link>
+          <Link href="/buy" className="pd-agency-link" style={{ color: '#A97A1F' }}>Виж всички обяви →</Link>
         </div>
       </>
     )
@@ -98,13 +103,13 @@ export default function ContactSidebar({
 
   if (compact) {
     return (
-      <div className="h-full rounded-xl p-3 flex flex-col gap-2" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)' }}>
-        <h3 className="text-[11px] font-semibold uppercase">Свържи се</h3>
-        <a href={`tel:${phone}`}>{phone}</a>
-        {sent ? <p className="text-xs text-crimson-700">Изпратено!</p> : (
+      <div className="h-full rounded p-3 flex flex-col gap-2 marble-property-card">
+        <h3 className="text-[11px] font-semibold uppercase" style={{ color: '#6B001C' }}>Свържи се</h3>
+        <a href={`tel:${phone}`} style={{ color: '#7A0D28' }}>{phone}</a>
+        {sent ? <p className="text-xs" style={{ color: '#CFA54A' }}>Изпратено!</p> : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-1.5">
-            <input type="text" placeholder="Име" value={name} onChange={e => setName(e.target.value)} required className="input-dark text-[11px]" />
-            <button type="submit" className="btn-crimson text-[11px] py-2">Запази оглед</button>
+            <input type="text" placeholder="Име" value={name} onChange={e => setName(e.target.value)} required className="input-luxury text-[11px]" />
+            <button type="submit" className="btn-gold text-[11px] py-2">Запази оглед</button>
           </form>
         )}
       </div>
@@ -113,16 +118,16 @@ export default function ContactSidebar({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-xl p-5" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)' }}>
-        <h3 className="text-sm font-semibold mb-4 uppercase">Свържи се с нас</h3>
-        <a href={`tel:${phone}`} className="block mb-3 text-sm">{phone}</a>
-        <a href={`mailto:${email}`} className="block mb-5 text-sm text-themed-secondary">{email}</a>
+      <div className="agent-glass-panel p-5">
+        <h3 className="text-sm font-semibold mb-4 uppercase" style={{ color: '#FAF7F2' }}>Свържи се с нас</h3>
+        <a href={`tel:${phone}`} className="block mb-3 text-sm" style={{ color: '#FAF7F2' }}>{phone}</a>
+        <a href={`mailto:${email}`} className="block mb-5 text-sm" style={{ color: 'rgba(250,247,242,0.8)' }}>{email}</a>
         {sent ? (
-          <p className="text-crimson-700 text-sm">Запитването е изпратено!</p>
+          <p className="text-sm" style={{ color: '#CFA54A' }}>Запитването е изпратено!</p>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-2.5">
-            <input type="text" placeholder="Вашето име" value={name} onChange={e => setName(e.target.value)} required className="input-dark text-sm" />
-            <button type="submit" className="btn-crimson w-full py-3">{loading ? '...' : 'Запази оглед'}</button>
+            <input type="text" placeholder="Вашето име" value={name} onChange={e => setName(e.target.value)} required className="input-luxury text-sm" />
+            <button type="submit" className="btn-gold w-full py-3">{loading ? '...' : 'Запази оглед'}</button>
           </form>
         )}
       </div>

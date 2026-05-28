@@ -9,6 +9,9 @@ import ContactSidebar from '@/components/property/ContactSidebar'
 import PropertyDescription from '@/components/property/PropertyDescription'
 import PropertyMap from '@/components/property/PropertyMap'
 import PropertyCharacteristics from '@/components/property/PropertyCharacteristics'
+import TerraceHero from '@/components/layout/TerraceHero'
+import { useEffect } from 'react'
+import { useCitySelection } from '@/components/providers/CitySelectionProvider'
 
 interface Props {
   property: Property
@@ -25,11 +28,16 @@ export default function PropertyDetailScreen({
   citySlug,
   quarterSlug,
 }: Props) {
+  const { setCitySlug } = useCitySelection()
   const backHref = `/cities/${citySlug}/${quarterSlug}`
+
+  useEffect(() => {
+    setCitySlug(citySlug)
+  }, [citySlug, setCitySlug])
 
   const breadcrumbs = [
     { label: 'Начало', href: '/' },
-    { label: 'Градове', href: '/buy' },
+    { label: 'За продажба', href: '/buy' },
     { label: cityName, href: `/cities/${citySlug}` },
     { label: property.quarter_name ?? quarterSlug, href: `/cities/${citySlug}/${quarterSlug}` },
     { label: 'Детайл' },
@@ -37,6 +45,10 @@ export default function PropertyDetailScreen({
 
   return (
     <div className="property-detail-page">
+      <div className="-mt-[96px]" style={{ marginTop: -96 }}>
+        <TerraceHero citySlug={citySlug} height={280} overlay="strong" />
+      </div>
+
       <div className="pd-shell">
         <div className="pd-subhead">
           <Link href={backHref} className="pd-back">
@@ -50,8 +62,9 @@ export default function PropertyDetailScreen({
           </div>
         </div>
 
-        <div className="pd-body">
-          <section className="pd-top" aria-label="Галерия и основна информация">
+        <div className="pd-columns">
+          {/* LEFT — gallery, stats, description */}
+          <div className="pd-left">
             <PropertyGallery
               images={galleryImages}
               title={property.title}
@@ -67,15 +80,19 @@ export default function PropertyDetailScreen({
               </div>
             </div>
 
-            <div className="pd-side">
-              <ContactSidebar propertyId={property.id} variant="detail" />
-            </div>
-          </section>
-
-          <section className="pd-bottom" aria-label="Детайли">
             <div className="pd-card pd-panel">
               <PropertyDescription description={property.description} variant="detail" />
             </div>
+          </div>
+
+          {/* RIGHT — agent, details, map */}
+          <div className="pd-right">
+            <ContactSidebar propertyId={property.id} variant="detail" />
+
+            <div className="pd-card pd-panel">
+              <PropertyCharacteristics property={property} variant="detail" />
+            </div>
+
             <div className="pd-card" style={{ display: 'flex', flexDirection: 'column', minHeight: 0 }}>
               <PropertyMap
                 address={property.quarter_name ?? ''}
@@ -84,10 +101,7 @@ export default function PropertyDetailScreen({
                 variant="detail"
               />
             </div>
-            <div className="pd-card pd-panel">
-              <PropertyCharacteristics property={property} variant="detail" />
-            </div>
-          </section>
+          </div>
         </div>
       </div>
     </div>

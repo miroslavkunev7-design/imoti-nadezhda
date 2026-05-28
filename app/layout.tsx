@@ -1,29 +1,28 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import ConditionalShell from '@/components/layout/ConditionalShell'
-import ThemeProvider    from '@/components/providers/ThemeProvider'
 
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   ),
   title: {
-    default:  'Имоти Надежда — Луксозни недвижими имоти',
-    template: '%s | Имоти Надежда',
+    default:  'Имоти ИЛДЖ.ИА — Луксозни недвижими имоти',
+    template: '%s | Имоти ИЛДЖ.ИА',
   },
   description:
-    'Намерете мечтания си имот в Шумен, Варна, Бургас и Нови пазар. ' +
+    'Намерете мечтания си имот в Шумен, Варна, Бургас и Нови Пазар. ' +
     'Апартаменти, къщи, мезонети и парцели от водещата агенция за недвижими имоти.',
   keywords: [
-    'имоти', 'недвижими имоти', 'Шумен', 'Варна', 'Бургас', 'Нови пазар',
-    'апартаменти', 'къщи', 'имоти Надежда',
+    'имоти', 'недвижими имоти', 'Шумен', 'Варна', 'Бургас', 'Нови Пазар',
+    'апартаменти', 'къщи', 'ИЛДЖ.ИА', 'Имоти ИЛДЖ.ИА',
   ],
   openGraph: {
     type:        'website',
     locale:      'bg_BG',
-    siteName:    'Имоти Надежда',
-    title:       'Имоти Надежда — Луксозни недвижими имоти',
-    description: 'Водещата агенция за недвижими имоти в Североизточна България.',
+    siteName:    'Имоти ИЛДЖ.ИА',
+    title:       'Имоти ИЛДЖ.ИА — Луксозни недвижими имоти',
+    description: 'Водещата агенция за луксозни недвижими имоти в Североизточна България.',
   },
   robots: {
     index:  true,
@@ -32,7 +31,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor:     '#080810',
+  themeColor:     '#6B001C',
   width:          'device-width',
   initialScale:   1,
   maximumScale:   5,
@@ -44,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="bg" className="dark" suppressHydrationWarning>
+    <html lang="bg" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -54,17 +53,15 @@ export default function RootLayout({
         />
       </head>
       <body
-        className="font-body antialiased transition-colors duration-300"
+        className="font-body antialiased"
         style={{
-          backgroundColor: 'var(--bg-base)',
-          color: 'var(--text-primary)',
+          backgroundColor: '#FAF7F2',
+          color: '#6B001C',
         }}
       >
-        <ThemeProvider>
-          <ConditionalShell>
-            {children}
-          </ConditionalShell>
-        </ThemeProvider>
+        <ConditionalShell>
+          {children}
+        </ConditionalShell>
       </body>
     </html>
   )
