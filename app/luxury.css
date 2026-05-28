@@ -1,0 +1,685 @@
+/* Имоти ИЛДЖ.ИА — luxury burgundy / marble / gold design system */
+
+.luxury-brand {
+  --lux-burgundy: #6b001c;
+  --lux-burgundy-light: #7a0d28;
+  --lux-marble: #faf7f2;
+  --lux-gold: #cfa54a;
+  --lux-gold-deep: #a97a1f;
+  --lux-text: #3d1520;
+  --lux-text-muted: #6b4a52;
+  --lux-header-h: 96px;
+  --lux-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --lux-shadow-soft: 0 8px 32px rgba(107, 0, 28, 0.12);
+  --lux-shadow-card: 0 4px 24px rgba(107, 0, 28, 0.1), 0 0 0 1px rgba(207, 165, 74, 0.22);
+  --lux-radius-panel: 0 0 28px 0;
+}
+
+.luxury-brand,
+.luxury-brand body {
+  background-color: var(--lux-marble);
+  color: var(--lux-text);
+}
+
+.luxury-marble-bg {
+  background-color: var(--lux-marble);
+  background-image:
+    radial-gradient(ellipse 120% 80% at 12% 8%, rgba(207, 165, 74, 0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 90% 60% at 88% 92%, rgba(207, 165, 74, 0.1) 0%, transparent 50%),
+    linear-gradient(125deg, rgba(250, 247, 242, 0.98) 0%, rgba(245, 238, 228, 0.95) 45%, rgba(250, 247, 242, 1) 100%);
+  background-attachment: fixed;
+}
+
+/* ── Header ribbon ─────────────────────────────────────────── */
+.lux-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: var(--lux-header-h);
+  pointer-events: none;
+}
+
+.lux-header__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  pointer-events: auto;
+}
+
+.lux-header__brand-panel {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 28px 0 20px;
+  min-width: min(420px, 42vw);
+  background:
+    linear-gradient(145deg, #ffffff 0%, #faf7f2 42%, #f3ebe0 100%);
+  border-radius: var(--lux-radius-panel);
+  box-shadow:
+    0 6px 28px rgba(107, 0, 28, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.lux-header__brand-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 30%, rgba(207, 165, 74, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 70% 80%, rgba(207, 165, 74, 0.08) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.lux-header__gold-ribbon {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  width: 14px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    #e8c878 0%,
+    #cfa54a 28%,
+    #a97a1f 52%,
+    #cfa54a 78%,
+    #e8c878 100%
+  );
+  border-radius: 0 4px 4px 0;
+  box-shadow:
+    2px 0 12px rgba(169, 122, 31, 0.45),
+    inset -1px 0 0 rgba(255, 255, 255, 0.35);
+}
+
+.lux-header__gold-ribbon::after {
+  content: '';
+  position: absolute;
+  top: 8%;
+  bottom: 8%;
+  left: 3px;
+  width: 3px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  border-radius: 2px;
+}
+
+.lux-header__nav-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0 24px 0 32px;
+  background: linear-gradient(
+    90deg,
+    rgba(250, 247, 242, 0.72) 0%,
+    rgba(250, 247, 242, 0.35) 40%,
+    transparent 100%
+  );
+}
+
+.lux-header__link {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lux-burgundy);
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition:
+    color 0.25s var(--lux-ease),
+    background 0.25s var(--lux-ease),
+    box-shadow 0.25s var(--lux-ease);
+}
+
+.lux-header__link:hover {
+  color: var(--lux-burgundy-light);
+  background: rgba(207, 165, 74, 0.12);
+}
+
+.lux-header__link.is-active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--lux-burgundy-light), var(--lux-burgundy));
+  box-shadow: 0 4px 14px rgba(107, 0, 28, 0.28);
+}
+
+.lux-header__profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(207, 165, 74, 0.65);
+  color: var(--lux-burgundy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  transition:
+    border-color 0.25s var(--lux-ease),
+    box-shadow 0.25s var(--lux-ease),
+    transform 0.25s var(--lux-ease);
+}
+
+.lux-header__profile:hover {
+  border-color: var(--lux-gold);
+  box-shadow: 0 0 0 3px rgba(207, 165, 74, 0.2);
+  transform: translateY(-1px);
+}
+
+.lux-logo__line1 {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lux-burgundy);
+  line-height: 1.2;
+}
+
+.lux-logo__line2 {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--lux-burgundy);
+  line-height: 1.1;
+}
+
+/* ── Terrace hero ──────────────────────────────────────────── */
+.lux-terrace-hero {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #2a1018 center / cover no-repeat;
+}
+
+.lux-terrace-hero__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.04);
+  animation: luxHeroZoom 10s var(--lux-ease) forwards;
+}
+
+@keyframes luxHeroZoom {
+  to {
+    transform: scale(1);
+  }
+}
+
+.lux-terrace-hero__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(107, 0, 28, 0.35) 0%, rgba(61, 21, 32, 0.25) 40%, rgba(250, 247, 242, 0.92) 100%);
+}
+
+.lux-terrace-hero__gold-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--lux-gold-deep) 15%,
+    var(--lux-gold) 50%,
+    var(--lux-gold-deep) 85%,
+    transparent
+  );
+}
+
+/* ── Marble search strip ───────────────────────────────────── */
+.lux-search-strip {
+  background: linear-gradient(180deg, #ffffff 0%, #faf7f2 100%);
+  border: 1.5px solid rgba(207, 165, 74, 0.45);
+  border-radius: 14px;
+  box-shadow:
+    var(--lux-shadow-soft),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  padding: 16px 20px;
+}
+
+.lux-search-strip select,
+.lux-search-strip input {
+  background: rgba(250, 247, 242, 0.85);
+  border: 1px solid rgba(207, 165, 74, 0.35);
+  border-radius: 8px;
+  color: var(--lux-text);
+  font-size: 0.875rem;
+  padding: 10px 12px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.lux-search-strip select:focus,
+.lux-search-strip input:focus {
+  border-color: var(--lux-gold);
+  box-shadow: 0 0 0 3px rgba(207, 165, 74, 0.18);
+}
+
+.lux-search-strip label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lux-text-muted);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.lux-btn-gold {
+  background: linear-gradient(135deg, var(--lux-gold) 0%, var(--lux-gold-deep) 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 22px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(169, 122, 31, 0.35);
+  transition:
+    transform 0.25s var(--lux-ease),
+    box-shadow 0.25s var(--lux-ease);
+}
+
+.lux-btn-gold:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(169, 122, 31, 0.45);
+}
+
+.lux-btn-burgundy {
+  background: linear-gradient(135deg, var(--lux-burgundy-light), var(--lux-burgundy));
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid rgba(207, 165, 74, 0.35);
+  border-radius: 8px;
+  padding: 12px 18px;
+  cursor: pointer;
+  transition:
+    box-shadow 0.25s var(--lux-ease),
+    transform 0.25s var(--lux-ease);
+}
+
+.lux-btn-burgundy:hover {
+  box-shadow: 0 6px 24px rgba(107, 0, 28, 0.35);
+  transform: translateY(-1px);
+}
+
+/* ── City cards — marble dissolve ──────────────────────────── */
+.lux-city-card {
+  position: relative;
+  display: block;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid rgba(207, 165, 74, 0.4);
+  box-shadow: var(--lux-shadow-card);
+  transition:
+    transform 0.35s var(--lux-ease),
+    box-shadow 0.35s var(--lux-ease),
+    border-color 0.35s var(--lux-ease);
+}
+
+.lux-city-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(207, 165, 74, 0.75);
+  box-shadow:
+    0 12px 40px rgba(107, 0, 28, 0.18),
+    0 0 0 1px rgba(207, 165, 74, 0.35);
+}
+
+.lux-city-card__image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.45s var(--lux-ease);
+}
+
+.lux-city-card:hover .lux-city-card__image {
+  transform: scale(1.05);
+}
+
+.lux-city-card__dissolve {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(250, 247, 242, 0.97) 0%,
+      rgba(250, 247, 242, 0.82) 12%,
+      rgba(243, 230, 210, 0.55) 28%,
+      rgba(207, 165, 74, 0.28) 42%,
+      rgba(207, 165, 74, 0.08) 58%,
+      transparent 78%
+    );
+}
+
+.lux-city-card__particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.85;
+  background-image:
+    radial-gradient(circle at 8% 42%, rgba(250, 247, 242, 0.9) 0 1px, transparent 2px),
+    radial-gradient(circle at 14% 58%, rgba(207, 165, 74, 0.45) 0 1px, transparent 2px),
+    radial-gradient(circle at 20% 35%, rgba(250, 247, 242, 0.75) 0 1px, transparent 2px),
+    radial-gradient(circle at 26% 72%, rgba(207, 165, 74, 0.35) 0 1px, transparent 2px),
+    radial-gradient(circle at 32% 48%, rgba(250, 247, 242, 0.5) 0 1px, transparent 2px),
+    radial-gradient(circle at 38% 62%, rgba(207, 165, 74, 0.25) 0 1px, transparent 2px);
+  background-size: 100% 100%;
+  mask-image: linear-gradient(90deg, black 0%, black 35%, transparent 72%);
+}
+
+.lux-city-card__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  padding: 16px 18px;
+}
+
+.lux-city-card__title {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  font-weight: 700;
+  color: var(--lux-burgundy);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* ── Burgundy filter bar ───────────────────────────────────── */
+.lux-filter-bar {
+  background: linear-gradient(135deg, var(--lux-burgundy) 0%, var(--lux-burgundy-light) 100%);
+  border: 1px solid rgba(207, 165, 74, 0.4);
+  border-radius: 12px;
+  padding: 14px 18px;
+  box-shadow: 0 8px 28px rgba(107, 0, 28, 0.25);
+}
+
+.lux-filter-bar select,
+.lux-filter-bar input {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(207, 165, 74, 0.35);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.8125rem;
+  padding: 9px 12px;
+  width: 100%;
+}
+
+.lux-filter-bar label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 5px;
+  display: block;
+}
+
+.lux-filter-bar .lux-filter-icon {
+  color: var(--lux-gold);
+}
+
+/* ── Property cards ──────────────────────────────────────────── */
+.lux-property-card {
+  background: linear-gradient(180deg, #ffffff 0%, #faf7f2 100%);
+  border: 1.5px solid rgba(207, 165, 74, 0.42);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--lux-shadow-card);
+  transition:
+    transform 0.35s var(--lux-ease),
+    box-shadow 0.35s var(--lux-ease),
+    border-color 0.35s var(--lux-ease);
+}
+
+.lux-property-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(107, 0, 28, 0.45);
+  box-shadow:
+    0 14px 40px rgba(107, 0, 28, 0.2),
+    0 0 24px rgba(107, 0, 28, 0.08);
+}
+
+.lux-property-card__dissolve-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 45%;
+  pointer-events: none;
+  background: linear-gradient(
+    0deg,
+    rgba(250, 247, 242, 0.95) 0%,
+    rgba(250, 247, 242, 0.6) 35%,
+    rgba(207, 165, 74, 0.15) 60%,
+    transparent 100%
+  );
+}
+
+.lux-property-card__price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--lux-burgundy);
+}
+
+/* ── Detail page ───────────────────────────────────────────── */
+.lux-detail-page {
+  --lux-detail-gap: 14px;
+  padding-top: var(--lux-header-h);
+  min-height: 100dvh;
+}
+
+.lux-detail-hero {
+  height: min(38vh, 320px);
+  min-height: 200px;
+}
+
+.lux-detail-grid {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 20px 24px 48px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr);
+  gap: var(--lux-detail-gap);
+  align-items: start;
+}
+
+.lux-detail-panel {
+  background: linear-gradient(180deg, #ffffff 0%, #faf7f2 100%);
+  border: 1.5px solid rgba(207, 165, 74, 0.4);
+  border-radius: 12px;
+  box-shadow: var(--lux-shadow-card);
+  overflow: hidden;
+}
+
+.lux-agent-card {
+  background: linear-gradient(
+    145deg,
+    rgba(107, 0, 28, 0.94) 0%,
+    rgba(122, 13, 40, 0.92) 100%
+  );
+  border: 1.5px solid rgba(207, 165, 74, 0.5);
+  border-radius: 12px;
+  padding: 20px;
+  color: #fff;
+  box-shadow: 0 10px 36px rgba(107, 0, 28, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+.lux-agent-card__btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition:
+    transform 0.25s var(--lux-ease),
+    box-shadow 0.25s var(--lux-ease);
+}
+
+.lux-agent-card__btn--gold {
+  background: linear-gradient(135deg, var(--lux-gold), var(--lux-gold-deep));
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.lux-agent-card__btn--outline {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(207, 165, 74, 0.65);
+}
+
+.lux-agent-card__btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.lux-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.lux-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+  animation: luxShimmer 4s ease-in-out infinite;
+}
+
+@keyframes luxShimmer {
+  0%,
+  100% {
+    left: -100%;
+  }
+  50% {
+    left: 120%;
+  }
+}
+
+/* Content pages */
+.lux-content-page {
+  padding-top: calc(var(--lux-header-h) + 32px);
+  padding-bottom: 64px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.lux-content-panel {
+  background: linear-gradient(180deg, #ffffff 0%, #faf7f2 100%);
+  border: 1.5px solid rgba(207, 165, 74, 0.4);
+  border-radius: 14px;
+  padding: 32px 36px;
+  box-shadow: var(--lux-shadow-card);
+}
+
+.lux-content-panel h1 {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  color: var(--lux-burgundy);
+  margin-bottom: 16px;
+}
+
+.lux-content-panel p {
+  color: var(--lux-text-muted);
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 1024px) {
+  .lux-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lux-header__brand-panel {
+    min-width: min(320px, 55vw);
+    padding-right: 20px;
+  }
+
+  .lux-header__nav-area {
+    padding-right: 16px;
+  }
+
+  .lux-header__link {
+    padding: 8px 10px;
+    font-size: 0.6875rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .luxury-brand {
+    --lux-header-h: 88px;
+  }
+
+  .lux-header__brand-panel {
+    min-width: 0;
+    flex: 1;
+    padding: 0 16px;
+  }
+
+  .lux-header__nav-area .lux-header__link:not(.lux-header__link--hide-mobile) {
+    display: none;
+  }
+}
+
+/* Property detail — luxury overrides */
+.luxury-detail-page.property-detail-page {
+  --pd-bg: transparent;
+  --pd-card: #faf7f2;
+  --pd-card-alt: #ffffff;
+  --pd-accent: #6b001c;
+  --pd-accent-bright: #7a0d28;
+  --pd-text: #3d1520;
+  --pd-text-secondary: #6b4a52;
+  --pd-text-muted: #8a7278;
+  --pd-border: rgba(207, 165, 74, 0.35);
+  background: transparent;
+  padding-top: 0;
+}
+
+.luxury-detail-page .pd-gallery-main {
+  min-height: min(36vh, 420px);
+}
+
+.luxury-detail-page .pd-price {
+  color: var(--lux-burgundy);
+}
+
+.luxury-detail-page .pd-tag {
+  background: var(--lux-burgundy);
+}
+
+.luxury-detail-page .pd-gallery-nav:hover {
+  background: var(--lux-burgundy);
+}

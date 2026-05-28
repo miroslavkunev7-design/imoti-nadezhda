@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import PropertyDetailScreen from '@/components/property/PropertyDetailScreen'
+import LuxuryPropertyDetail from '@/components/property/LuxuryPropertyDetail'
 import { FALLBACK_CITIES } from '@/lib/data/fallback'
 import type { Property } from '@/types'
 
@@ -40,7 +40,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
   }]
 
   return (
-    <PropertyDetailScreen
+    <LuxuryPropertyDetail
       property={property}
       galleryImages={galleryImages}
       cityName={city?.name ?? params.slug}

@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
-import HeroSection from '@/components/home/HeroSection'
+import LuxuryHome from '@/components/home/LuxuryHome'
 import { FALLBACK_CITIES } from '@/lib/data/fallback'
+import { BRAND } from '@/lib/design/brand'
 
 export const metadata: Metadata = {
-  title: 'Имоти Надежда — Луксозни недвижими имоти',
+  title: `${BRAND.siteTitle} — Луксозни недвижими имоти`,
   description:
     'Намерете мечтания си имот в Шумен, Варна, Бургас и Нови пазар. ' +
     'Апартаменти, къщи, мезонети и парцели от водещата агенция.',
@@ -12,5 +13,5 @@ export const metadata: Metadata = {
 export const revalidate = 120
 
 export default function HomePage() {
-  return <HeroSection cities={FALLBACK_CITIES} />
+  return <LuxuryHome cities={FALLBACK_CITIES} />
 }

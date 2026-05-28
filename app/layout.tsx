@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import './luxury.css'
 import ConditionalShell from '@/components/layout/ConditionalShell'
 import ThemeProvider    from '@/components/providers/ThemeProvider'
 
