@@ -30,49 +30,73 @@ export default function HomeHero({ cities }: Props) {
       <section className="hp-top" aria-label="Главна навигация">
         <svg className="hp-top__surface" viewBox="0 0 940 166" preserveAspectRatio="none" aria-hidden>
           <defs>
-            {/* Real marble texture tile */}
+            {/* Marble texture */}
             <pattern id="hpMarbleTile" patternUnits="userSpaceOnUse" x="0" y="0" width="940" height="166">
               <image href="/images/texture-marble-white-gold.png"
                 x="0" y="0" width="940" height="166"
                 preserveAspectRatio="xMidYMid slice" />
             </pattern>
-            <linearGradient id="hpMarbleBase" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0"    stopColor="#ffffff" />
-              <stop offset="0.32" stopColor="#fdfaf3" />
-              <stop offset="0.62" stopColor="#f7f1e6" />
-              <stop offset="0.85" stopColor="#f1ead9" />
-              <stop offset="1"    stopColor="#ece2cd" />
+
+            {/* 3D gold ribbon — main body (dark→bright→dark across the band width) */}
+            <linearGradient id="hpGoldRibbon" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0"    stopColor="#3d1f00" />
+              <stop offset="0.06" stopColor="#7a4210" />
+              <stop offset="0.18" stopColor="#d4960a" />
+              <stop offset="0.32" stopColor="#f7d96a" />
+              <stop offset="0.46" stopColor="#fff3a0" />
+              <stop offset="0.58" stopColor="#f0c836" />
+              <stop offset="0.72" stopColor="#c68e10" />
+              <stop offset="0.86" stopColor="#7a4a08" />
+              <stop offset="1"    stopColor="#3a1e02" />
             </linearGradient>
-            <linearGradient id="hpGold" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0"    stopColor="#6b3c08" />
-              <stop offset="0.12" stopColor="#c4922a" />
-              <stop offset="0.36" stopColor="#f5d97a" />
-              <stop offset="0.50" stopColor="#ffe9a0" />
-              <stop offset="0.66" stopColor="#c48a1e" />
-              <stop offset="1"    stopColor="#5c3407" />
+
+            {/* Bright highlight streak on top edge of ribbon */}
+            <linearGradient id="hpGoldEdge" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0"    stopColor="rgba(255,255,255,0)" />
+              <stop offset="0.15" stopColor="rgba(255,248,200,0.85)" />
+              <stop offset="0.42" stopColor="rgba(255,252,220,0.96)" />
+              <stop offset="0.70" stopColor="rgba(255,240,160,0.72)" />
+              <stop offset="1"    stopColor="rgba(255,255,255,0)" />
             </linearGradient>
-            <filter id="hpVein" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
-              <feTurbulence type="fractalNoise" baseFrequency="0.010 0.038" numOctaves="6" seed="7" result="raw"/>
-              <feColorMatrix in="raw" type="matrix"
-                values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3 3 3 -1.85 0.3"
-                result="mask"/>
-              <feFlood floodColor="#cfa54a" floodOpacity="1" result="col"/>
-              <feComposite in="col" in2="mask" operator="in" result="v"/>
-              <feGaussianBlur in="v" stdDeviation="0.45"/>
+
+            {/* Shadow under ribbon */}
+            <linearGradient id="hpGoldShadow" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0"   stopColor="rgba(0,0,0,0.32)" />
+              <stop offset="1"   stopColor="rgba(0,0,0,0)" />
+            </linearGradient>
+
+            <filter id="hpRibbonBlur">
+              <feGaussianBlur stdDeviation="1.2" />
             </filter>
             <clipPath id="hpClip">
               <path d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z"/>
             </clipPath>
           </defs>
-          <path className="hp-top__surface-main"
-            d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z"
-            fill="url(#hpMarbleTile)" />
-          <path className="hp-top__surface-gold-light"
-            d="M274 88 C329 71 365 47 392 0 H449 C412 24 394 49 354 64 C315 79 294 79 274 88 Z"/>
-          <path className="hp-top__surface-gold"
-            d="M0 156 C77 169 168 168 216 143 C238 128 247 107 277 91 C315 70 363 54 392 0 H478 C438 25 416 52 371 70 C330 86 300 89 281 105 C257 125 246 147 216 159 C153 181 70 174 0 164 Z"/>
-          <path strokeWidth="0" fill="rgba(255,240,160,0.52)"
-            d="M280 92 C320 74 356 50 386 2 H416 C382 46 346 70 306 89 Z"/>
+
+          {/* 1. Marble surface */}
+          <path d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z"
+            fill="url(#hpMarbleTile)"
+            stroke="rgba(190,138,42,0.38)" strokeWidth="1" />
+
+          {/* 2. Drop shadow under ribbon */}
+          <path d="M0 148 C72 165 158 165 210 143 C234 133 248 116 278 100 C318 80 362 60 394 8 H420 C388 62 342 84 300 104 C270 118 254 136 222 148 C168 170 72 172 0 158 Z"
+            fill="url(#hpGoldShadow)" filter="url(#hpRibbonBlur)" opacity="0.6" />
+
+          {/* 3. Thick 3D gold ribbon — main body */}
+          <path d="M0 140 C72 158 156 158 208 136 C232 126 246 108 276 92 C316 70 360 50 392 0 H476 C444 18 428 38 396 56 C354 78 320 96 294 112 C266 128 248 144 216 154 C164 172 74 168 0 156 Z"
+            fill="url(#hpGoldRibbon)" />
+
+          {/* 4. Top bright highlight edge */}
+          <path d="M0 140 C72 158 156 158 208 136 C232 126 246 108 276 92 C316 70 360 50 392 0 H406 C374 46 330 66 290 88 C264 104 248 120 220 132 C168 152 76 156 0 144 Z"
+            fill="url(#hpGoldEdge)" opacity="0.9" />
+
+          {/* 5. Fine bright line on top edge of ribbon */}
+          <path d="M0 140 C72 158 156 158 208 136 C232 126 246 108 276 92 C316 70 360 50 392 0"
+            fill="none" stroke="rgba(255,252,210,0.95)" strokeWidth="1.8" />
+
+          {/* 6. Fine dark line on bottom edge */}
+          <path d="M0 156 C74 168 164 172 216 154 C248 144 266 128 294 112 C320 96 354 78 396 56 C428 38 444 18 476 0"
+            fill="none" stroke="rgba(60,30,0,0.55)" strokeWidth="1.2" />
         </svg>
         <Link href="/" className="hp-brand" aria-label="Начало">
           {/* eslint-disable-next-line @next/next/no-img-element */}

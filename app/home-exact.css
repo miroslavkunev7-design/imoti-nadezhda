@@ -313,15 +313,15 @@
   overflow: hidden;
   border-radius: 0.78vw;
   border: 1px solid rgba(207, 165, 74, 0.52);
-  background: linear-gradient(128deg, #f5e6c8 0%, #fdf5e4 55%, #f2ddb8 100%);
+  background: url('/images/texture-marble-white-gold.png') center / cover no-repeat;
   box-shadow: 0 8px 26px rgba(0, 0, 0, 0.34);
   text-decoration: none;
 }
 
 .hp-city__photo {
   position: relative;
-  height: 15.45vh;
-  flex: 0 0 15.45vh;
+  height: 16.5vh;
+  flex: 0 0 16.5vh;
   background-size: cover;
   background-position: center;
 }
