@@ -19,20 +19,16 @@
   --crm-marble-vein:   rgba(207,168,71,0.08);
 }
 
-/* ─── Bordeaux Damask Wallpaper Background ────────────── */
-.admin-luxury-root .admin-bg-overlay {
-  /* Rich bordeaux + damask diamond lattice via SVG data URI */
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40 4 L76 40 L40 76 L4 40 Z' fill='none' stroke='rgba(207,168,71,0.07)' stroke-width='0.8'/%3E%3Ccircle cx='40' cy='40' r='5' fill='none' stroke='rgba(207,168,71,0.06)' stroke-width='0.7'/%3E%3Ccircle cx='0' cy='0' r='3' fill='none' stroke='rgba(207,168,71,0.05)' stroke-width='0.6'/%3E%3Ccircle cx='80' cy='0' r='3' fill='none' stroke='rgba(207,168,71,0.05)' stroke-width='0.6'/%3E%3Ccircle cx='0' cy='80' r='3' fill='none' stroke='rgba(207,168,71,0.05)' stroke-width='0.6'/%3E%3Ccircle cx='80' cy='80' r='3' fill='none' stroke='rgba(207,168,71,0.05)' stroke-width='0.6'/%3E%3Cpath d='M40 14 L50 24 L40 34 L30 24 Z M40 46 L50 56 L40 66 L30 56 Z M14 40 L24 30 L34 40 L24 50 Z M46 40 L56 30 L66 40 L56 50 Z' fill='rgba(255,255,255,0.018)'/%3E%3C/svg%3E"),
-    linear-gradient(160deg, #5A1028 0%, #420B17 35%, #380812 60%, #4A0C1A 100%) !important;
-  background-repeat: repeat, no-repeat !important;
-  background-size: 80px 80px, cover !important;
-}
-
-/* Actual fixed BG */
-.admin-luxury-root > div[class*='fixed'][style*='z-[-20]'],
-.admin-luxury-root > div:first-child {
-  background: linear-gradient(160deg, #5A1028 0%, #420B17 40%, #380812 70%, #4A0C1A 100%) !important;
+/* ─── Bordeaux MARBLE STONE Background ────────────────── */
+/* Real marble: fractal-noise turbulence warps gold veins over a
+   bordeaux stone body — organic, no geometric tiling. */
+.admin-luxury-root .admin-marble-bg {
+  background-color: #420B17 !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='700'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%235C1129'/%3E%3Cstop offset='0.5' stop-color='%23420B17'/%3E%3Cstop offset='1' stop-color='%23350710'/%3E%3C/linearGradient%3E%3Cfilter id='warp' x='-30%25' y='-30%25' width='160%25' height='160%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.009' numOctaves='5' seed='9' result='n'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='n' scale='110' xChannelSelector='R' yChannelSelector='G'/%3E%3CfeGaussianBlur stdDeviation='0.5'/%3E%3C/filter%3E%3Cfilter id='cloud'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.011 0.016' numOctaves='5' seed='4'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.7 0'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='700' height='700' fill='url(%23g)'/%3E%3Crect width='700' height='700' filter='url(%23cloud)' fill='%23ffffff' opacity='0.035'/%3E%3Crect width='700' height='700' filter='url(%23cloud)' fill='%23200309' opacity='0.18'/%3E%3Cg filter='url(%23warp)' fill='none' stroke-linecap='round'%3E%3Cpath d='M-60 110 Q170 70 320 170 T720 220' stroke='rgba(207,168,71,0.5)' stroke-width='1.6'/%3E%3Cpath d='M-60 250 Q180 220 350 300 T720 330' stroke='rgba(232,201,107,0.32)' stroke-width='0.9'/%3E%3Cpath d='M-60 400 Q160 360 340 460 T720 470' stroke='rgba(207,168,71,0.42)' stroke-width='1.3'/%3E%3Cpath d='M-60 560 Q200 520 360 600 T720 610' stroke='rgba(232,201,107,0.3)' stroke-width='1'/%3E%3Cpath d='M140 -60 Q180 220 130 420 T190 760' stroke='rgba(207,168,71,0.28)' stroke-width='0.8'/%3E%3Cpath d='M500 -60 Q540 240 470 460 T540 760' stroke='rgba(232,201,107,0.26)' stroke-width='0.8'/%3E%3Cpath d='M-60 180 Q220 150 380 230 T720 280' stroke='rgba(207,168,71,0.2)' stroke-width='0.5'/%3E%3C/g%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  background-attachment: fixed !important;
 }
 
 /* ─── WHITE IVORY MARBLE SIDEBAR ────────────────────────── */
