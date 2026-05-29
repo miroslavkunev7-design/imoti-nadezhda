@@ -47,23 +47,6 @@
   user-select: none;
 }
 
-.hp-window-view {
-  position: absolute;
-  z-index: 1;
-  left: 12.2vw;
-  top: 15.2vh;
-  width: 75.6vw;
-  height: 36.8vh;
-  background-image: url('/images/cities/burgas-page.jpg');
-  background-size: 104vw auto;
-  background-position: 42% 14%;
-  background-repeat: no-repeat;
-  opacity: 0.22;
-  mix-blend-mode: screen;
-  pointer-events: none;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 51% 100%, 50.2% 0, 0 0);
-}
-
 .hp__vignette {
   position: absolute;
   inset: 0;
@@ -75,55 +58,110 @@
     linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, transparent 48%, rgba(44, 3, 15, 0.34) 100%);
 }
 
-/* Top marble panel */
 .hp-top {
   position: absolute;
-  top: 1.39vh;
+  top: 1.2vh;
   left: 0;
   width: 91.8vw;
-  height: 19.97vh;
+  height: 28.82vh;
   z-index: 5;
+  overflow: visible;
+  filter: drop-shadow(0 0.62vh 0.78vh rgba(0, 0, 0, 0.28));
 }
 
-.hp-top__marble {
+.hp-top__surface {
   position: absolute;
-  top: 0;
-  left: 0.78vw;
-  width: 91.02vw;
-  height: 19.79vh;
-  border-radius: 0.59vw 0.59vw 0.39vw 0.39vw;
-  border: 1px solid rgba(190, 138, 42, 0.42);
-  background:
-    radial-gradient(ellipse 48% 80% at 18% 20%, rgba(255, 255, 255, 0.95), transparent 70%),
-    radial-gradient(ellipse 32% 70% at 78% 8%, rgba(223, 184, 96, 0.32), transparent 62%),
-    linear-gradient(112deg, transparent 0 42%, rgba(170, 105, 18, 0.18) 44%, rgba(255, 245, 215, 0.72) 46%, rgba(174, 116, 23, 0.42) 48%, transparent 52%),
-    linear-gradient(180deg, #f9f0df 0%, #fffaf0 54%, #efe0c9 100%);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.24);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: visible;
 }
 
-.hp-top__logo-panel {
-  position: absolute;
-  top: -0.35vh;
-  left: 0;
-  width: 60.55vw;
-  height: auto;
-  z-index: 2;
-  pointer-events: none;
-  user-select: none;
+.hp-top__surface-main {
+  fill: url(#hpMarbleBase);
+  stroke: rgba(190, 138, 42, 0.48);
+  stroke-width: 1.15;
 }
 
-.hp-top__logo-hit {
+.hp-top__surface-gold {
+  fill: url(#hpGold);
+  opacity: 0.96;
+}
+
+.hp-top__surface-gold-light {
+  fill: rgba(255, 242, 184, 0.64);
+  mix-blend-mode: screen;
+}
+
+.hp-top__surface-marble-lines {
+  fill: none;
+  stroke: rgba(174, 116, 23, 0.18);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  filter: url(#hpMarbleNoise);
+}
+
+.hp-brand {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 24.41vw;
-  height: 24.65vh;
-  z-index: 3;
+  z-index: 4;
+  left: 2.95vw;
+  top: 3.55vh;
+  width: 20.7vw;
+  height: 20.1vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: var(--hp-burg);
+}
+
+.hp-brand__mark {
+  width: 17.2vw;
+  height: 9.95vh;
+  overflow: visible;
+}
+
+.hp-brand__roof {
+  fill: none;
+  stroke: var(--hp-burg);
+  stroke-width: 7.8;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.hp-brand__roof--mid { stroke-width: 10.2; }
+.hp-brand__wall,
+.hp-brand__window,
+.hp-brand__chimney,
+.hp-brand__spark {
+  fill: var(--hp-burg);
+  stroke: none;
+}
+
+.hp-brand__small {
+  margin-top: 0.08vh;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.42vw;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.hp-brand__name {
+  margin-top: 0.7vh;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 2.72vw;
+  line-height: 0.96;
+  font-weight: 800;
+  letter-spacing: 0.035em;
+  white-space: nowrap;
 }
 
 .hp-nav {
   position: absolute;
-  top: 3.9vh;
+  top: 5.75vh;
   right: 1.66vw;
   z-index: 4;
   display: flex;

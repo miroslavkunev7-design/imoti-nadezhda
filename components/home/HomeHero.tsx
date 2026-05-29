@@ -25,13 +25,51 @@ export default function HomeHero({ cities }: Props) {
         <source srcSet="/images/hero-bg.webp" type="image/webp" />
         <img src="/images/hero-bg.jpg" alt="" className="hp-bg__img" draggable={false} />
       </picture>
-      <div className="hp-window-view" aria-hidden />
       <div className="hp__vignette" aria-hidden />
 
       <section className="hp-top" aria-label="Главна навигация">
-        <div className="hp-top__marble" aria-hidden />
-        <img src="/images/logo-panel-cut.png" alt="" className="hp-top__logo-panel" draggable={false} />
-        <Link href="/" className="hp-top__logo-hit" aria-label="Начало" />
+        <svg className="hp-top__surface" viewBox="0 0 940 166" preserveAspectRatio="none" aria-hidden>
+          <defs>
+            <linearGradient id="hpMarbleBase" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stopColor="#f8ecda" />
+              <stop offset="0.42" stopColor="#fffaf0" />
+              <stop offset="0.72" stopColor="#f6ead7" />
+              <stop offset="1" stopColor="#ead8bc" />
+            </linearGradient>
+            <linearGradient id="hpGold" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stopColor="#87520f" />
+              <stop offset="0.18" stopColor="#d4a844" />
+              <stop offset="0.46" stopColor="#fff0a8" />
+              <stop offset="0.67" stopColor="#c58a22" />
+              <stop offset="1" stopColor="#6e3f0b" />
+            </linearGradient>
+            <filter id="hpMarbleNoise" x="-10%" y="-10%" width="120%" height="120%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.018 0.032" numOctaves="4" seed="17" result="noise" />
+              <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0.85 0 0 0 0 0.68 0 0 0 0 0.35 0 0 0 0.18 0" />
+            </filter>
+          </defs>
+          <path className="hp-top__surface-main" d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z" />
+          <path className="hp-top__surface-gold" d="M0 156 C77 169 168 168 216 143 C238 128 247 107 277 91 C315 70 363 54 392 0 H478 C438 25 416 52 371 70 C330 86 300 89 281 105 C257 125 246 147 216 159 C153 181 70 174 0 164 Z" />
+          <path className="hp-top__surface-gold-light" d="M274 88 C329 71 365 47 392 0 H449 C412 24 394 49 354 64 C315 79 294 79 274 88 Z" />
+          <path className="hp-top__surface-marble-lines" d="M30 18 C84 7 130 13 178 4 M34 119 C80 108 137 112 188 98 M500 20 C585 4 666 12 736 0 M652 92 C735 83 824 90 920 78" />
+        </svg>
+        <Link href="/" className="hp-brand" aria-label="Начало">
+          <svg className="hp-brand__mark" viewBox="0 0 220 92" aria-hidden>
+            <path className="hp-brand__roof" d="M18 58 L63 22 L101 58" />
+            <path className="hp-brand__roof hp-brand__roof--mid" d="M69 58 L111 12 L154 58" />
+            <path className="hp-brand__roof" d="M122 58 L160 28 L202 58" />
+            <path className="hp-brand__wall" d="M40 58 H92 V79 H40 Z" />
+            <path className="hp-brand__wall" d="M99 58 H158 V79 H99 Z" />
+            <path className="hp-brand__wall" d="M166 58 H208 V79 H166 Z" />
+            <path className="hp-brand__window" d="M56 64 H69 V77 H56 Z M72 64 H85 V77 H72 Z" />
+            <path className="hp-brand__window" d="M113 64 H132 V77 H113 Z M135 64 H154 V77 H135 Z" />
+            <path className="hp-brand__window" d="M176 64 H189 V77 H176 Z M192 64 H205 V77 H192 Z" />
+            <path className="hp-brand__chimney" d="M142 13 H157 V29 H142 Z" />
+            <path className="hp-brand__spark" d="M158 7 H170 V19 H158 Z" />
+          </svg>
+          <span className="hp-brand__small">НЕДВИЖИМИ ИМОТИ</span>
+          <span className="hp-brand__name">•НАДЕЖДА•</span>
+        </Link>
         <nav className="hp-nav" aria-label="Навигация">
           <Link href="/buy" className="hp-nav__link">За продажба</Link>
           <span className="hp-nav__sep" aria-hidden />
