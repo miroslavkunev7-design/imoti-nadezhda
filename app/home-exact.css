@@ -79,9 +79,8 @@
 }
 
 .hp-top__surface-main {
-  fill: url(#hpMarbleBase);
-  stroke: rgba(190, 138, 42, 0.48);
-  stroke-width: 1.15;
+  stroke: rgba(190, 138, 42, 0.45);
+  stroke-width: 1.1;
 }
 
 .hp-top__surface-gold {
@@ -187,18 +186,12 @@
   align-items: stretch;
   overflow: hidden;
   border-radius: 0.78vw;
-  border: 1px solid rgba(196, 148, 48, 0.55);
-  background: linear-gradient(
-    128deg,
-    #f5e6c8 0%,
-    #fdf5e4 32%,
-    #f9ead4 58%,
-    #f2ddb8 100%
-  );
+  border: 1px solid rgba(190, 148, 48, 0.50);
+  background: url('/images/texture-marble-white-gold.png') center / cover no-repeat;
   box-shadow:
     0 7px 30px rgba(0, 0, 0, 0.28),
     0 1px 4px rgba(0, 0, 0, 0.14),
-    inset 0 1px 0 rgba(255, 242, 190, 0.55);
+    inset 0 1px 0 rgba(255, 245, 210, 0.40);
 }
 
 .hp-search__field,

@@ -97,7 +97,9 @@ export default function AdminSidebar({ badges, session, restrictedPages }: Props
       className="fixed top-0 left-0 bottom-0 z-50 flex flex-col admin-sidebar"
       style={{
         width: 200,
-        background: 'linear-gradient(180deg, #FDFAF5 0%, #F8F2E8 55%, #F3EBE0 100%)',
+        backgroundImage: "url('/images/texture-marble-white-gold.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center top',
         borderRight: '2px solid rgba(207,168,71,0.45)',
         boxShadow: '4px 0 32px rgba(0,0,0,0.22), inset -1px 0 0 rgba(207,168,71,0.15)',
       }}

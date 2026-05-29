@@ -156,24 +156,17 @@
   100% { background-position:  200% center; }
 }
 
-/* ─── WHITE MARBLE CARDS ─────────────────────────────────── */
+/* ─── WHITE/GOLD MARBLE CARDS — from texture ─────────────── */
 .admin-luxury-root .admin-card,
 .admin-luxury-root [class*='AdminCard'],
 .admin-luxury-root .admin-kanban-bg {
   background:
-    linear-gradient(
-      128deg,
-      #FAF7F2 0%,
-      #F5EDE0 35%,
-      #FAF7F2 55%,
-      #F0E8DB 85%,
-      #FAF7F2 100%
-    ) !important;
-  border: 1px solid rgba(207,168,71,0.38) !important;
+    url('/images/texture-marble-white-gold.png') center / cover no-repeat !important;
+  border: 1px solid rgba(207,168,71,0.40) !important;
   border-radius: 16px !important;
   box-shadow:
     0 6px 28px rgba(0,0,0,0.22),
-    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 1px 0 rgba(255,255,255,0.85) inset,
     0 0 0 1px rgba(207,168,71,0.08) inset !important;
   position: relative;
   overflow: hidden;
@@ -340,7 +333,7 @@
   backdrop-filter: blur(10px) !important;
 }
 .admin-modal-panel {
-  background: linear-gradient(145deg, #FAF7F2 0%, #F5EDE0 60%, #FAF7F2 100%) !important;
+  background: url('/images/texture-marble-white-gold.png') center / cover no-repeat !important;
   border: 1px solid rgba(207,168,71,0.45) !important;
   box-shadow: 0 24px 80px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.8) inset !important;
 }

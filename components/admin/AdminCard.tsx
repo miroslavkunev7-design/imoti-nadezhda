@@ -1,6 +1,8 @@
 // Shared marble card style for admin — white/ivory with gold borders
 export const MARBLE_CARD = {
-  background: 'linear-gradient(128deg, #FAF7F2 0%, #F5EDE0 35%, #FAF7F2 60%, #F0E8DB 100%)',
+  backgroundImage: "url('/images/texture-marble-white-gold.png')",
+  backgroundSize: 'cover' as const,
+  backgroundPosition: 'center' as const,
   border: '1px solid rgba(207,168,71,0.38)',
   borderRadius: 16,
   boxShadow: '0 6px 28px rgba(0,0,0,0.22), 0 1px 0 rgba(255,255,255,0.9) inset',

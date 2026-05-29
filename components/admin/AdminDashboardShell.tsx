@@ -21,8 +21,17 @@ export default function AdminDashboardShell({ children, badges, session, restric
       <AdminSidebar badges={badges} session={session} restrictedPages={restrictedPages} />
 
       <main
-        className="min-h-screen overflow-y-auto admin-scroll-main admin-panel admin-marble-bg"
-        style={{ marginLeft: 200, paddingTop: 56, paddingBottom: 80 }}
+        className="min-h-screen overflow-y-auto admin-scroll-main admin-panel"
+        style={{
+          marginLeft: 200,
+          paddingTop: 56,
+          paddingBottom: 80,
+          backgroundImage: "url('/images/texture-burgundy-wall.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
+        }}
       >
         <div className="p-7">{children}</div>
       </main>

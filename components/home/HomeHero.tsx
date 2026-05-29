@@ -30,12 +30,18 @@ export default function HomeHero({ cities }: Props) {
       <section className="hp-top" aria-label="Главна навигация">
         <svg className="hp-top__surface" viewBox="0 0 940 166" preserveAspectRatio="none" aria-hidden>
           <defs>
+            {/* Real marble texture tile */}
+            <pattern id="hpMarbleTile" patternUnits="userSpaceOnUse" x="0" y="0" width="940" height="166">
+              <image href="/images/texture-marble-white-gold.png"
+                x="0" y="0" width="940" height="166"
+                preserveAspectRatio="xMidYMid slice" />
+            </pattern>
             <linearGradient id="hpMarbleBase" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0"    stopColor="#f5e2c0" />
-              <stop offset="0.25" stopColor="#fdf3e0" />
-              <stop offset="0.52" stopColor="#f8e8ce" />
-              <stop offset="0.78" stopColor="#f0d9b0" />
-              <stop offset="1"    stopColor="#e6c99e" />
+              <stop offset="0"    stopColor="#ffffff" />
+              <stop offset="0.32" stopColor="#fdfaf3" />
+              <stop offset="0.62" stopColor="#f7f1e6" />
+              <stop offset="0.85" stopColor="#f1ead9" />
+              <stop offset="1"    stopColor="#ece2cd" />
             </linearGradient>
             <linearGradient id="hpGold" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0"    stopColor="#6b3c08" />
@@ -46,31 +52,21 @@ export default function HomeHero({ cities }: Props) {
               <stop offset="1"    stopColor="#5c3407" />
             </linearGradient>
             <filter id="hpVein" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
-              <feTurbulence type="fractalNoise" baseFrequency="0.011 0.042" numOctaves="6" seed="7" result="raw"/>
+              <feTurbulence type="fractalNoise" baseFrequency="0.010 0.038" numOctaves="6" seed="7" result="raw"/>
               <feColorMatrix in="raw" type="matrix"
-                values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3 3 3 -1.6 0.35"
+                values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3 3 3 -1.85 0.3"
                 result="mask"/>
-              <feFlood floodColor="#b8892a" floodOpacity="1" result="col"/>
+              <feFlood floodColor="#cfa54a" floodOpacity="1" result="col"/>
               <feComposite in="col" in2="mask" operator="in" result="v"/>
-              <feGaussianBlur in="v" stdDeviation="0.5"/>
+              <feGaussianBlur in="v" stdDeviation="0.45"/>
             </filter>
             <clipPath id="hpClip">
               <path d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z"/>
             </clipPath>
           </defs>
           <path className="hp-top__surface-main"
-            d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z"/>
-          <rect x="0" y="0" width="940" height="166"
-            filter="url(#hpVein)" clipPath="url(#hpClip)" opacity="0.62"/>
-          <g clipPath="url(#hpClip)" fill="none" stroke="#c49628" strokeLinecap="round">
-            <path strokeWidth="1.8" strokeOpacity="0.55" d="M0 58 C48 42 90 62 138 48 C192 30 228 10 272 0"/>
-            <path strokeWidth="1.2" strokeOpacity="0.38" d="M0 74 C52 60 100 80 154 68 C208 56 244 26 290 0"/>
-            <path strokeWidth="2.2" strokeOpacity="0.62" d="M0 92 C44 78 86 98 136 84 C188 70 222 36 264 0"/>
-            <path strokeWidth="1.0" strokeOpacity="0.32" d="M344 0 C368 20 384 50 416 46 C448 42 472 14 498 0"/>
-            <path strokeWidth="1.6" strokeOpacity="0.48" d="M476 0 C518 16 544 42 588 36 C638 28 686 8 730 0"/>
-            <path strokeWidth="1.0" strokeOpacity="0.30" d="M608 114 C656 100 706 110 754 98 C806 84 856 90 940 76"/>
-            <path strokeWidth="1.4" strokeOpacity="0.40" d="M0 118 C40 106 78 112 120 102 C164 90 196 108 234 118"/>
-          </g>
+            d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z"
+            fill="url(#hpMarbleTile)" />
           <path className="hp-top__surface-gold-light"
             d="M274 88 C329 71 365 47 392 0 H449 C412 24 394 49 354 64 C315 79 294 79 274 88 Z"/>
           <path className="hp-top__surface-gold"
