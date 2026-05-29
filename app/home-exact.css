@@ -99,7 +99,11 @@
   stroke: rgba(174, 116, 23, 0.18);
   stroke-width: 1.4;
   stroke-linecap: round;
-  filter: url(#hpMarbleNoise);
+}
+
+.hp-top__surface-gold-streak {
+  fill: rgba(255, 240, 160, 0.52);
+  stroke: none;
 }
 
 .hp-brand {

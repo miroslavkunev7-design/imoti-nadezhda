@@ -30,33 +30,53 @@ export default function HomeHero({ cities }: Props) {
       <section className="hp-top" aria-label="Главна навигация">
         <svg className="hp-top__surface" viewBox="0 0 940 166" preserveAspectRatio="none" aria-hidden>
           <defs>
-            {/* Ivory-marble base: warm cream → golden ivory → deeper amber cream */}
             <linearGradient id="hpMarbleBase" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0"    stopColor="#f5e6c8" />
-              <stop offset="0.28" stopColor="#fdf5e4" />
-              <stop offset="0.55" stopColor="#f9ead4" />
-              <stop offset="0.78" stopColor="#f2ddb8" />
-              <stop offset="1"    stopColor="#e8ccaa" />
+              <stop offset="0"    stopColor="#f5e2c0" />
+              <stop offset="0.25" stopColor="#fdf3e0" />
+              <stop offset="0.52" stopColor="#f8e8ce" />
+              <stop offset="0.78" stopColor="#f0d9b0" />
+              <stop offset="1"    stopColor="#e6c99e" />
             </linearGradient>
-            {/* Gold ribbon: dark amber → bright gold highlight → warm gold → dark amber */}
             <linearGradient id="hpGold" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0"    stopColor="#6b3c08" />
-              <stop offset="0.14" stopColor="#c4922a" />
-              <stop offset="0.38" stopColor="#f5d97a" />
-              <stop offset="0.52" stopColor="#ffe9a0" />
-              <stop offset="0.68" stopColor="#c48a1e" />
+              <stop offset="0.12" stopColor="#c4922a" />
+              <stop offset="0.36" stopColor="#f5d97a" />
+              <stop offset="0.50" stopColor="#ffe9a0" />
+              <stop offset="0.66" stopColor="#c48a1e" />
               <stop offset="1"    stopColor="#5c3407" />
             </linearGradient>
-            {/* Marble vein noise filter — golden-amber tones */}
-            <filter id="hpMarbleNoise" x="-10%" y="-10%" width="120%" height="120%">
-              <feTurbulence type="fractalNoise" baseFrequency="0.016 0.028" numOctaves="5" seed="23" result="noise" />
-              <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0.78 0 0 0 0 0.56 0 0 0 0 0.18 0 0 0 0.22 0" />
+            <filter id="hpVein" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
+              <feTurbulence type="fractalNoise" baseFrequency="0.011 0.042" numOctaves="6" seed="7" result="raw"/>
+              <feColorMatrix in="raw" type="matrix"
+                values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3 3 3 -1.6 0.35"
+                result="mask"/>
+              <feFlood floodColor="#b8892a" floodOpacity="1" result="col"/>
+              <feComposite in="col" in2="mask" operator="in" result="v"/>
+              <feGaussianBlur in="v" stdDeviation="0.5"/>
             </filter>
+            <clipPath id="hpClip">
+              <path d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z"/>
+            </clipPath>
           </defs>
-          <path className="hp-top__surface-main" d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z" />
-          <path className="hp-top__surface-gold" d="M0 156 C77 169 168 168 216 143 C238 128 247 107 277 91 C315 70 363 54 392 0 H478 C438 25 416 52 371 70 C330 86 300 89 281 105 C257 125 246 147 216 159 C153 181 70 174 0 164 Z" />
-          <path className="hp-top__surface-gold-light" d="M274 88 C329 71 365 47 392 0 H449 C412 24 394 49 354 64 C315 79 294 79 274 88 Z" />
-          <path className="hp-top__surface-marble-lines" d="M30 18 C84 7 130 13 178 4 M34 119 C80 108 137 112 188 98 M500 20 C585 4 666 12 736 0 M652 92 C735 83 824 90 920 78" />
+          <path className="hp-top__surface-main"
+            d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z"/>
+          <rect x="0" y="0" width="940" height="166"
+            filter="url(#hpVein)" clipPath="url(#hpClip)" opacity="0.62"/>
+          <g clipPath="url(#hpClip)" fill="none" stroke="#c49628" strokeLinecap="round">
+            <path strokeWidth="1.8" strokeOpacity="0.55" d="M0 58 C48 42 90 62 138 48 C192 30 228 10 272 0"/>
+            <path strokeWidth="1.2" strokeOpacity="0.38" d="M0 74 C52 60 100 80 154 68 C208 56 244 26 290 0"/>
+            <path strokeWidth="2.2" strokeOpacity="0.62" d="M0 92 C44 78 86 98 136 84 C188 70 222 36 264 0"/>
+            <path strokeWidth="1.0" strokeOpacity="0.32" d="M344 0 C368 20 384 50 416 46 C448 42 472 14 498 0"/>
+            <path strokeWidth="1.6" strokeOpacity="0.48" d="M476 0 C518 16 544 42 588 36 C638 28 686 8 730 0"/>
+            <path strokeWidth="1.0" strokeOpacity="0.30" d="M608 114 C656 100 706 110 754 98 C806 84 856 90 940 76"/>
+            <path strokeWidth="1.4" strokeOpacity="0.40" d="M0 118 C40 106 78 112 120 102 C164 90 196 108 234 118"/>
+          </g>
+          <path className="hp-top__surface-gold-light"
+            d="M274 88 C329 71 365 47 392 0 H449 C412 24 394 49 354 64 C315 79 294 79 274 88 Z"/>
+          <path className="hp-top__surface-gold"
+            d="M0 156 C77 169 168 168 216 143 C238 128 247 107 277 91 C315 70 363 54 392 0 H478 C438 25 416 52 371 70 C330 86 300 89 281 105 C257 125 246 147 216 159 C153 181 70 174 0 164 Z"/>
+          <path strokeWidth="0" fill="rgba(255,240,160,0.52)"
+            d="M280 92 C320 74 356 50 386 2 H416 C382 46 346 70 306 89 Z"/>
         </svg>
         <Link href="/" className="hp-brand" aria-label="Начало">
           {/* eslint-disable-next-line @next/next/no-img-element */}
