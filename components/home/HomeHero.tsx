@@ -36,21 +36,18 @@ export default function HomeHero({ cities }: Props) {
                 preserveAspectRatio="xMidYMid slice" />
             </pattern>
 
-            {/* 3D ribbon — vertical gradient across ribbon thickness */}
-            <linearGradient id="hpGoldRibbon" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%"   stopColor="#2a1000" />
-              <stop offset="7%"   stopColor="#6b3608" />
-              <stop offset="18%"  stopColor="#c48518" />
-              <stop offset="33%"  stopColor="#f5d560" />
-              <stop offset="46%"  stopColor="#fff6b8" />
-              <stop offset="56%"  stopColor="#ffe070" />
-              <stop offset="70%"  stopColor="#c68e10" />
-              <stop offset="84%"  stopColor="#7a4a08" />
-              <stop offset="100%" stopColor="#1e0e00" />
+            {/* Original gold ribbon gradient — horizontal */}
+            <linearGradient id="hpGoldRibbon" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0"    stopColor="#6b3c08" />
+              <stop offset="0.12" stopColor="#c4922a" />
+              <stop offset="0.36" stopColor="#f5d97a" />
+              <stop offset="0.50" stopColor="#ffe9a0" />
+              <stop offset="0.66" stopColor="#c48a1e" />
+              <stop offset="1"    stopColor="#5c3407" />
             </linearGradient>
 
             <filter id="hpRibbonShadow">
-              <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#000" floodOpacity="0.42"/>
+              <feDropShadow dx="0" dy="2" stdDeviation="2.5" floodColor="#000" floodOpacity="0.30"/>
             </filter>
           </defs>
 
@@ -62,29 +59,18 @@ export default function HomeHero({ cities }: Props) {
             strokeWidth="1"
           />
 
-          {/* ── 3D Gold ribbon — original curve, new gradient ── */}
+          {/* ── Gold ribbon ── */}
           <path
             d="M0 156 C77 169 168 168 216 143 C238 128 247 107 277 91 C315 70 363 54 392 0 H478 C438 25 416 52 371 70 C330 86 300 89 281 105 C257 125 246 147 216 159 C153 181 70 174 0 164 Z"
             fill="url(#hpGoldRibbon)"
-            filter="url(#hpRibbonShadow)"
+            opacity="0.96"
           />
 
-          {/* ── Bright top-edge highlight line ── */}
+          {/* ── Light shimmer overlay on the ribbon ── */}
           <path
-            d="M0 156 C77 169 168 168 216 143 C238 128 247 107 277 91 C315 70 363 54 392 0"
-            fill="none" stroke="rgba(255,252,210,0.90)" strokeWidth="1.8"
-          />
-
-          {/* ── Second bright streak just inside top edge ── */}
-          <path
-            d="M0 157.5 C78 170 168 170 216 145 C238 130 248 109 278 93 C316 72 363 56 393 2"
-            fill="none" stroke="rgba(255,245,170,0.50)" strokeWidth="1.0"
-          />
-
-          {/* ── Dark bottom-edge shadow ── */}
-          <path
-            d="M0 164 C70 174 153 181 216 159 C246 147 257 125 281 105 C300 89 330 86 371 70 C416 52 438 25 478 0"
-            fill="none" stroke="rgba(25,8,0,0.62)" strokeWidth="1.4"
+            d="M274 88 C329 71 365 47 392 0 H449 C412 24 394 49 354 64 C315 79 294 79 274 88 Z"
+            fill="rgba(255,242,184,0.64)"
+            style={{ mixBlendMode: 'screen' }}
           />
         </svg>
         <Link href="/" className="hp-brand" aria-label="Начало">
