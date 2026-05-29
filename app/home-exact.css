@@ -1,6 +1,72 @@
 /* ══════════════════════════════════════════════════
    HOME PAGE — 1:1 pixel-exact от screenshot
    ══════════════════════════════════════════════════ */
+.hp-clone {
+  aspect-ratio: 16 / 9;
+}
+
+.hp-clone__hit {
+  position: absolute;
+  z-index: 5;
+  display: block;
+  text-decoration: none;
+  background: transparent;
+}
+
+/* Coordinates are mapped from the supplied 1024x576 screenshot. */
+.hp-clone__logo {
+  left: 0%;
+  top: 0%;
+  width: 25.2%;
+  height: 28.7%;
+}
+
+.hp-clone__nav-sale {
+  left: 60.1%;
+  top: 5.7%;
+  width: 10.4%;
+  height: 7.1%;
+}
+
+.hp-clone__nav-rent {
+  left: 70.7%;
+  top: 5.7%;
+  width: 10.0%;
+  height: 7.1%;
+}
+
+.hp-clone__nav-about {
+  left: 80.9%;
+  top: 5.7%;
+  width: 7.0%;
+  height: 7.1%;
+}
+
+.hp-clone__nav-user {
+  left: 87.8%;
+  top: 5.0%;
+  width: 4.0%;
+  height: 7.2%;
+}
+
+.hp-clone__search {
+  left: 50.2%;
+  top: 42.5%;
+  width: 49.2%;
+  height: 8.8%;
+}
+
+.hp-clone__city {
+  top: 69.1%;
+  width: 14.35%;
+  height: 25.9%;
+}
+
+.hp-clone__city--1 { left: 17.2%; }
+.hp-clone__city--2 { left: 32.0%; }
+.hp-clone__city--3 { left: 46.6%; }
+.hp-clone__city--4 { left: 61.2%; }
+
 .main--home-exact {
   min-height: 0 !important;
   height: 100dvh !important;
