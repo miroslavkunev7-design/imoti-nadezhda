@@ -1,0 +1,363 @@
+/* Имоти Надежда — brand design system (visual only) */
+
+/* ── Marble dust dispersion (left → right) ── */
+.marble-dispersion {
+  position: relative;
+  overflow: hidden;
+}
+
+.marble-dispersion::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 48%;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(250, 247, 242, 0.98) 0%,
+      rgba(250, 247, 242, 0.88) 18%,
+      rgba(255, 253, 248, 0.55) 38%,
+      rgba(212, 175, 55, 0.28) 58%,
+      rgba(255, 253, 248, 0.12) 78%,
+      transparent 100%
+    ),
+    radial-gradient(ellipse 8% 40% at 22% 88%, rgba(212, 175, 55, 0.45) 0%, transparent 100%),
+    radial-gradient(ellipse 6% 35% at 42% 92%, rgba(255, 253, 248, 0.5) 0%, transparent 100%),
+    radial-gradient(ellipse 5% 30% at 62% 90%, rgba(212, 175, 55, 0.25) 0%, transparent 100%),
+    radial-gradient(ellipse 4% 25% at 82% 88%, rgba(255, 255, 255, 0.35) 0%, transparent 100%);
+  mix-blend-mode: normal;
+}
+
+.marble-dispersion--subtle::after {
+  height: 38%;
+  opacity: 0.92;
+}
+
+.marble-dispersion--burgundy::after {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(110, 15, 36, 0.95) 0%,
+      rgba(127, 23, 52, 0.82) 22%,
+      rgba(110, 15, 36, 0.45) 48%,
+      rgba(212, 175, 55, 0.2) 68%,
+      transparent 100%
+    ),
+    radial-gradient(ellipse 7% 38% at 30% 90%, rgba(212, 175, 55, 0.35) 0%, transparent 100%);
+}
+
+/* ── Burgundy satin wallpaper ── */
+.luxury-wallpaper,
+body.luxury-site-body {
+  background-color: var(--bg-base);
+  background-image:
+    radial-gradient(ellipse 120% 80% at 20% 0%, rgba(127, 23, 52, 0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 90% 60% at 85% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+    linear-gradient(165deg, #1a0c12 0%, var(--bg-base) 38%, #140a10 100%);
+}
+
+html.light .luxury-wallpaper,
+html.light body.luxury-site-body {
+  background-color: var(--marble-white);
+  background-image:
+    radial-gradient(ellipse 100% 70% at 10% 0%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
+    linear-gradient(180deg, var(--warm-white) 0%, var(--marble-white) 100%);
+}
+
+/* ── Global marble header (locked — identical on all public pages) ── */
+.site-marble-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 52;
+  pointer-events: none;
+  height: var(--site-header-offset);
+}
+
+.site-marble-header__inner {
+  display: grid;
+  grid-template-columns: minmax(200px, 280px) 1fr;
+  align-items: stretch;
+  height: 100%;
+  max-width: 100%;
+  pointer-events: auto;
+}
+
+.site-marble-header__marble {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  padding: clamp(6px, 1vh, 12px) clamp(12px, 2vw, 22px) 0;
+  background:
+    linear-gradient(180deg, var(--marble-white) 0%, var(--warm-white) 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+}
+
+.site-marble-header__wave {
+  position: absolute;
+  left: -6px;
+  right: -28px;
+  bottom: -1px;
+  height: clamp(28px, 4vh, 40px);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.site-marble-header__logo-link {
+  position: relative;
+  z-index: 3;
+  text-decoration: none;
+}
+
+.site-marble-header__nav-area {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  min-height: 0;
+  background: transparent;
+}
+
+.site-marble-header .luxury-nav-panel {
+  align-self: flex-start;
+  min-height: 40px;
+  height: 40px;
+  margin-top: clamp(8px, 1.2vh, 14px);
+  margin-right: 0;
+  padding: 0 4px 0 10px;
+  border-radius: 0;
+  clip-path: polygon(16px 0, 100% 0, 100% 100%, 0 100%);
+  background: linear-gradient(
+    180deg,
+    var(--burgundy-secondary) 0%,
+    var(--burgundy-primary) 55%,
+    #5a1028 100%
+  );
+  border: 1px solid var(--gold-border);
+  border-left: none;
+  box-shadow: 0 4px 20px rgba(110, 15, 36, 0.35), inset 0 1px 0 rgba(255, 230, 200, 0.15);
+}
+
+.site-marble-header .luxury-nav-link {
+  padding: 10px 16px;
+  font-size: 0.875rem;
+}
+
+.site-marble-header .luxury-user-ring,
+.site-marble-header .luxury-nav-theme-btn {
+  width: 34px;
+  height: 34px;
+  margin: 0 6px 0 2px;
+}
+
+/* ── Marble search bar (homepage + city) ── */
+.luxury-search-bar--marble,
+.luxury-search-bar--home.luxury-search-bar--marble {
+  background: linear-gradient(180deg, var(--warm-white) 0%, var(--marble-white) 100%) !important;
+  border: 1px solid var(--gold-border) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+.luxury-search-bar--marble .luxury-search-segment__label,
+.luxury-search-bar--marble .luxury-search-select,
+.luxury-search-bar--marble .luxury-search-value {
+  color: var(--burgundy-primary) !important;
+}
+
+.luxury-search-bar--marble .luxury-search-segment__icon {
+  color: var(--gold) !important;
+}
+
+.luxury-search-bar--marble .luxury-search-filters-btn,
+.luxury-search-bar--marble .luxury-search-submit {
+  background: linear-gradient(180deg, var(--burgundy-secondary), var(--burgundy-primary)) !important;
+  color: var(--gold-light) !important;
+  border-color: var(--gold-border) !important;
+}
+
+.luxury-search-bar--marble.marble-dispersion::after {
+  height: 28%;
+  opacity: 0.75;
+}
+
+/* ── Cards: marble base + 16px radius ── */
+.luxury-card-marble {
+  border-radius: 16px;
+  border: 1px solid var(--gold-border);
+  background: linear-gradient(180deg, var(--warm-white) 0%, var(--marble-white) 100%);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+}
+
+.luxury-card-burgundy {
+  border-radius: 16px;
+  border: 1px solid var(--gold-border);
+  background: linear-gradient(180deg, var(--burgundy-secondary) 0%, var(--burgundy-primary) 100%);
+  box-shadow: 0 8px 28px rgba(110, 15, 36, 0.28);
+}
+
+/* ── Buttons ── */
+.btn-marble-luxury {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--gold-border);
+  background: linear-gradient(180deg, var(--warm-white), var(--marble-white));
+  color: var(--burgundy-primary);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  text-decoration: none;
+  transition: box-shadow 0.28s var(--ease-luxury), border-color 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-marble-luxury:hover {
+  border-color: var(--gold);
+  box-shadow: 0 8px 28px rgba(212, 175, 55, 0.28);
+}
+
+.btn-marble-luxury::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 253, 248, 0.5) 45%,
+    rgba(212, 175, 55, 0.25) 70%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-luxury);
+  pointer-events: none;
+}
+
+.btn-marble-luxury:hover::after {
+  opacity: 1;
+}
+
+/* Hero city cards — white marble footer via dispersion */
+.hero-city-card.marble-dispersion::after,
+.city-card-link.marble-dispersion::after {
+  height: 52%;
+}
+
+.luxury-property-card.marble-dispersion::after {
+  height: 40%;
+}
+
+.luxury-quarter-card.marble-dispersion::after {
+  height: 55%;
+}
+
+/* ── Bottom bar — burgundy + gold (brand), marble dust on top edge ── */
+.site-bottom-marble {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: var(--site-bottom-offset);
+  background:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, var(--burgundy-secondary) 0%, var(--burgundy-primary) 100%);
+  border-top: 1px solid var(--gold-border);
+  box-shadow: 0 -4px 24px rgba(107, 0, 28, 0.35);
+}
+
+.site-bottom-marble__grid {
+  max-width: 1280px;
+  margin: 0 auto;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.site-bottom-marble__cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+  text-decoration: none;
+  color: #fff;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.2s;
+}
+
+.site-bottom-marble__cell:last-child {
+  border-right: none;
+}
+
+.site-bottom-marble__cell:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.site-bottom-marble__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  flex-shrink: 0;
+  background: linear-gradient(180deg, rgba(255, 253, 248, 0.12), transparent);
+}
+
+.site-bottom-marble__label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.site-bottom-marble__sub {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: var(--gold-light);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Homepage — single viewport, marble UI preserved */
+.main--home-collage {
+  min-height: 0 !important;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  background: #000;
+}
+
+.collage-home.hero-home {
+  height: 100%;
+  min-height: 0;
+  position: relative;
+}
+
+.collage-home .hero-home__content {
+  height: 100%;
+  justify-content: space-between;
+  padding-top: calc(var(--site-header-offset) + 10px);
+  padding-bottom: calc(var(--site-bottom-offset) + 10px);
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .site-marble-header__inner {
+    grid-template-columns: 1fr auto;
+  }
+
+  .site-marble-header__marble {
+    padding-right: 8px;
+  }
+}

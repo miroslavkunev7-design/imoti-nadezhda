@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
+import '@/app/admin/admin-luxury.css'
 import AdminDashboardShell from '@/components/admin/AdminDashboardShell'
 import { getSidebarBadges } from '@/lib/queries/admin-sidebar'
 import { isPathRestricted } from '@/lib/auth/pages'
@@ -29,12 +30,15 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     : await getBrokerRestrictions(session?.id ?? 0)
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative admin-luxury-root">
       <div
         className="fixed inset-0 -z-20 bg-center bg-cover"
-        style={{ backgroundImage: "url('/images/admin-bg.jpg')" }}
+        style={{
+          backgroundImage:
+            "linear-gradient(180deg, #1a1016 0%, #0e080c 100%), url('/images/admin-bg.jpg')",
+        }}
       />
-      <div className="fixed inset-0 -z-10 admin-bg-overlay" style={{ background: 'rgba(6,4,14,0.88)' }} />
+      <div className="fixed inset-0 -z-10 admin-bg-overlay" />
 
       <AdminDashboardShell
         badges={badges}

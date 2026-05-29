@@ -1,4 +1,10 @@
 {
-  "framework": "nextjs",
-  "regions": ["fra1"]
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.imotinadezhda.bg" }],
+      "destination": "https://imotinadezhda.bg/:path*",
+      "permanent": true
+    }
+  ]
 }

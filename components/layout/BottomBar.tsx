@@ -1,71 +1,38 @@
 'use client'
 
 import Link from 'next/link'
-import { useTheme } from '@/components/providers/ThemeProvider'
 
 const SECTIONS = [
   {
-    href:    '/buy?featured=1',
-    icon:    <HouseIcon />,
-    label:   'Featured Listings',
-    sub:     'Details View',
-    border:  true,
+    href: '/buy?featured=1',
+    icon: <HouseIcon />,
+    label: 'Топ оферти',
+    sub: 'Виж обяви',
   },
   {
-    href:    '/buy?new=1',
-    icon:    <TagIcon />,
-    label:   'Newest Offers',
-    sub:     'Details View',
-    border:  true,
+    href: '/buy?new=1',
+    icon: <TagIcon />,
+    label: 'Най-нови',
+    sub: 'Виж обяви',
   },
   {
-    href:    '/admin/login',
-    icon:    <CrmIcon />,
-    label:   'CRM система',
-    sub:     'За брокери',
-    border:  false,
+    href: '/admin/login',
+    icon: <CrmIcon />,
+    label: 'CRM система',
+    sub: 'За брокери',
   },
 ]
 
 export default function BottomBar() {
-  const { theme } = useTheme()
-  const isLight = theme === 'light'
-
   return (
-    <div
-      className="bottom-bar-root fixed bottom-0 left-0 right-0 z-40 transition-all duration-300"
-      style={{
-        background: isLight
-          ? 'rgba(250,246,238,0.18)'
-          : 'rgba(6,5,14,0.20)',
-        backdropFilter: 'blur(18px) saturate(1.8)',
-        WebkitBackdropFilter: 'blur(18px) saturate(1.8)',
-        borderTop: isLight
-          ? '1px solid rgba(196,30,58,0.15)'
-          : '1px solid rgba(255,255,255,0.10)',
-      }}
-    >
-      <div className="max-w-[1280px] mx-auto grid grid-cols-3 divide-x divide-[rgba(255,255,255,0.06)]">
+    <footer className="site-bottom-marble" role="contentinfo">
+      <div className="site-bottom-marble__grid">
         {SECTIONS.map(({ href, icon, label, sub }) => (
-          <Link
-            key={href}
-            href={href}
-            className="group flex items-center gap-3 px-5 py-3 hover:bg-[rgba(196,30,58,0.08)] transition-colors duration-200"
-          >
-            {/* Icon circle */}
-            <div
-              className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-crimson-700 transition-colors duration-200 group-hover:text-crimson-400"
-              style={{ border: '1px solid rgba(196,30,58,0.3)' }}
-            >
-              {icon}
-            </div>
-
-            {/* Text */}
+          <Link key={href} href={href} className="site-bottom-marble__cell">
+            <span className="site-bottom-marble__icon">{icon}</span>
             <div className="min-w-0">
-              <p className="text-[13px] font-semibold text-themed-primary leading-tight truncate transition-colors">
-                {label}
-              </p>
-              <p className="text-[11px] text-crimson-700 leading-tight mt-0.5 flex items-center gap-1 truncate">
+              <p className="site-bottom-marble__label">{label}</p>
+              <p className="site-bottom-marble__sub">
                 {sub}
                 <ArrowIcon />
               </p>
@@ -73,7 +40,7 @@ export default function BottomBar() {
           </Link>
         ))}
       </div>
-    </div>
+    </footer>
   )
 }
 

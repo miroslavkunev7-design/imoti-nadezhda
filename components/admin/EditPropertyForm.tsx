@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { uploadPropertyImage } from '@/lib/upload-client'
+import VirtualTourCRMPanel from '@/components/virtual-tour/VirtualTourCRMPanel'
 
 interface PropertyData {
   id: number
@@ -208,6 +209,10 @@ export default function EditPropertyForm({ property }: { property: PropertyData 
             ))}
           </div>
         )}
+      </div>
+
+      <div className="property-card-surface p-6 mb-5">
+        <VirtualTourCRMPanel propertyId={property.id} imageUrls={images} />
       </div>
 
       <div className="flex flex-wrap gap-3">

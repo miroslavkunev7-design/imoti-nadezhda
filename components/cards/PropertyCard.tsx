@@ -10,9 +10,12 @@ import FavoriteButton from '@/components/ui/FavoriteButton'
 interface PropertyCardProps {
   property: Property
   index?: number
+  layout?: 'vertical' | 'horizontal'
+  collage?: boolean
 }
 
-export default function PropertyCard({ property, index = 0 }: PropertyCardProps) {
+export default function PropertyCard({ property, index = 0, layout = 'vertical', collage = false }: PropertyCardProps) {
+  const isHorizontal = layout === 'horizontal'
   const href = `/cities/${property.city_slug}/${property.quarter_slug}/property/${property.id}`
   const imageUrl = resolveMediaUrl(property.primary_image)
 
@@ -22,8 +25,13 @@ export default function PropertyCard({ property, index = 0 }: PropertyCardProps)
       style={{ '--card-i': index } as React.CSSProperties}
     >
       <Link href={href} className="block">
-        <div className="property-card-surface">
-          <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
+        <div
+          className={`property-card-surface luxury-property-card${collage ? ' collage-property-card' : ' marble-dispersion marble-dispersion--burgundy'}${isHorizontal ? ' luxury-property-card--list' : ''}`}
+        >
+          <div
+            className="relative overflow-hidden flex-shrink-0"
+            style={isHorizontal ? { width: 200, minHeight: 140, aspectRatio: 'auto' } : { aspectRatio: '4/3' }}
+          >
             <div
               className="absolute inset-0 bg-center bg-cover transition-transform duration-300 group-hover:scale-105"
               style={{
@@ -32,10 +40,13 @@ export default function PropertyCard({ property, index = 0 }: PropertyCardProps)
                   : 'linear-gradient(135deg, #0f0a1a 0%, #1a0a14 100%)',
               }}
             />
-            <div
-              className="absolute inset-0"
-              style={{ background: 'linear-gradient(to top, rgba(4,2,12,0.7) 0%, transparent 50%)' }}
-            />
+            {collage && <div className="collage-property-card__dissolve" aria-hidden />}
+            {!collage && (
+              <div
+                className="absolute inset-0"
+                style={{ background: 'linear-gradient(to top, rgba(4,2,12,0.7) 0%, transparent 50%)' }}
+              />
+            )}
 
             <div className="absolute top-3 left-3 flex gap-2">
               {property.is_featured && <PropertyBadge type="featured" />}
@@ -48,7 +59,10 @@ export default function PropertyCard({ property, index = 0 }: PropertyCardProps)
           </div>
 
           <div className="p-4">
-            <p className="text-xs text-themed-secondary uppercase tracking-wider mb-1 font-medium">
+            <p
+              className="text-xs uppercase tracking-wider mb-1 font-medium"
+              style={{ color: collage ? 'rgba(107,0,28,0.55)' : undefined }}
+            >
               {property.type}
             </p>
 

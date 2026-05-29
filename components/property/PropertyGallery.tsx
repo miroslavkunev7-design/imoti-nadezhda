@@ -47,6 +47,16 @@ export default function PropertyGallery({
 
           {isFeatured && <span className="pd-badge-top">Топ оферта</span>}
 
+          <div className="pd-gallery-toolbar">
+            <span className="pd-gallery-meta">{activeIndex + 1} / {total}</span>
+            <button type="button" className="pd-gallery-fs" onClick={() => setFullscreen(true)} aria-label="Цял екран">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" />
+                <line x1="21" y1="3" x2="14" y2="10" /><line x1="3" y1="21" x2="10" y2="14" />
+              </svg>
+            </button>
+          </div>
+
           {total > 1 && (
             <>
               <button type="button" className="pd-gallery-nav pd-gallery-nav--prev" onClick={prev} aria-label="Предишна">
@@ -64,8 +74,6 @@ export default function PropertyGallery({
         </div>
 
         <div className="pd-gallery-footer">
-          <span className="pd-gallery-meta">{activeIndex + 1} / {total}</span>
-
           {total > 1 ? (
             <div className="pd-thumbs">
               {images.map((img, i) => {
@@ -89,13 +97,6 @@ export default function PropertyGallery({
           ) : (
             <div className="pd-thumbs-spacer" />
           )}
-
-          <button type="button" className="pd-gallery-fs" onClick={() => setFullscreen(true)} aria-label="Цял екран">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" />
-              <line x1="21" y1="3" x2="14" y2="10" /><line x1="3" y1="21" x2="10" y2="14" />
-            </svg>
-          </button>
         </div>
 
         {fullscreen && currentUrl && (

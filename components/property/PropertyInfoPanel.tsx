@@ -123,7 +123,7 @@ export default function PropertyInfoPanel({
       {property.features && property.features.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {property.features.map(f => (
-            <span key={f} className="text-xs px-3 py-1.5 rounded-full" style={{ background: 'rgba(196,30,58,0.1)', color: '#c41e3a' }}>
+            <span key={f} className="text-xs px-3 py-1.5 rounded-full" style={{ background: 'rgba(80,11,26,0.1)', color: '#A86B3D' }}>
               {FEATURE_LABELS[f] ?? f}
             </span>
           ))}

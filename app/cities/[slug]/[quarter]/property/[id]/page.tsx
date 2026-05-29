@@ -46,6 +46,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
       cityName={city?.name ?? params.slug}
       citySlug={params.slug}
       quarterSlug={params.quarter}
+      cityCardImage={city?.image_url ?? property.primary_image}
     />
   )
 }

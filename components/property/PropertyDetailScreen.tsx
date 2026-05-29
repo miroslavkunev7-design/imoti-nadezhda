@@ -9,6 +9,8 @@ import ContactSidebar from '@/components/property/ContactSidebar'
 import PropertyDescription from '@/components/property/PropertyDescription'
 import PropertyMap from '@/components/property/PropertyMap'
 import PropertyCharacteristics from '@/components/property/PropertyCharacteristics'
+import PropertyVirtualTourButton from '@/components/virtual-tour/PropertyVirtualTourButton'
+import PropertyCityHero from '@/components/property/PropertyCityHero'
 
 interface Props {
   property: Property
@@ -16,6 +18,7 @@ interface Props {
   cityName: string
   citySlug: string
   quarterSlug: string
+  cityCardImage?: string | null
 }
 
 export default function PropertyDetailScreen({
@@ -24,6 +27,7 @@ export default function PropertyDetailScreen({
   cityName,
   citySlug,
   quarterSlug,
+  cityCardImage,
 }: Props) {
   const backHref = `/cities/${citySlug}/${quarterSlug}`
 
@@ -36,22 +40,27 @@ export default function PropertyDetailScreen({
   ]
 
   return (
-    <div className="property-detail-page">
-      <div className="pd-shell">
-        <div className="pd-subhead">
-          <Link href={backHref} className="pd-back">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-            Назад към списъка
-          </Link>
-          <div className="hidden sm:block">
-            <Breadcrumb items={breadcrumbs} />
-          </div>
-        </div>
+    <div className="rd-detail">
+      <PropertyCityHero citySlug={citySlug} cityCardImage={cityCardImage} />
 
-        <div className="pd-body">
-          <section className="pd-top" aria-label="Галерия и основна информация">
+      <div className="rd-detail__inner">
+        {/* Breadcrumb */}
+        <nav className="rd-breadcrumb" aria-label="Навигация">
+          {breadcrumbs.map((b, i) => (
+            <span key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              {i > 0 && <span className="rd-breadcrumb__sep">/</span>}
+              {b.href ? (
+                <Link href={b.href} className="rd-breadcrumb__link" style={{ color: 'rgba(107,0,28,0.55)', textDecoration: 'none' }}>{b.label}</Link>
+              ) : (
+                <span className="rd-breadcrumb__current">{b.label}</span>
+              )}
+            </span>
+          ))}
+        </nav>
+
+        <div className="rd-detail__grid">
+          {/* Left column */}
+          <div className="rd-detail__left">
             <PropertyGallery
               images={galleryImages}
               title={property.title}
@@ -61,22 +70,23 @@ export default function PropertyDetailScreen({
               variant="detail"
             />
 
-            <div className="pd-card pd-info-card">
-              <div className="pd-info-inner">
-                <PropertyInfoPanel property={property} variant="detail" />
-              </div>
+            <div style={{ marginTop: 20 }}>
+              <PropertyInfoPanel property={property} variant="detail" />
             </div>
 
-            <div className="pd-side">
-              <ContactSidebar propertyId={property.id} variant="detail" />
+            <div style={{ marginTop: 20 }}>
+              <PropertyVirtualTourButton propertyId={property.id} propertyTitle={property.title} />
             </div>
-          </section>
 
-          <section className="pd-bottom" aria-label="Детайли">
-            <div className="pd-card pd-panel">
+            <div style={{ marginTop: 20 }}>
               <PropertyDescription description={property.description} variant="detail" />
             </div>
-            <div className="pd-card" style={{ display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+
+            <div style={{ marginTop: 20 }}>
+              <PropertyCharacteristics property={property} variant="detail" />
+            </div>
+
+            <div style={{ marginTop: 20 }}>
               <PropertyMap
                 address={property.quarter_name ?? ''}
                 quarterName={property.quarter_name ?? quarterSlug}
@@ -84,10 +94,12 @@ export default function PropertyDetailScreen({
                 variant="detail"
               />
             </div>
-            <div className="pd-card pd-panel">
-              <PropertyCharacteristics property={property} variant="detail" />
-            </div>
-          </section>
+          </div>
+
+          {/* Right column */}
+          <div className="rd-detail__right">
+            <ContactSidebar propertyId={property.id} variant="detail" />
+          </div>
         </div>
       </div>
     </div>

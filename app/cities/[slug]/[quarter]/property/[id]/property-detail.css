@@ -1,48 +1,128 @@
-/* Property detail — scoped styles only (mockup 1:1). No global layout changes. */
+/* Property detail — luxury marble / burgundy / gold (scoped only). */
+
+.main--property-detail {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
+.property-detail-layout {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
 
 .property-detail-page {
-  --pd-bg: #0d0d0d;
-  --pd-card: #141414;
-  --pd-card-alt: #1a1a1a;
-  --pd-accent: #8b0000;
-  --pd-accent-bright: #a10000;
-  --pd-text: #ffffff;
-  --pd-text-secondary: #a0a0a0;
-  --pd-text-muted: #6e6e6e;
-  --pd-border: rgba(255, 255, 255, 0.09);
-  --pd-radius: 10px;
-  --pd-gap: 12px;
-  --pd-nav: 84px;
-  --pd-foot: 68px;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  --pd-bg: #1a1016;
+  --pd-card: rgba(250, 247, 242, 0.92);
+  --pd-card-alt: rgba(255, 253, 248, 0.88);
+  --pd-accent: #6b001c;
+  --pd-accent-bright: #7a0d28;
+  --pd-gold: #cfa54a;
+  --pd-gold-light: #e8c878;
+  --pd-text: #2a0612;
+  --pd-text-secondary: rgba(110, 15, 36, 0.75);
+  --pd-text-muted: rgba(110, 15, 36, 0.48);
+  --pd-border: var(--gold-border);
+  --pd-radius: 16px;
+  --pd-gap: 14px;
+  --pd-nav: var(--site-header-offset, 96px);
+  --pd-foot: 20px;
+  --pd-glass-blur: blur(18px);
 
-  background: var(--pd-bg);
+  position: relative;
+  background-color: var(--marble-white);
+  background-image:
+    radial-gradient(ellipse 90% 60% at 50% -10%, rgba(212, 175, 55, 0.1) 0%, transparent 55%),
+    linear-gradient(180deg, var(--warm-white) 0%, var(--marble-white) 48%, #f0ebe3 100%);
   color: var(--pd-text);
   -webkit-font-smoothing: antialiased;
 }
 
+.property-detail-page .pd-city-hero {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.property-detail-page .pd-city-hero__panorama {
+  position: absolute;
+  inset: -8%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform-origin: center center;
+  will-change: transform, background-position;
+}
+.property-detail-page .pd-city-hero__sunset {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(78, 11, 31, 0.35) 0%,
+    rgba(12, 8, 10, 0.15) 35%,
+    rgba(12, 8, 10, 0.82) 72%,
+    #0c080a 100%
+  );
+}
+.property-detail-page .pd-city-hero__terrace {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 28vh;
+  background: linear-gradient(
+    to top,
+    rgba(18, 10, 14, 0.95) 0%,
+    rgba(18, 10, 14, 0.4) 40%,
+    transparent 100%
+  );
+  border-top: 1px solid rgba(207, 168, 71, 0.15);
+}
+.property-detail-page .pd-city-hero__marble {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+.property-detail-page .pd-shell {
+  position: relative;
+  z-index: 1;
+}
+
+.property-detail-page .vt-property-btn {
+  border-color: rgba(207, 168, 71, 0.55) !important;
+  background: linear-gradient(180deg, rgba(78, 11, 31, 0.92), rgba(46, 6, 18, 0.98)) !important;
+  color: var(--pd-gold-light) !important;
+  box-shadow: 0 0 24px rgba(207, 168, 71, 0.2);
+}
+
+/* Детайлът на имот винаги е luxury dark — независимо от светъл/тъмен режим на сайта */
 html.light .property-detail-page {
-  --pd-bg: #e8e6e2;
-  --pd-card: #ffffff;
-  --pd-card-alt: #f4f2ee;
-  --pd-accent: #8b0000;
-  --pd-accent-bright: #9a0000;
-  --pd-text: #1a1218;
-  --pd-text-secondary: #5c554c;
-  --pd-text-muted: #8a8278;
-  --pd-border: rgba(0, 0, 0, 0.09);
+  --pd-bg: #0c080a;
+  --pd-card: rgba(22, 12, 18, 0.78);
+  --pd-card-alt: rgba(30, 16, 24, 0.7);
+  --pd-text: #faf6f0;
+  --pd-text-secondary: rgba(240, 221, 176, 0.72);
+  --pd-text-muted: rgba(240, 221, 176, 0.45);
+  --pd-border: rgba(207, 168, 71, 0.22);
 }
 
 .property-detail-page .pd-shell {
   box-sizing: border-box;
   max-width: 1520px;
   margin: 0 auto;
-  padding: var(--pd-nav) 24px var(--pd-foot);
-  min-height: 100dvh;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  overflow: visible;
+  padding: calc(var(--pd-nav) + 4px) 20px calc(var(--pd-foot) + 4px);
+  height: 100dvh;
+  max-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 6px;
+  overflow: hidden;
 }
 
 .property-detail-page .pd-back {
@@ -64,9 +144,10 @@ html.light .property-detail-page {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding-bottom: 6px;
+  gap: 10px;
+  padding-bottom: 4px;
   border-bottom: 1px solid var(--pd-border);
+  min-height: 0;
 }
 
 .property-detail-page .pd-subhead .breadcrumb {
@@ -84,20 +165,21 @@ html.light .property-detail-page {
 }
 
 .property-detail-page .pd-body {
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: var(--pd-gap);
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: minmax(0, 1.62fr) minmax(0, 0.88fr);
+  gap: 8px;
 }
 
 /* Top row: gallery (по-широка) | info | contact */
 .property-detail-page .pd-top {
-  flex: 0 0 auto;
-  min-height: min(58vh, 640px);
+  min-height: 0;
   display: grid;
-  grid-template-columns: minmax(0, 2.35fr) minmax(240px, 1fr) 248px;
+  grid-template-columns: minmax(0, 2.2fr) minmax(220px, 1fr) 228px;
   gap: var(--pd-gap);
   align-items: stretch;
+  overflow: hidden;
 }
 
 .property-detail-page .pd-top > * {
@@ -106,12 +188,23 @@ html.light .property-detail-page {
 }
 
 .property-detail-page .pd-bottom {
-  flex: 0 0 auto;
-  min-height: min(32vh, 280px);
+  min-height: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--pd-gap);
   align-items: stretch;
+  overflow: hidden;
+}
+
+.property-detail-page .pd-bottom .pd-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.property-detail-page .pd-bottom .pd-panel {
+  overflow: auto;
 }
 
 .property-detail-page .pd-bottom > * {
@@ -120,15 +213,44 @@ html.light .property-detail-page {
 }
 
 .property-detail-page .pd-card {
+  position: relative;
+  overflow: hidden;
   background: var(--pd-card);
-  border: 1px solid var(--pd-border);
-  border-radius: var(--pd-radius);
-  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--gold-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 28px rgba(110, 15, 36, 0.12);
   min-height: 0;
+  transition: box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.property-detail-page .pd-card::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 36%;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(250, 247, 242, 0.85) 0%,
+      rgba(255, 253, 248, 0.5) 35%,
+      rgba(212, 175, 55, 0.2) 60%,
+      transparent 100%
+    );
+}
+
+.property-detail-page .pd-card:hover {
+  border-color: var(--gold);
+  box-shadow: 0 12px 36px rgba(212, 175, 55, 0.22);
 }
 
 html.light .property-detail-page .pd-card {
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .property-detail-page .pd-gallery-wrap {
@@ -142,7 +264,7 @@ html.light .property-detail-page .pd-card {
 .property-detail-page .pd-gallery-main {
   position: relative;
   flex: 1 1 auto;
-  min-height: min(42vh, 480px);
+  min-height: 0;
   border-radius: var(--pd-radius) var(--pd-radius) 0 0;
   overflow: hidden;
   background: #0a0a0a;
@@ -155,7 +277,7 @@ html.light .property-detail-page .pd-card {
   width: 100%;
   height: 100%;
   max-height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
   display: block;
 }
@@ -207,11 +329,38 @@ html.light .property-detail-page .pd-card {
 .property-detail-page .pd-gallery-nav--prev { left: 12px; }
 .property-detail-page .pd-gallery-nav--next { right: 12px; }
 
+.property-detail-page .pd-gallery-toolbar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: rgba(12, 8, 10, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--pd-border);
+}
+
+.property-detail-page .pd-gallery-toolbar .pd-gallery-meta {
+  margin: 0;
+  padding: 4px 8px;
+}
+
+.property-detail-page .pd-gallery-toolbar .pd-gallery-fs {
+  width: 32px;
+  height: 32px;
+  margin: 0;
+}
+
 /* Лента под снимката — без застъпване върху изображението */
 .property-detail-page .pd-gallery-footer {
   flex-shrink: 0;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 1fr;
   align-items: center;
   gap: 10px;
   padding: 8px 10px;
@@ -268,8 +417,8 @@ html.light .property-detail-page .pd-card {
 
 .property-detail-page .pd-thumb {
   flex-shrink: 0;
-  width: 72px;
-  height: 48px;
+  width: 56px;
+  height: 38px;
   border-radius: 8px;
   overflow: hidden;
   border: 2px solid transparent;
@@ -300,11 +449,14 @@ html.light .property-detail-page .pd-card {
 
 .property-detail-page .pd-info-inner {
   flex: 1;
-  overflow: visible;
-  padding: 12px 14px;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  scrollbar-width: thin;
 }
 
 .property-detail-page .pd-info-lower {
@@ -331,11 +483,11 @@ html.light .property-detail-page .pd-card {
 }
 
 .property-detail-page .pd-title {
-  font-family: var(--font-inter), system-ui, sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.25;
-  color: var(--pd-text);
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--pd-gold-light);
   margin: 0;
 }
 
@@ -348,11 +500,13 @@ html.light .property-detail-page .pd-card {
 }
 
 .property-detail-page .pd-price {
-  font-size: 24px;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 22px;
   font-weight: 700;
-  color: var(--pd-accent);
+  color: var(--pd-gold);
   line-height: 1;
   letter-spacing: -0.02em;
+  text-shadow: 0 2px 16px rgba(207, 168, 71, 0.25);
 }
 
 .property-detail-page .pd-actions {
@@ -404,8 +558,8 @@ html.light .property-detail-page .pd-card {
 .property-detail-page .pd-spec-cell {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
+  gap: 6px;
+  padding: 5px 8px;
   border-bottom: 1px solid var(--pd-border);
 }
 .property-detail-page .pd-spec-cell:nth-child(odd) {
@@ -448,6 +602,10 @@ html.light .property-detail-page .pd-spec-icon {
   gap: 5px;
 }
 
+.property-detail-page .pd-amenities {
+  display: none;
+}
+
 .property-detail-page .pd-amenity {
   display: flex;
   flex-direction: column;
@@ -471,17 +629,23 @@ html.light .property-detail-page .pd-spec-icon {
 .property-detail-page .pd-side {
   display: flex;
   flex-direction: column;
-  gap: var(--pd-gap);
-  overflow: visible;
+  gap: 0;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.property-detail-page .pd-agency {
+  display: none;
 }
 
 .property-detail-page .pd-contact {
-  padding: 14px 12px;
+  padding: 12px 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   flex: 1 1 auto;
-  overflow: visible;
+  min-height: 0;
+  justify-content: center;
 }
 
 .property-detail-page .pd-contact h3 {
@@ -566,28 +730,31 @@ html.light .property-detail-page .pd-spec-icon {
 }
 
 .property-detail-page .pd-panel {
-  padding: 12px 14px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
-  min-height: min(32vh, 280px);
-  overflow: visible;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
 .property-detail-page .pd-panel-title {
-  margin: 0 0 10px;
+  margin: 0 0 6px;
   font-family: var(--font-playfair), Georgia, serif;
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 600;
-  color: var(--pd-text);
+  color: var(--pd-gold-light);
   flex-shrink: 0;
 }
 
 .property-detail-page .pd-panel-scroll {
   flex: 1;
-  overflow: visible;
-  font-size: 12px;
-  line-height: 1.4;
+  min-height: 0;
+  overflow-y: auto;
+  font-size: 11px;
+  line-height: 1.35;
   color: var(--pd-text-secondary);
+  scrollbar-width: thin;
 }
 
 .property-detail-page .pd-bullet {

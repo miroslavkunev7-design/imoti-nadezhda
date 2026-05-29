@@ -1,5 +1,6 @@
 import { MARKETPLACE_CITIES, resolveDistrict } from '@/lib/marketplace/districts'
 import type { ScrapedListing } from '@/lib/marketplace/types'
+import { isPrivateOwnerListing } from '@/lib/marketplace/private-filter'
 import { toSlug } from '@/lib/utils'
 
 const BASE = 'https://realistimo.com'
@@ -142,6 +143,18 @@ function parseOfferPage(html: string, url: string, cityConfig: (typeof MARKETPLA
   }
 
   if (!title || !price) return null
+
+  if (
+    !isPrivateOwnerListing({
+      source: 'realistimo',
+      title,
+      description,
+      html,
+      url,
+    })
+  ) {
+    return null
+  }
 
   const external_id = url.split('/').filter(Boolean).pop() ?? toSlug(title)
   const districtResolved = resolveDistrict(

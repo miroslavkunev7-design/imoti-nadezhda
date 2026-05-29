@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import type { City, Quarter } from '@/types'
 import { PROPERTY_TYPES_BG, EXTRA_FILTERS_BG } from '@/lib/data/fallback'
+import LuxurySearchBar from '@/components/search/LuxurySearchBar'
 
 interface SearchWidgetProps {
   cities: City[]
@@ -12,13 +13,37 @@ interface SearchWidgetProps {
   initialQuarter?: string
   initialQuarters?: Quarter[]
   compact?: boolean
+  /** Mockup horizontal burgundy search bar */
+  luxuryBar?: boolean
+  /** Homepage pill bar (mockup layout) */
+  homeLayout?: boolean
+  /** White marble search body + gold borders */
+  marbleSearch?: boolean
+  onCityChange?: (slug: string) => void
 }
 
 const BATHROOMS = ['1', '2', '3', '4', '4+']
 const PRICE_MIN = 30_000
 const PRICE_MAX = 2_000_000
 
-export default function SearchWidget({
+export default function SearchWidget(props: SearchWidgetProps) {
+  if (props.luxuryBar) {
+    return (
+      <LuxurySearchBar
+        cities={props.cities}
+        initialCity={props.initialCity}
+        initialQuarter={props.initialQuarter}
+        initialQuarters={props.initialQuarters}
+        homeLayout={props.homeLayout}
+        marbleSearch={props.marbleSearch}
+        onCityChange={props.onCityChange}
+      />
+    )
+  }
+  return <ClassicSearchPanel {...props} />
+}
+
+function ClassicSearchPanel({
   cities,
   initialCity = '',
   initialQuarter = '',
@@ -190,7 +215,7 @@ export default function SearchWidget({
           onChange={e => setPriceMax(Number(e.target.value))}
           className="w-full h-1 rounded-full appearance-none cursor-pointer"
           style={{
-            background: `linear-gradient(to right, #c41e3a 0%, #c41e3a ${((priceMax - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100}%, var(--border-subtle) ${((priceMax - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100}%, var(--border-subtle) 100%)`,
+            background: `linear-gradient(to right, #A86B3D 0%, #A86B3D ${((priceMax - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100}%, var(--border-subtle) ${((priceMax - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100}%, var(--border-subtle) 100%)`,
           }}
         />
       </div>

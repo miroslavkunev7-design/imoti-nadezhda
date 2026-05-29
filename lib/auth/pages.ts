@@ -4,6 +4,7 @@ export const ADMIN_PAGE_OPTIONS = [
   { slug: 'properties',  label: 'Имоти',       path: '/admin/properties' },
   { slug: 'brokers',     label: 'Брокери',     path: '/admin/brokers' },
   { slug: 'clients',     label: 'Клиенти',     path: '/admin/clients' },
+  { slug: 'owners',      label: 'Собственици', path: '/admin/owners' },
   { slug: 'marketplace', label: 'Извлечени имоти', path: '/admin/marketplace' },
   { slug: 'inquiries',   label: 'Запитвания',  path: '/admin/inquiries' },
   { slug: 'chat',        label: 'Чат',         path: '/admin/chat' },

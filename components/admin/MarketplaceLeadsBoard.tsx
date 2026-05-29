@@ -79,8 +79,13 @@ export default function MarketplaceLeadsBoard() {
       const res = await fetch('/api/admin/marketplace/sync', { method: 'POST' })
       const json = await res.json()
       if (json.success) {
+        const bySrc = json.bySource
+          ? Object.entries(json.bySource as Record<string, number>)
+              .map(([k, v]) => `${k}: ${v}`)
+              .join(', ')
+          : ''
         setSyncMsg(
-          `Добавени: ${json.added}, дубликати: ${json.duplicates}, пропуснати: ${json.skipped}. Сканирани: ${json.scanned} обяви.`
+          `Добавени (непубликувани): ${json.added}, дубликати: ${json.duplicates}, пропуснати: ${json.skipped}. Сканирани: ${json.scanned}.${bySrc ? ` Източници: ${bySrc}` : ''} ${json.note ? `— ${json.note}` : ''}`
         )
         if (json.errors?.length) {
           setSyncMsg(prev => `${prev} ${json.errors.join(' ')}`)
@@ -202,9 +207,15 @@ export default function MarketplaceLeadsBoard() {
   return (
     <div>
       <PageHeader title="Извлечени имоти" />
-      <p className="admin-text-muted text-sm mb-5 -mt-3">
-        Имоти, извлечени от външни пазари (Realistimo) за Шумен, Варна, Бургас и Нови пазар. Преглед, редакция и публикуване в сайта.
+      <p className="admin-text-muted text-sm mb-3 -mt-3">
+        Извличане от Realistimo, Imoti.bg, OLX (само частни), Bazar.bg и Home.bg — <strong>само обяви от собственик / частни</strong>.
+        Записват се като <strong>непубликувани чернови</strong> — редактирайте телефон, цена, снимки, после „Публикувай на сайта“.
       </p>
+      <div
+        className="mb-5 px-4 py-2.5 rounded-xl text-xs border border-amber-500/35 bg-amber-950/25 text-amber-100/90"
+      >
+        Нищо не отива автоматично на сайта. Публикувате само след преглед в CRM редактора.
+      </div>
 
       <div className={`${adminCardClass} mb-6 flex flex-wrap items-center gap-3`}>
         <button
@@ -213,7 +224,7 @@ export default function MarketplaceLeadsBoard() {
           disabled={syncing}
           className="btn-crimson px-5 py-2.5 text-sm font-semibold disabled:opacity-60"
         >
-          {syncing ? 'Синхронизиране...' : 'Синхронизирай пазара'}
+          {syncing ? 'Извличане...' : 'Извлечи имоти (всички сайтове)'}
         </button>
         <select
           className="input-dark text-sm"
@@ -267,7 +278,8 @@ export default function MarketplaceLeadsBoard() {
         </div>
 
         <div className={adminCardClass}>
-          <h3 className="admin-heading text-sm mb-3">CRM редактор</h3>
+          <h3 className="admin-heading text-sm mb-1">CRM редактор — чернова</h3>
+          <p className="admin-text-muted text-[11px] mb-3">Променете телефон, цена, квартал преди публикуване.</p>
           {!form ? (
             <p className="admin-text-muted text-sm">Изберете обява от списъка.</p>
           ) : (
@@ -356,15 +368,18 @@ export default function MarketplaceLeadsBoard() {
                   disabled={saving}
                   className="px-4 py-2 text-sm rounded-lg border border-crimson-600/50 text-crimson-300 hover:bg-crimson-900/30 disabled:opacity-50"
                 >
-                  Редактирай
+                  Запази чернова
                 </button>
                 <button
                   type="button"
                   onClick={publish}
-                  disabled={saving}
+                  disabled={
+                    saving ||
+                    leads.find(l => l.id === selectedId)?.status === 'published'
+                  }
                   className="btn-crimson px-4 py-2 text-sm disabled:opacity-50"
                 >
-                  Завърши и публикувай
+                  Публикувай на сайта
                 </button>
               </div>
             </div>

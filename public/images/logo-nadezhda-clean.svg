@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 250" fill="none">
+  <defs>
+    <style>
+      .burg { fill: #6B001C; }
+      .txt1 {
+        fill: #6B001C;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 3px;
+      }
+      .txt2 {
+        fill: #6B001C;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 34px;
+        font-weight: 700;
+        letter-spacing: 8px;
+      }
+    </style>
+
+    <!-- Punch transparent windows through the houses -->
+    <mask id="houses-mask">
+      <rect width="420" height="250" fill="white"/>
+      <rect x="92" y="105" width="26" height="20" fill="black"/>
+      <path d="M105 105V125M92 115H118" stroke="white" stroke-width="2"/>
+      <rect x="183" y="101" width="48" height="24" fill="black"/>
+      <path d="M207 101V125M183 113H231" stroke="white" stroke-width="2"/>
+      <rect x="289" y="106" width="27" height="19" fill="black"/>
+      <path d="M302.5 106V125M289 115.5H316" stroke="white" stroke-width="2"/>
+    </mask>
+  </defs>
+
+  <g mask="url(#houses-mask)" class="burg">
+    <!-- Left house -->
+    <path d="M62 132V101L105 62L148 101V132H62Z"/>
+    <!-- Center house -->
+    <path d="M150 132V92L210 28L270 92V132H150Z"/>
+    <!-- Chimney -->
+    <rect x="242" y="35" width="18" height="26" rx="2"/>
+    <!-- Right house -->
+    <path d="M270 132V102L303 70L336 102V132H270Z"/>
+  </g>
+
+  <!-- Roof accents / sharper peaks -->
+  <path class="burg" d="M44 134L105 50L164 134H146L105 78L64 134H44Z"/>
+  <path class="burg" d="M128 134L210 16L292 134H270L210 50L150 134H128Z"/>
+  <path class="burg" d="M252 134L303 58L356 134H336L303 88L272 134H252Z"/>
+
+  <text x="210" y="170" text-anchor="middle" class="txt1"> "</text>
+  <text x="210" y="212" text-anchor="middle" class="txt2">"  "</text>
+</svg>

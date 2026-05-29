@@ -1,0 +1,484 @@
+/* Имоти ИЛДЖ.ИА — collage 1:1 visual system */
+
+:root {
+  --burgundy-primary: #6b001c;
+  --burgundy-secondary: #7a0d28;
+  --bordeaux: #6b001c;
+  --bordeaux-deep: #4a0814;
+  --bordeaux-dark: #5c0a1e;
+  --bordeaux-light: #7a0d28;
+  --burgundy-deep: #4a0814;
+  --burgundy-mid: #6b001c;
+  --burgundy-light: #7a0d28;
+  --gold: #cfa54a;
+  --gold-light: #e8c878;
+  --gold-deep: #a97a1f;
+  --gold-border: rgba(207, 165, 74, 0.35);
+  --gold-glow: rgba(207, 165, 74, 0.32);
+  --marble-white: #faf7f2;
+  --warm-white: #fffdf8;
+  --accent-rgb: 107, 0, 28;
+  --gold-rgb: 207, 165, 74;
+  --site-header-offset: 96px;
+}
+
+html,
+body.luxury-site-body {
+  background-color: var(--marble-white) !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 80% 50% at 15% 0%, rgba(207, 165, 74, 0.07) 0%, transparent 55%),
+    linear-gradient(180deg, var(--warm-white) 0%, var(--marble-white) 100%) !important;
+  color: var(--burgundy-primary);
+}
+
+.luxury-wallpaper,
+.main--city-luxury,
+.min-h-screen.luxury-wallpaper {
+  background: transparent !important;
+}
+
+/* Terrace hero */
+.terrace-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #12070c;
+}
+
+.terrace-bg::before {
+  content: '';
+  position: absolute;
+  inset: -24px;
+  z-index: 0;
+  background-image: var(--terrace-bg-url);
+  background-size: cover;
+  background-position: center;
+  filter: blur(18px) saturate(1.08) brightness(0.78);
+  transform: scale(1.05);
+}
+
+.terrace-bg__picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.terrace-bg__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transform: none;
+}
+
+.terrace-bg__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, transparent 50%, rgba(107, 0, 28, 0.35) 78%, rgba(74, 8, 20, 0.55) 100%),
+    linear-gradient(105deg, rgba(107, 0, 28, 0.2) 0%, transparent 38%);
+  pointer-events: none;
+}
+
+.terrace-hero-band {
+  position: relative;
+  height: clamp(200px, 28vh, 280px);
+  overflow: hidden;
+  border-bottom: 1px solid var(--gold-border);
+}
+
+/* Homepage centered marble search */
+.collage-home__search-center {
+  display: flex;
+  justify-content: center;
+  padding: 0 clamp(16px, 4vw, 48px);
+  margin-bottom: clamp(16px, 3vh, 28px);
+  max-width: 920px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.collage-home__search-center .luxury-search-wrap {
+  width: 100%;
+  filter: drop-shadow(0 10px 32px rgba(0, 0, 0, 0.2));
+}
+
+.collage-home__search-center .luxury-search-bar--home {
+  border-radius: 4px !important;
+  clip-path: none !important;
+  min-height: 58px;
+}
+
+.collage-home__cities {
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.collage-home__search-center .luxury-search-bar--marble {
+  position: relative;
+}
+
+.collage-home .hero-home__cities-title {
+  color: #fff;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* City cards — left marble dissolve → right photo */
+.collage-city-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px !important;
+  border: 1px solid var(--gold-border) !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22) !important;
+  transition: box-shadow 0.35s var(--ease-luxury), transform 0.35s var(--ease-luxury);
+}
+
+.collage-city-card:hover {
+  box-shadow: 0 10px 36px rgba(107, 0, 28, 0.35), 0 0 24px var(--gold-glow) !important;
+  transform: translateY(-2px);
+}
+
+.collage-city-card__photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center right;
+  transition: transform 0.4s var(--ease-luxury);
+}
+
+.collage-city-card:hover .collage-city-card__photo {
+  transform: scale(1.04);
+}
+
+.collage-city-card__dissolve {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      var(--marble-white) 0%,
+      rgba(250, 247, 242, 0.98) 22%,
+      rgba(250, 247, 242, 0.82) 34%,
+      rgba(255, 253, 248, 0.55) 44%,
+      rgba(232, 200, 120, 0.28) 54%,
+      rgba(255, 253, 248, 0.12) 64%,
+      transparent 76%
+    ),
+    radial-gradient(circle at 12% 78%, rgba(207, 165, 74, 0.55) 0%, transparent 8%),
+    radial-gradient(circle at 18% 62%, rgba(255, 253, 248, 0.7) 0%, transparent 6%),
+    radial-gradient(circle at 24% 88%, rgba(207, 165, 74, 0.4) 0%, transparent 5%),
+    radial-gradient(circle at 30% 72%, rgba(250, 247, 242, 0.65) 0%, transparent 7%),
+    radial-gradient(circle at 38% 84%, rgba(207, 165, 74, 0.25) 0%, transparent 4%);
+}
+
+.collage-city-card__body {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  padding: 14px 16px;
+  max-width: 52%;
+}
+
+.collage-city-card__name {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--burgundy-primary);
+  margin: 0 0 8px;
+  line-height: 1.15;
+}
+
+.collage-city-card__cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.collage-city-card__plus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-border);
+  color: var(--burgundy-primary);
+  background: var(--warm-white);
+  transition: background 0.25s, border-color 0.25s;
+}
+
+.collage-city-card:hover .collage-city-card__plus {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #fff;
+}
+
+/* Listing page */
+.collage-listing-page {
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: var(--site-bottom-offset);
+}
+
+.collage-listing-page__hero {
+  position: relative;
+  height: clamp(180px, 24vh, 240px);
+}
+
+.collage-listing-page__body {
+  position: relative;
+  z-index: 2;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px clamp(16px, 3vw, 32px) 40px;
+}
+
+.collage-listing-page .luxury-search-bar {
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--burgundy-secondary), var(--burgundy-primary)) !important;
+  border: 1px solid var(--gold-border) !important;
+}
+
+.collage-listing-page .luxury-search-segment__icon,
+.collage-listing-page .luxury-search-select,
+.collage-listing-page .luxury-search-value,
+.collage-listing-page .luxury-search-segment__label {
+  color: var(--gold-light) !important;
+}
+
+.collage-listing-page__title {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+  color: var(--burgundy-primary);
+  margin: 16px 0 4px;
+}
+
+.collage-listing-page__count {
+  font-size: 12px;
+  color: rgba(107, 0, 28, 0.65);
+  margin-bottom: 20px;
+}
+
+/* Property cards listing */
+.collage-property-card {
+  border-radius: 4px !important;
+  border: 1px solid var(--gold-border) !important;
+  background: linear-gradient(180deg, var(--warm-white), var(--marble-white)) !important;
+  overflow: hidden;
+  transition: box-shadow 0.35s var(--ease-luxury), border-color 0.35s;
+}
+
+.collage-property-card:hover {
+  border-color: var(--gold) !important;
+  box-shadow: 0 12px 40px rgba(107, 0, 28, 0.22), 0 0 20px var(--gold-glow) !important;
+}
+
+.collage-property-card .price {
+  color: var(--burgundy-primary) !important;
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+.collage-property-card__dissolve {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 42%;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(250, 247, 242, 0.95) 0%,
+    rgba(250, 247, 242, 0.6) 30%,
+    rgba(207, 165, 74, 0.2) 55%,
+    transparent 100%
+  );
+}
+
+/* Agent card detail */
+.collage-agent-card {
+  background: linear-gradient(180deg, rgba(122, 13, 40, 0.96), rgba(107, 0, 28, 0.98)) !important;
+  border: 1px solid var(--gold-border) !important;
+  border-radius: 4px !important;
+  color: #fff;
+}
+
+.collage-agent-card h3 {
+  font-family: var(--font-playfair), Georgia, serif;
+  color: var(--gold-light);
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+
+.collage-agent-card .pd-btn-gold {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px 16px;
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--gold-light), var(--gold));
+  color: var(--burgundy-primary);
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  transition: filter 0.25s, box-shadow 0.25s;
+}
+
+.collage-agent-card .pd-btn-gold:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 6px 20px rgba(207, 165, 74, 0.45);
+}
+
+.collage-agent-card .pd-btn-outline {
+  width: 100%;
+  margin-top: 8px;
+  padding: 11px 16px;
+  border: 1px solid var(--gold-border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--gold-light);
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* About page */
+.collage-about-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  min-height: 320px;
+  border-bottom: 1px solid var(--gold-border);
+}
+
+.collage-about-hero__text {
+  padding: clamp(24px, 4vw, 48px);
+  background: linear-gradient(135deg, var(--burgundy-primary), var(--burgundy-secondary));
+  color: #fff;
+}
+
+.collage-about-hero__image {
+  min-height: 280px;
+  background: url('/images/hero-bg.jpg') center/cover no-repeat;
+}
+
+.collage-stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 24px clamp(16px, 3vw, 32px);
+  background: var(--marble-white);
+  border-bottom: 1px solid var(--gold-border);
+}
+
+.collage-stat {
+  text-align: center;
+}
+
+.collage-stat strong {
+  display: block;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.35rem;
+  color: var(--burgundy-primary);
+}
+
+.collage-stat span {
+  font-size: 11px;
+  color: rgba(107, 0, 28, 0.65);
+}
+
+.collage-team {
+  padding: 40px clamp(16px, 3vw, 32px);
+  background: linear-gradient(180deg, var(--burgundy-secondary), var(--burgundy-primary));
+}
+
+.collage-team h2 {
+  font-family: var(--font-playfair), Georgia, serif;
+  color: var(--gold-light);
+  text-align: center;
+  margin: 0 0 28px;
+}
+
+/* Contact page 3-col */
+.collage-contact {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) minmax(280px, 1.1fr) minmax(200px, 0.9fr);
+  gap: 0;
+  min-height: calc(100vh - var(--site-header-offset) - var(--site-bottom-offset));
+  padding-top: var(--site-header-offset);
+}
+
+.collage-contact__info {
+  padding: 32px 28px;
+  background: linear-gradient(180deg, var(--burgundy-primary), #4a0814);
+  color: #fff;
+}
+
+.collage-contact__form {
+  padding: 32px 28px;
+  background: linear-gradient(180deg, var(--burgundy-secondary), var(--burgundy-primary));
+}
+
+.collage-contact__map {
+  background: var(--marble-white);
+  border-left: 1px solid var(--gold-border);
+  min-height: 320px;
+}
+
+.collage-contact__form input,
+.collage-contact__form textarea {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--gold-border);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.15);
+  color: #fff;
+  font-size: 13px;
+}
+
+.collage-contact__form input::placeholder,
+.collage-contact__form textarea::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.collage-contact__submit {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--gold-light), var(--gold));
+  color: var(--burgundy-primary);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .collage-about-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .collage-stats-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .collage-contact {
+    grid-template-columns: 1fr;
+  }
+}

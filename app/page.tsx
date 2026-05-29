@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import HeroSection from '@/components/home/HeroSection'
+import HomeHero from '@/components/home/HomeHero'
 import { FALLBACK_CITIES } from '@/lib/data/fallback'
 
 export const metadata: Metadata = {
@@ -12,5 +12,5 @@ export const metadata: Metadata = {
 export const revalidate = 120
 
 export default function HomePage() {
-  return <HeroSection cities={FALLBACK_CITIES} />
+  return <HomeHero cities={FALLBACK_CITIES} />
 }

@@ -172,7 +172,7 @@ export default function SellPropertyForm({ cities, allQuarters }: Props) {
           className="w-16 h-16 rounded-full mx-auto mb-5 flex items-center justify-center"
           style={{ background: 'rgba(196,30,58,0.15)' }}
         >
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c41e3a" strokeWidth="2">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#A86B3D" strokeWidth="2">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>

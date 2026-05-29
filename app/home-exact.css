@@ -1,0 +1,414 @@
+/* ══════════════════════════════════════════════════
+   HOME PAGE — 1:1 pixel-exact от screenshot
+   ══════════════════════════════════════════════════ */
+.main--home-exact {
+  min-height: 0 !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.hp {
+  --hp-burg: #6b001c;
+  --hp-burg2: #7a0d28;
+  --hp-gold: #cfa54a;
+  --hp-gold2: #e8c878;
+  --hp-gold-deep: #a97a1f;
+  --hp-marble: #faf7f2;
+  --hp-cream: #fffdf8;
+
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background: #0a0608;
+}
+
+/* Full-bleed background */
+.hp .terrace-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hp .terrace-bg__img {
+  object-position: center 38%;
+}
+
+/* Subtle dark shade */
+.hp__shade {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.04) 0%,
+    transparent 28%,
+    rgba(20,4,10,0.30) 68%,
+    rgba(20,4,10,0.52) 100%
+  );
+}
+
+/* ─── Logo panel — PNG фон + НАДЕЖДА HTML текст ─── */
+.hp__panel-wrap {
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 20;
+  width: clamp(300px, 42vw, 580px);
+  pointer-events: none;
+}
+
+.hp__panel-bg-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Клик зона върху мраморния панел (лявата ~38% от изображението) */
+.hp__panel-content {
+  position: absolute;
+  top: 0; left: 0;
+  width: 38%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 14%;
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+/* Кремав блок — покрива "ИЛДЖ.ИА" от PNG-то */
+.hp__panel-text-cover {
+  position: absolute;
+  bottom: 7%;
+  left: 6%; right: 6%;
+  height: 22%;
+  background: linear-gradient(180deg, #f5ecde 0%, #faf7f2 55%, #fffdf8 100%);
+  border-radius: 2px;
+  z-index: 1;
+}
+
+/* НАДЕЖДА текст — точно на позицията на покрития текст */
+.hp__panel-nadejda {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(10px, 1.1vw, 15px);
+  font-weight: 800;
+  letter-spacing: 0.26em;
+  color: #6b001c;
+  text-align: center;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .hp__panel-wrap { width: min(90vw, 340px); }
+  .hp__panel-nadejda { font-size: 10px; }
+}
+
+/* ─── Navigation top-right ─── */
+.hp__nav {
+  position: absolute;
+  top: clamp(18px,2.8vh,30px);
+  right: clamp(24px,3.5vw,52px);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  pointer-events: auto;
+}
+
+.hp__nav-link {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(13px,1.1vw,16px);
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  padding: 0 clamp(14px,1.5vw,22px);
+  white-space: nowrap;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+  transition: color 0.18s;
+}
+
+.hp__nav-link:hover { color: var(--hp-gold2); }
+
+.hp__nav-sep {
+  width: 1px; height: 16px;
+  background: rgba(255,255,255,0.3);
+}
+
+.hp__nav-user {
+  display: flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 1.5px solid rgba(207,165,74,0.7);
+  color: var(--hp-gold);
+  text-decoration: none;
+  margin-left: 10px;
+  transition: background 0.2s;
+}
+
+.hp__nav-user:hover { background: rgba(207,165,74,0.15); }
+
+/* ─── Search bar — floating, compact ─── */
+.hp__search-wrap {
+  position: absolute;
+  /* center-right, middle-ish vertically */
+  top: clamp(28%, 33%, 38%);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  width: min(92vw, 920px);
+  pointer-events: auto;
+}
+
+@media (max-width: 900px) {
+  .hp__search-wrap {
+    left: clamp(8px, 3vw, 24px);
+    right: clamp(8px, 3vw, 24px);
+    transform: none;
+    width: auto;
+    top: auto;
+    bottom: calc(clamp(218px,28vh,268px) + clamp(12px,2vh,18px));
+  }
+}
+
+.hp__search {
+  display: flex;
+  align-items: stretch;
+  height: 60px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--hp-cream) 0%, var(--hp-marble) 100%);
+  border: 1px solid rgba(207,165,74,0.45);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.hp__search-segs {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.hp__search-seg {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border-right: 1px solid rgba(207,165,74,0.3);
+  background: transparent;
+  border-top: none; border-bottom: none; border-left: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.hp__search-seg:last-child { border-right: none; }
+
+.hp__search-icon { color: var(--hp-gold); flex-shrink: 0; }
+
+.hp__search-text { min-width: 0; flex: 1; }
+
+.hp__search-label {
+  display: block;
+  font-size: 8.5px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(107,0,28,0.42);
+  margin-bottom: 1px;
+  white-space: nowrap;
+}
+
+.hp__search-val {
+  display: block;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(11px, 0.9vw, 13px);
+  font-weight: 700;
+  color: var(--hp-burg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: none; background: transparent;
+  padding: 0; width: 100%; appearance: none; cursor: pointer;
+}
+
+.hp__search-btns { display: flex; align-items: stretch; flex-shrink: 0; }
+
+.hp__search-filter {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 14px;
+  border: none; border-right: 1px solid rgba(207,165,74,0.3);
+  background: transparent;
+  color: rgba(107,0,28,0.75);
+  font-size: 12px; font-weight: 600;
+  cursor: pointer; white-space: nowrap;
+}
+
+.hp__search-submit {
+  display: flex; align-items: center; gap: 7px;
+  padding: 0 clamp(18px,2vw,28px);
+  border: none;
+  background: linear-gradient(135deg, var(--hp-gold2) 0%, var(--hp-gold) 50%, #b8923a 100%);
+  color: #2e0612;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 14px; font-weight: 800;
+  cursor: pointer;
+  border-radius: 0 12px 12px 0;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+
+.hp__search-submit:hover { filter: brightness(1.06); }
+
+/* Expanded filters */
+.hp__search-exp {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0; right: 0;
+  z-index: 35;
+  padding: 16px 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(207,165,74,0.38);
+  background: linear-gradient(180deg, var(--hp-cream), var(--hp-marble));
+  box-shadow: 0 12px 40px rgba(0,0,0,0.22);
+}
+
+/* ─── City cards — bottom row ─── */
+.hp__cards-wrap {
+  position: absolute;
+  bottom: clamp(12px,2vh,22px);
+  left: 0; right: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  padding: 0 clamp(14px,2.5vw,32px);
+  gap: clamp(12px,1.5vw,18px);
+  pointer-events: auto;
+}
+
+.hp__card {
+  flex: 0 0 clamp(165px,16vw,205px);
+  height: clamp(215px,25vh,252px);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--hp-marble);
+  border: 1px solid rgba(207,165,74,0.5);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  text-decoration: none;
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.hp__card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 56px rgba(107,0,28,0.4);
+}
+
+.hp__card-media {
+  position: relative;
+  flex: 0 0 57%;
+  overflow: hidden;
+}
+
+.hp__card-photo {
+  position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+}
+
+.hp__card:hover .hp__card-photo { transform: scale(1.06); }
+
+/* Бяло+златисто мраморно разпръскване — само долната ~25% на снимката */
+.hp__card-dust {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  /* Само долната четвъртина на снимката (photo е 57% от картата) */
+  height: 26%;
+  z-index: 1; pointer-events: none;
+  background:
+    /* Вертикален преход: мраморен крем → прозрачен */
+    linear-gradient(
+      to top,
+      rgba(250,247,242,1)   0%,
+      rgba(252,248,240,0.96) 18%,
+      rgba(255,250,240,0.80) 38%,
+      rgba(248,240,220,0.52) 58%,
+      rgba(240,225,190,0.22) 78%,
+      transparent 100%
+    ),
+    /* Хоризонтални златисто-мраморни блестящи точки */
+    radial-gradient(ellipse 22% 55% at  4% 100%, rgba(207,165,74,0.72) 0%, transparent 100%),
+    radial-gradient(ellipse 16% 48% at 13% 98%,  rgba(255,253,248,0.88) 0%, transparent 100%),
+    radial-gradient(ellipse 20% 52% at 23% 100%, rgba(212,175,55,0.62)  0%, transparent 100%),
+    radial-gradient(ellipse 18% 50% at 33% 99%,  rgba(250,240,210,0.80) 0%, transparent 100%),
+    radial-gradient(ellipse 22% 54% at 43% 100%, rgba(207,165,74,0.58)  0%, transparent 100%),
+    radial-gradient(ellipse 16% 46% at 54% 98%,  rgba(255,248,220,0.82) 0%, transparent 100%),
+    radial-gradient(ellipse 20% 52% at 64% 100%, rgba(212,175,55,0.65)  0%, transparent 100%),
+    radial-gradient(ellipse 17% 48% at 74% 99%,  rgba(250,245,225,0.78) 0%, transparent 100%),
+    radial-gradient(ellipse 22% 54% at 84% 100%, rgba(207,165,74,0.60)  0%, transparent 100%),
+    radial-gradient(ellipse 18% 50% at 94% 98%,  rgba(255,250,230,0.80) 0%, transparent 100%);
+}
+
+.hp__card-body {
+  position: relative; z-index: 2;
+  flex: 1;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 11px 14px 14px;
+  background: linear-gradient(180deg, var(--hp-marble) 0%, var(--hp-cream) 100%);
+}
+
+.hp__card-name-row {
+  display: flex; align-items: center; gap: 6px;
+}
+
+.hp__card-pin { color: var(--hp-gold); flex-shrink: 0; }
+
+.hp__card-name {
+  margin: 0;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.05rem, 1.2vw, 1.22rem);
+  font-weight: 800;
+  color: var(--hp-burg);
+  line-height: 1.1;
+}
+
+.hp__card-footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 6px;
+}
+
+.hp__card-cta {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--hp-gold-deep);
+}
+
+.hp__card-arrow {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 1.5px solid rgba(207,165,74,0.55);
+  color: var(--hp-burg);
+  background: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .hp__nav-link { font-size: 12px; padding: 0 8px; }
+  .hp__search { height: auto; flex-wrap: wrap; }
+  .hp__search-segs { flex-wrap: wrap; }
+  .hp__search-seg { flex: 1 1 45%; min-height: 52px; }
+  .hp__search-submit { border-radius: 0 0 12px 12px; flex: 1; justify-content: center; }
+  .hp__cards-wrap { gap: 10px; padding: 0 10px; }
+  .hp__card { flex: 0 0 44vw; height: 48vw; }
+}

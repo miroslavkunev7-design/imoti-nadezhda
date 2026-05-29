@@ -11,11 +11,28 @@ declare global {
 }
 
 function getDatabaseUrl(): string | null {
-  const url =
-    process.env.DATABASE_URL?.trim() ||
-    process.env.POSTGRES_URL?.trim() ||
-    process.env.SUPABASE_DB_URL?.trim()
-  return url || null
+  const candidates = [
+    process.env.DATABASE_URL,
+    process.env.POSTGRES_URL,
+    process.env.POSTGRES_PRISMA_URL,
+    process.env.POSTGRES_URL_NON_POOLING,
+    process.env.SUPABASE_DB_URL,
+  ]
+  for (const raw of candidates) {
+    const url = raw?.trim()
+    if (url && url.length > 12 && !url.startsWith('""')) return url
+  }
+
+  const host = process.env.POSTGRES_HOST?.trim()
+  const user = process.env.POSTGRES_USER?.trim()
+  const password = process.env.POSTGRES_PASSWORD?.trim()
+  const database = process.env.POSTGRES_DATABASE?.trim() || 'postgres'
+  const port = process.env.POSTGRES_PORT?.trim() || '6543'
+  if (host && user && password) {
+    return `postgresql://${encodeURIComponent(user)}:${encodeURIComponent(password)}@${host}:${port}/${database}?sslmode=require`
+  }
+
+  return null
 }
 
 export function isDbConfigured(): boolean {

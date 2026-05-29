@@ -36,4 +36,6 @@ next-env.d.ts
 
 # Uploads
 public/uploads/
+data/app-secrets.json
 .vercel
+.env*

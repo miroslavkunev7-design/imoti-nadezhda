@@ -64,7 +64,7 @@ export default function MatchNotification({
           {/* Crimson top glow bar */}
           <div style={{
             height: 3,
-            background: 'linear-gradient(to right, #7b0d1e, #c41e3a, #e85472, #c41e3a, #7b0d1e)',
+            background: 'linear-gradient(to right, #500B1A, #A86B3D, #C4895A, #A86B3D, #500B1A)',
           }} />
 
           {/* Header */}
@@ -125,7 +125,7 @@ export default function MatchNotification({
                       {/* Avatar initials */}
                       <div
                         className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
-                        style={{ background: '#c41e3a' }}
+                        style={{ background: '#A86B3D' }}
                       >
                         {client.name.charAt(0).toUpperCase()}
                       </div>
@@ -168,7 +168,7 @@ export default function MatchNotification({
                     onClick={() => onNotify(client.id)}
                     className="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-all duration-200 hover:scale-105"
                     style={{
-                      background: '#c41e3a',
+                      background: '#A86B3D',
                       border: '1px solid rgba(232,84,114,0.3)',
                       boxShadow: '0 2px 8px rgba(196,30,58,0.35)',
                     }}
@@ -213,7 +213,7 @@ function Chip({ icon, label }: { icon: string; label: string }) {
 
 function TargetIcon() {
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c41e3a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A86B3D" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="10"/>
       <circle cx="12" cy="12" r="6"/>
       <circle cx="12" cy="12" r="2"/>

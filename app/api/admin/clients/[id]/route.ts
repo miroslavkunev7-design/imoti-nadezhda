@@ -37,6 +37,18 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       fields.push('agent_id = ?')
       values.push(body.assigned_agent_id || null)
     }
+    if (body.city !== undefined) {
+      fields.push('city = ?')
+      values.push(body.city || null)
+    }
+    if (body.property_type !== undefined) {
+      fields.push('property_type = ?')
+      values.push(body.property_type || null)
+    }
+    if (body.search_description !== undefined) {
+      fields.push('search_description = ?')
+      values.push(body.search_description || null)
+    }
 
     if (fields.length) {
       values.push(id)

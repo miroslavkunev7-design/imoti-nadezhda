@@ -1,67 +1,74 @@
 import { cardStyle, PageHeader } from '@/components/admin/AdminCard'
+
 import ConnectionStatus from '@/components/admin/ConnectionStatus'
 
-const SECTIONS = [
-  {
-    title: 'Профил',
-    icon: '👤',
-    items: ['Мой профил', 'Промяна на парола', 'Известия', 'Сигурност'],
-  },
-  {
-    title: 'Система',
-    icon: '⚙️',
-    items: ['Основни настройки', 'Известия', 'Интеграции', 'Архив и бекъп'],
-  },
-  {
-    title: 'Екип и права',
-    icon: '👥',
-    items: ['Потребители', 'Роли и права', 'Активност на потребителите'],
-  },
-  {
-    title: 'Данни',
-    icon: '📊',
-    items: ['Импорт на данни', 'Експорт на данни', 'Почистване на данни'],
-  },
-]
+import MilenaConfigPanel from '@/components/admin/MilenaConfigPanel'
+
+import SettingsHub from '@/components/admin/SettingsHub'
+
+
 
 export default function SettingsPage() {
+
   return (
+
     <div>
+
       <PageHeader title="Настройки" />
-      <ConnectionStatus />
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {SECTIONS.map(section => (
-          <div key={section.title} className="rounded-xl p-5" style={cardStyle}>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-lg">{section.icon}</span>
-              <h2 className="font-display text-white font-semibold text-sm">{section.title}</h2>
-            </div>
-            <div className="flex flex-col gap-1">
-              {section.items.map(item => (
-                <button key={item}
-                  className="text-left text-sm text-[rgba(255,255,255,0.55)] hover:text-white hover:text-crimson-400 transition-colors py-2 px-2 rounded-lg hover:bg-[rgba(196,30,58,0.08)]">
-                  {item}
-                </button>
-              ))}
-            </div>
-          </div>
-        ))}
+      <div id="status">
+
+        <ConnectionStatus />
+
       </div>
 
-      {/* About section */}
+      <div id="milena">
+
+        <MilenaConfigPanel />
+
+      </div>
+
+      <SettingsHub />
+
+
+
       <div className="mt-5 rounded-xl p-6" style={cardStyle}>
-        <div className="flex items-center justify-between">
+
+        <div className="flex items-center justify-between flex-wrap gap-4">
+
           <div>
-            <h2 className="font-display text-white font-semibold mb-1">Имоти Надежда — Admin v1.0</h2>
-            <p className="text-[rgba(255,255,255,0.4)] text-sm">Модерен дизайн · Интуитивен интерфейс · Всички необходими инструменти</p>
+
+            <h2 className="font-display text-white font-semibold mb-1">Имоти Надежда</h2>
+
+            <p className="text-[rgba(255,255,255,0.4)] text-sm">
+
+              Официален домейн:{' '}
+
+              <a href="https://imotinadezhda.bg" className="text-crimson-400 hover:underline">
+
+                imotinadezhda.bg
+
+              </a>
+
+            </p>
+
           </div>
-          <div className="flex gap-3">
+
+          <div className="flex gap-3 items-center">
+
             <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+
             <span className="text-xs text-white">Системата работи нормално</span>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
+
   )
+
 }
+

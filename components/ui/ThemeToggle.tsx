@@ -2,7 +2,12 @@
 
 import { useTheme } from '@/components/providers/ThemeProvider'
 
-export default function ThemeToggle() {
+interface ThemeToggleProps {
+  /** Styled as gold ring inside luxury nav panel */
+  inPanel?: boolean
+}
+
+export default function ThemeToggle({ inPanel = false }: ThemeToggleProps) {
   const { theme, toggle } = useTheme()
 
   return (
@@ -11,11 +16,15 @@ export default function ThemeToggle() {
       aria-label={theme === 'dark' ? 'Превключи към светъл режим' : 'Превключи към тъмен режим'}
       title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
       className={[
-        'relative w-9 h-9 rounded-full flex items-center justify-center',
-        'transition-all duration-300',
-        theme === 'dark'
-          ? 'border border-[rgba(255,255,255,0.12)] text-[#9b8f82] hover:text-[#f5d97a] hover:border-[rgba(245,217,122,0.3)]'
-          : 'border border-[rgba(0,0,0,0.12)] text-[#6b5e58] hover:text-crimson-700 hover:border-[rgba(196,30,58,0.25)]',
+        'relative flex items-center justify-center transition-all duration-300',
+        inPanel
+          ? 'luxury-nav-theme-btn'
+          : [
+              'w-9 h-9 rounded-full',
+              theme === 'dark'
+                ? 'border border-[rgba(255,255,255,0.12)] text-[#9b8f82] hover:text-[#f5d97a] hover:border-[rgba(245,217,122,0.3)]'
+                : 'border border-[rgba(0,0,0,0.12)] text-[#6b5e58] hover:text-bordeaux hover:border-[rgba(80,11,26,0.25)]',
+            ].join(' '),
       ].join(' ')}
     >
       {/* Animated sun/moon swap */}

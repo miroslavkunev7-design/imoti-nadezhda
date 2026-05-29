@@ -34,7 +34,7 @@ export default function AdminLoginPage({
               border: '1.5px solid rgba(196,30,58,0.35)',
             }}
           >
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c41e3a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#A86B3D" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
             </svg>
           </div>

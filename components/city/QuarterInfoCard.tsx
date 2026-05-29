@@ -2,17 +2,18 @@ import type { Quarter } from '@/types'
 
 interface QuarterInfoCardProps {
   quarter: Quarter
+  cityImageUrl?: string | null
 }
 
-export default function QuarterInfoCard({ quarter }: QuarterInfoCardProps) {
+export default function QuarterInfoCard({ quarter, cityImageUrl }: QuarterInfoCardProps) {
+  const photoUrl = quarter.image_url || cityImageUrl
   return (
-    <div className="info-card flex flex-col">
-      {/* Quarter photo */}
-      {quarter.image_url && (
+    <div className="info-card luxury-info-card flex flex-col">
+      {photoUrl && (
         <div className="relative overflow-hidden" style={{ height: 160 }}>
           <div
             className="absolute inset-0 bg-center bg-cover"
-            style={{ backgroundImage: `url(${quarter.image_url})` }}
+            style={{ backgroundImage: `url(${photoUrl})` }}
           />
           <div
             className="absolute inset-0"

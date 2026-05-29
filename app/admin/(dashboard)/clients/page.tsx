@@ -15,18 +15,24 @@ type ClientRow = {
   budget_max: number
   created_at: string
   source: string
+  city?: string
+  property_type?: string
+  search_description?: string
 }
 
 function mapRow(c: {
   id: number
   name: string
-  email: string
+  email?: string | null
   phone: string | null
   status: string
   budget_min: number | null
   budget_max: number | null
   created_at: string
   source?: string | null
+  city?: string | null
+  property_type?: string | null
+  search_description?: string | null
 }): ClientRow {
   return {
     id: c.id,
@@ -38,6 +44,9 @@ function mapRow(c: {
     budget_min: Number(c.budget_min) || 0,
     budget_max: Number(c.budget_max) || 0,
     created_at: c.created_at,
+    city: c.city ?? '',
+    property_type: c.property_type ?? '',
+    search_description: c.search_description ?? '',
   }
 }
 
@@ -52,14 +61,18 @@ async function getClients(): Promise<ClientRow[]> {
       const rows = await query<{
         id: number
         name: string
-        email: string
-        phone: string
+        email: string | null
+        phone: string | null
         status: string
-        budget_min: number
-        budget_max: number
+        budget_min: number | null
+        budget_max: number | null
         created_at: string
         source: string | null
-      }>(`SELECT id, name, email, phone, status, budget_min, budget_max, created_at, source
+        city: string | null
+        property_type: string | null
+        search_description: string | null
+      }>(`SELECT id, name, email, phone, status, budget_min, budget_max, created_at,
+                source, city, property_type, search_description
           FROM crm_clients ORDER BY created_at DESC`)
 
       for (const row of rows) {

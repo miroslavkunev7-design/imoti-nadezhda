@@ -11,18 +11,44 @@ const STATUS_MAP: Record<string, string> = {
 
 export default function InquiriesTable({ inquiries }: { inquiries: Inquiry[] }) {
   const [tab, setTab] = useState('Всички')
+  const [search, setSearch] = useState('')
+  const [showFilters, setShowFilters] = useState(false)
   const unread = inquiries.filter(i => i.status === 'new').length
 
-  const filtered = tab === 'Всички' ? inquiries
-    : inquiries.filter(i => i.status === STATUS_MAP[tab])
+  let filtered = tab === 'Всички' ? inquiries : inquiries.filter(i => i.status === STATUS_MAP[tab])
+  if (search.trim()) {
+    const q = search.trim().toLowerCase()
+    filtered = filtered.filter(
+      i =>
+        i.name.toLowerCase().includes(q) ||
+        i.email.toLowerCase().includes(q) ||
+        (i.property_title ?? '').toLowerCase().includes(q)
+    )
+  }
 
   return (
     <div>
       <PageHeader title={`Запитвания ${unread > 0 ? `(${unread} нови)` : ''}`}
         action={
-          <button className="btn-ghost text-sm px-4 py-2">Филтри</button>
+          <button type="button" className="btn-ghost text-sm px-4 py-2" onClick={() => setShowFilters(v => !v)}>
+            {showFilters ? 'Скрий филтри' : 'Филтри'}
+          </button>
         }
       />
+      {showFilters && (
+        <div className="mb-4 p-4 rounded-xl flex flex-wrap gap-3 items-end" style={cardStyle}>
+          <div className="flex-1 min-w-[200px]">
+            <label className="text-[10px] text-white/40 uppercase tracking-wider block mb-1">Търсене</label>
+            <input
+              className="input-dark text-sm w-full"
+              placeholder="Име, имейл, имот…"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
+          <p className="text-xs text-white/45">Показани: {filtered.length} от {inquiries.length}</p>
+        </div>
+      )}
       <TabBar tabs={TABS} active={tab} onChange={setTab} />
 
       <div className="rounded-xl overflow-hidden" style={cardStyle}>

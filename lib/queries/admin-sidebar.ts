@@ -8,6 +8,7 @@ export interface SidebarBadges {
   inquiries: number
   tasks: number
   extractedLeads: number
+  owners: number
 }
 
 const EMPTY_BADGES: SidebarBadges = {
@@ -17,11 +18,12 @@ const EMPTY_BADGES: SidebarBadges = {
   inquiries: 0,
   tasks: 0,
   extractedLeads: 0,
+  owners: 0,
 }
 
 export async function getSidebarBadges(): Promise<SidebarBadges> {
   try {
-    const [pendingProps, brokers, unassignedClients, newInquiries, openTasks, extractedLeads] =
+    const [pendingProps, brokers, unassignedClients, newInquiries, openTasks, extractedLeads, ownersCount] =
       await Promise.all([
         query<{ total: number }>(
           `SELECT COUNT(*) AS total FROM properties WHERE status = 'pending'`
@@ -41,6 +43,9 @@ export async function getSidebarBadges(): Promise<SidebarBadges> {
         query<{ total: number }>(
           `SELECT COUNT(*) AS total FROM crm_leads_queue WHERE status IN ('pending_review','editing')`
         ),
+        query<{ total: number }>(
+          `SELECT COUNT(*) AS total FROM property_owners`
+        ).catch(() => [{ total: 0 }]),
       ])
 
     let extracted = Number(extractedLeads[0]?.total ?? 0)
@@ -58,6 +63,7 @@ export async function getSidebarBadges(): Promise<SidebarBadges> {
       inquiries: Number(newInquiries[0]?.total ?? 0),
       tasks: Number(openTasks[0]?.total ?? 0),
       extractedLeads: extracted,
+      owners: Number(ownersCount[0]?.total ?? 0),
     }
   } catch {
     try {

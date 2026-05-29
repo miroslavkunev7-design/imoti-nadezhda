@@ -4,52 +4,119 @@ import { useState, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useAdminAi } from '@/components/admin/AdminAiContext'
 
+interface Attachment {
+  url: string
+  name: string
+  type: string
+}
+
 interface ChatMsg {
   role: 'user' | 'assistant'
   content: string
   contract?: { title: string; content: string; filename: string }
+  imageUrl?: string
 }
 
 export default function CrmAiAssistant() {
   const { open, setOpen } = useAdminAi()
   const [mounted, setMounted] = useState(false)
-  const [messages, setMessages] = useState<ChatMsg[]>([
-    {
-      role: 'assistant',
-      content:
-        'Здравейте! Аз съм CRM асистентът. Мога да добавям/изтривам клиенти и обяви, да записвам срещи и да генерирам договори от шаблони с данни от клиента и прикачените документи. Напишете „помощ" за примери.',
-    },
-  ])
+  const [messages, setMessages] = useState<ChatMsg[]>([])
+  const [welcomed, setWelcomed] = useState(false)
+
+  useEffect(() => {
+    if (open && !welcomed) {
+      setWelcomed(true)
+      setMessages([
+        {
+          role: 'assistant',
+          content:
+            'Здравейте! Аз съм **Милена**. Пишете както ви е удобно — ще разбера и ще действам. CRM, обяви, цени, договори, снимки, проекти. 📎 за файлове.',
+        },
+      ])
+    }
+  }, [open, welcomed])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [attachments, setAttachments] = useState<Attachment[]>([])
+  const [uploading, setUploading] = useState(false)
+  const [milenaReady, setMilenaReady] = useState<boolean | null>(null)
+  const [milenaModel, setMilenaModel] = useState('gpt-4o')
   const bottomRef = useRef<HTMLDivElement>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
   useEffect(() => {
+    if (!open) return
+    fetch('/api/admin/ai')
+      .then(r => r.json())
+      .then(j => {
+        if (j.success) {
+          setMilenaReady(Boolean(j.milenaReady))
+          if (j.model) setMilenaModel(String(j.model))
+        }
+      })
+      .catch(() => setMilenaReady(null))
+  }, [open])
+
+  useEffect(() => {
     if (open) bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, open, loading])
 
+  async function uploadFiles(files: FileList | null) {
+    if (!files?.length) return
+    setUploading(true)
+    try {
+      for (const file of Array.from(files)) {
+        const form = new FormData()
+        form.append('file', file)
+        form.append('name', file.name)
+        const res = await fetch('/api/admin/ai/upload', { method: 'POST', body: form })
+        const json = await res.json()
+        if (json.success && json.url) {
+          setAttachments(prev => [
+            ...prev,
+            { url: json.url, name: json.name ?? file.name, type: json.type ?? file.type },
+          ])
+        }
+      }
+    } finally {
+      setUploading(false)
+    }
+  }
+
   async function send() {
     const text = input.trim()
-    if (!text || loading) return
+    if ((!text && !attachments.length) || loading) return
     setInput('')
-    const userMsg: ChatMsg = { role: 'user', content: text }
+    const attachSnapshot = [...attachments]
+    setAttachments([])
+
+    const userLine =
+      text +
+      (attachSnapshot.length
+        ? `\n[Прикачено: ${attachSnapshot.map(a => a.name).join(', ')}]`
+        : '')
+    const userMsg: ChatMsg = { role: 'user', content: userLine }
     setMessages(prev => [...prev, userMsg])
     setLoading(true)
 
     try {
       const history = [...messages, userMsg]
         .filter(m => m.role === 'user' || m.role === 'assistant')
-        .slice(-8)
+        .slice(-40)
         .map(m => ({ role: m.role, content: m.content }))
 
       const res = await fetch('/api/admin/ai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, history }),
+        body: JSON.stringify({
+          message: text || 'Анализирай прикачените файлове и помогни.',
+          history,
+          attachments: attachSnapshot,
+        }),
       })
       const json = await res.json()
       setMessages(prev => [
@@ -58,12 +125,13 @@ export default function CrmAiAssistant() {
           role: 'assistant',
           content: json.message ?? json.error ?? 'Няма отговор',
           contract: json.contract ?? undefined,
+          imageUrl: json.imageUrl ?? undefined,
         },
       ])
     } catch {
       setMessages(prev => [
         ...prev,
-        { role: 'assistant', content: 'Грешка при връзка с асистента.' },
+        { role: 'assistant', content: 'Грешка при връзка с Милена.' },
       ])
     } finally {
       setLoading(false)
@@ -89,35 +157,31 @@ export default function CrmAiAssistant() {
         onClick={() => setOpen(!open)}
         className="fixed flex items-center justify-center rounded-full text-white transition-transform hover:scale-105"
         style={{
-          right: 24,
-          top: '50%',
-          transform: 'translateY(-50%)',
-          width: 56,
-          height: 56,
-          zIndex: 9999,
-          background: 'linear-gradient(135deg, #8b0000, #c41e3a)',
+          right: 20,
+          top: 72,
+          transform: 'none',
+          width: 52,
+          height: 52,
+          zIndex: 9000,
+          background: 'linear-gradient(135deg, #500B1A, #A86B3D)',
           boxShadow: '0 8px 32px rgba(139,0,0,0.5)',
         }}
-        aria-label="CRM AI асистент"
-        title="AI Асистент"
+        aria-label="Милена AI"
+        title="Милена — AI асистент"
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7v1a2 2 0 01-2 2h-1v1.27a2 2 0 11-4 0V17h-1a2 2 0 01-2-2v-1H8a7 7 0 017-7h1V5.73A2 2 0 0112 2z" />
-          <path d="M9 21h6" />
-        </svg>
+        <span style={{ fontSize: 22 }}>✦</span>
       </button>
 
       {open && (
         <div
           className="fixed flex flex-col rounded-2xl overflow-hidden"
           style={{
-            right: 24,
-            top: '50%',
-            transform: 'translateY(-50%)',
-            marginTop: open ? 0 : 0,
-            width: 'min(420px, calc(100vw - 48px))',
-            maxHeight: 'min(520px, calc(100vh - 48px))',
-            zIndex: 10000,
+            right: 20,
+            top: 132,
+            transform: 'none',
+            width: 'min(420px, calc(100vw - 40px))',
+            maxHeight: 'min(560px, calc(100dvh - 148px))',
+            zIndex: 9001,
             background: 'rgba(8,6,18,0.98)',
             border: '1.5px solid rgba(196,30,58,0.45)',
             boxShadow: '0 16px 48px rgba(0,0,0,0.55)',
@@ -128,8 +192,30 @@ export default function CrmAiAssistant() {
             style={{ borderBottom: '1px solid rgba(196,30,58,0.25)' }}
           >
             <div>
-              <p className="text-white font-semibold text-sm">CRM AI Асистент</p>
-              <p className="text-[10px] text-[rgba(255,255,255,0.45)]">Клиенти · обяви · график · договори</p>
+              <p className="text-white font-semibold text-sm flex items-center gap-2">
+                Милена
+                {milenaReady === true && (
+                  <span
+                    className="text-[9px] font-medium px-1.5 py-0.5 rounded-full"
+                    style={{ background: 'rgba(34,197,94,0.2)', color: '#86efac' }}
+                  >
+                    AI активен
+                  </span>
+                )}
+                {milenaReady === false && (
+                  <span
+                    className="text-[9px] font-medium px-1.5 py-0.5 rounded-full"
+                    style={{ background: 'rgba(234,179,8,0.15)', color: '#fde047' }}
+                  >
+                    нужен ключ
+                  </span>
+                )}
+              </p>
+              <p className="text-[10px] text-[rgba(255,255,255,0.45)]">
+                {milenaReady === false
+                  ? 'Админ → Настройки → Милена AI → въведете OpenAI ключ'
+                  : `Свободен разговор · ${milenaModel} · CRM · проекти · памет`}
+              </p>
             </div>
             <button
               type="button"
@@ -144,38 +230,84 @@ export default function CrmAiAssistant() {
             {messages.map((m, i) => (
               <div
                 key={i}
-                className={`rounded-xl px-3 py-2 text-xs leading-relaxed max-w-[92%] ${
+                className={`rounded-xl px-3 py-2 text-xs leading-relaxed max-w-[94%] ${
                   m.role === 'user' ? 'ml-auto' : 'mr-auto'
                 }`}
                 style={
                   m.role === 'user'
-                    ? { background: '#8b0000', color: '#fff' }
+                    ? { background: '#500B1A', color: '#fff' }
                     : { background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.9)' }
                 }
               >
                 <p className="whitespace-pre-wrap">{m.content}</p>
+                {m.imageUrl && (
+                  <a href={m.imageUrl} target="_blank" rel="noreferrer" className="block mt-2">
+                    <img
+                      src={m.imageUrl}
+                      alt="Генерирана снимка"
+                      className="rounded-lg max-h-40 w-full object-cover"
+                    />
+                  </a>
+                )}
                 {m.contract && (
                   <button
                     type="button"
                     onClick={() => downloadContract(m.contract!)}
                     className="mt-2 text-[11px] font-semibold underline text-crimson-400"
                   >
-                    Изтегли файл — {m.contract.title}
+                    Изтегли — {m.contract.title}
                   </button>
                 )}
               </div>
             ))}
             {loading && (
-              <p className="text-xs text-[rgba(255,255,255,0.4)] italic">Мисля...</p>
+              <p className="text-xs text-[rgba(255,255,255,0.4)] italic">Милена работи…</p>
             )}
             <div ref={bottomRef} />
           </div>
 
+          {attachments.length > 0 && (
+            <div className="px-3 pb-1 flex flex-wrap gap-1">
+              {attachments.map((a, i) => (
+                <span
+                  key={i}
+                  className="text-[10px] px-2 py-0.5 rounded bg-white/10 text-white/80"
+                >
+                  {a.name}
+                  <button
+                    type="button"
+                    className="ml-1"
+                    onClick={() => setAttachments(prev => prev.filter((_, j) => j !== i))}
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+
           <div className="p-3 flex-shrink-0" style={{ borderTop: '1px solid rgba(196,30,58,0.2)' }}>
+            <input
+              ref={fileRef}
+              type="file"
+              multiple
+              className="hidden"
+              accept="image/*,.pdf,.doc,.docx,.txt"
+              onChange={e => uploadFiles(e.target.files)}
+            />
             <div className="flex gap-2">
+              <button
+                type="button"
+                className="px-2 py-2 rounded-lg border border-white/15 text-white/70 text-sm"
+                onClick={() => fileRef.current?.click()}
+                disabled={uploading}
+                title="Прикачи файл"
+              >
+                📎
+              </button>
               <input
                 className="input-dark flex-1 text-sm"
-                placeholder="Напр. Предварителен договор за Златомир..."
+                placeholder="Пишете свободно — задача, въпрос, проект…"
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => {
@@ -189,7 +321,7 @@ export default function CrmAiAssistant() {
               <button
                 type="button"
                 onClick={send}
-                disabled={loading || !input.trim()}
+                disabled={loading || uploading || (!input.trim() && !attachments.length)}
                 className="btn-crimson px-3 py-2 text-sm disabled:opacity-50"
               >
                 →

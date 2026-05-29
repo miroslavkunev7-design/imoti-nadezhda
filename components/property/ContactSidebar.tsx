@@ -48,8 +48,21 @@ export default function ContactSidebar({
   if (isDetail) {
     return (
       <>
-        <div className="pd-card pd-contact">
-          <h3>Свържи се с нас</h3>
+        <div className="pd-card pd-contact collage-agent-card">
+          <div
+            style={{
+              width: 72,
+              height: 72,
+              borderRadius: '50%',
+              margin: '0 auto 12px',
+              border: '2px solid var(--gold-border)',
+              background: 'linear-gradient(135deg, var(--burgundy-secondary), var(--burgundy-primary))',
+            }}
+          />
+          <h3 style={{ textAlign: 'center' }}>Вашият консултант</h3>
+          <p style={{ textAlign: 'center', fontSize: 13, margin: '0 0 12px', color: 'var(--gold-light)' }}>
+            Имоти Надежда
+          </p>
 
           <a href={`tel:${phone.replace(/\s/g, '')}`} className="pd-contact-row">
             <span className="pd-contact-icon"><PhoneIcon /></span>
@@ -62,20 +75,25 @@ export default function ContactSidebar({
           </a>
 
           {sent ? (
-            <p style={{ fontSize: 12, color: 'var(--pd-accent)', textAlign: 'center' }}>Запитването е изпратено!</p>
+            <p style={{ fontSize: 12, color: 'var(--gold-light)', textAlign: 'center' }}>Запитването е изпратено!</p>
           ) : showForm ? (
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <input type="text" placeholder="Име" value={name} onChange={e => setName(e.target.value)} required className="input-dark text-sm" />
               <input type="email" placeholder="Имейл" value={emailV} onChange={e => setEmailV(e.target.value)} required className="input-dark text-sm" />
               <input type="tel" placeholder="Телефон" value={phoneV} onChange={e => setPhoneV(e.target.value)} className="input-dark text-sm" />
               <textarea placeholder="Съобщение" value={message} onChange={e => setMessage(e.target.value)} rows={2} className="input-dark text-sm resize-none" />
-              <button type="submit" disabled={loading} className="pd-btn">{loading ? '...' : 'Изпрати'}</button>
-              <button type="button" onClick={() => setShowForm(false)} style={{ fontSize: 11, color: 'var(--pd-text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}>Отказ</button>
+              <button type="submit" disabled={loading} className="pd-btn-gold">{loading ? '...' : 'Изпрати'}</button>
+              <button type="button" onClick={() => setShowForm(false)} style={{ fontSize: 11, color: 'var(--gold-light)', background: 'none', border: 'none', cursor: 'pointer' }}>Отказ</button>
             </form>
           ) : (
-            <button type="button" className="pd-btn" onClick={() => setShowForm(true)}>
-              Запази оглед
-            </button>
+            <>
+              <button type="button" className="pd-btn-gold" onClick={() => setShowForm(true)}>
+                Запази час за оглед
+              </button>
+              <button type="button" className="pd-btn-outline" onClick={() => setShowForm(true)}>
+                Запитване
+              </button>
+            </>
           )}
         </div>
 

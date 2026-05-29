@@ -4,15 +4,13 @@ import type { City } from '@/types'
 import SearchWidget from '@/components/search/SearchWidget'
 import CityCard from '@/components/cards/CityCard'
 import { useTheme } from '@/components/providers/ThemeProvider'
+import Link from 'next/link'
 
 interface HeroSectionProps {
   cities: City[]
 }
 
-const NAVBAR_H  = 76
-const BOTTOMBAR_H = 60
-const CARD_H    = 156
-const LABEL_H   = 28
+const BOTTOMBAR_H = 68
 
 export default function HeroSection({ cities }: HeroSectionProps) {
   const { theme } = useTheme()
@@ -20,62 +18,73 @@ export default function HeroSection({ cities }: HeroSectionProps) {
 
   return (
     <section
-      className="relative w-full overflow-hidden"
-      style={{ height: '100dvh', minHeight: 620 }}
+      className="hero-home relative w-full overflow-hidden"
+      style={{ height: '100dvh', minHeight: 640 }}
     >
-      <div
-        className="absolute inset-0 bg-center bg-cover bg-no-repeat hero-bg-zoom"
-        style={{
-          backgroundImage: "url('/images/hero-bg.jpg')",
-          backgroundColor: '#0f0a1a',
-          filter: isLight ? 'brightness(1.15) saturate(1.05)' : 'none',
-          transition: 'filter 0.5s ease',
-        }}
-      />
+      <picture className="hero-home__bg" aria-hidden>
+        <source srcSet="/images/hero-bg.webp" type="image/webp" />
+        <img
+          src="/images/hero-bg.jpg"
+          alt=""
+          className="hero-home__bg-img"
+          fetchPriority="high"
+          decoding="async"
+        />
+      </picture>
 
       {!isLight && (
         <>
-          <div className="absolute inset-0" style={{ background: 'rgba(6,4,14,0.52)' }} />
-          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 40%, transparent 30%, rgba(4,2,12,0.55) 100%)' }} />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 45%, rgba(4,2,12,0.75) 75%, rgba(4,2,12,0.95) 100%)' }} />
+          <div className="absolute inset-0 z-[1]" style={{ background: 'rgba(6,4,14,0.22)' }} />
+          <div
+            className="absolute inset-0 z-[1]"
+            style={{
+              background:
+                'radial-gradient(ellipse 90% 65% at 50% 45%, transparent 42%, rgba(4,2,12,0.32) 100%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 z-[1]"
+            style={{
+              background:
+                'linear-gradient(to bottom, transparent 48%, rgba(4,2,12,0.5) 72%, rgba(4,2,12,0.85) 100%)',
+            }}
+          />
         </>
       )}
       {isLight && (
-        <div className="absolute inset-0" style={{
-          background: 'linear-gradient(to bottom, transparent 70%, rgba(245,240,232,0.35) 88%, rgba(245,240,232,0.75) 100%)',
-        }} />
+        <div
+          className="absolute inset-0 z-[1]"
+          style={{
+            background:
+              'linear-gradient(to bottom, transparent 65%, rgba(245,240,232,0.4) 88%, rgba(245,240,232,0.78) 100%)',
+          }}
+        />
       )}
-      <div className="absolute bottom-0 left-0 right-0" style={{
-        height: 260,
-        background: 'radial-gradient(ellipse at 50% 100%, rgba(196,30,58,0.10) 0%, transparent 70%)',
-      }} />
 
       <div
-        className="relative z-10 h-full flex flex-col max-w-[1280px] mx-auto px-5 lg:px-8"
-        style={{ paddingTop: NAVBAR_H, paddingBottom: BOTTOMBAR_H + 8 }}
+        className="hero-home__content relative z-10 h-full w-full"
+        style={{ paddingBottom: BOTTOMBAR_H + 8, paddingTop: 'var(--site-header-offset)' }}
       >
-        <div className="flex-1 flex flex-col justify-center items-start gap-2 min-h-0">
-          <p className="text-label text-themed-secondary uppercase tracking-[0.25em] page-enter">
-            Намери своя имот
-          </p>
-          <SearchWidget cities={cities} compact />
-        </div>
+        <div className="hero-home__cities-band">
+          <div className="hero-home__cities-intro">
+            <h2 className="hero-home__cities-title">Избери град</h2>
+            <Link href="/buy" className="luxury-outline-btn hero-home__cities-btn">
+              Виж всички градове
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
 
-        <div className="flex-shrink-0" style={{ height: CARD_H + LABEL_H + 4 }}>
-          <p className="text-label text-themed-secondary uppercase tracking-[0.2em] mb-2 page-enter">
-            Избери град
-          </p>
-
-          <div
-            className="grid gap-3"
-            style={{
-              gridTemplateColumns: `repeat(${cities.length}, 1fr)`,
-              height: CARD_H,
-            }}
-          >
-            {cities.map((city, i) => (
-              <CityCard key={city.id} city={city} index={i} cardHeight={CARD_H} />
-            ))}
+          <div className="hero-home__cities-stack">
+            <div className="hero-home__search-slot">
+              <SearchWidget cities={cities} luxuryBar homeLayout marbleSearch />
+            </div>
+            <div className="hero-home__cities-row">
+              {cities.map((city, i) => (
+                <CityCard key={city.id} city={city} index={i} variant="home" />
+              ))}
+            </div>
           </div>
         </div>
       </div>

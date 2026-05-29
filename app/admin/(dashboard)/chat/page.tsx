@@ -119,7 +119,7 @@ export default function ChatPage() {
               <div key={msg.id} className={`flex ${mine ? 'justify-end' : 'justify-start'} gap-2`}>
                 {!mine && (
                   <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0 self-end mb-1"
-                    style={{ background: '#c41e3a' }}>
+                    style={{ background: '#A86B3D' }}>
                     {msg.sender_name.charAt(0).toUpperCase()}
                   </div>
                 )}
@@ -129,7 +129,7 @@ export default function ChatPage() {
                   )}
                   <div className="px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed"
                     style={mine
-                      ? { background: '#c41e3a', color: '#fff', borderBottomRightRadius: 4 }
+                      ? { background: '#A86B3D', color: '#fff', borderBottomRightRadius: 4 }
                       : { background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.9)', borderBottomLeftRadius: 4 }}>
                     <p>{msg.message}</p>
                     <p className="text-[10px] mt-1 opacity-60 text-right">{fmtTime(msg.created_at)}</p>

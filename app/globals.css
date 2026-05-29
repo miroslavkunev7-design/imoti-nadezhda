@@ -4,14 +4,34 @@
 
 /* ── CSS Custom Properties ──────────────────────────────────── */
 :root {
-  /* Brand */
-  --crimson-950: #4a0010;
-  --crimson-900: #7b0d1e;
-  --crimson-800: #8b0000;
-  --crimson-700: #c41e3a;
-  --crimson-600: #e4002b;
-  --crimson-400: #ff5070;
-  --crimson-300: #ff8fa3;
+  /* Brand design system — Имоти ИЛДЖ.ИА collage */
+  --burgundy-primary:   #6B001C;
+  --burgundy-secondary: #7A0D28;
+  --bordeaux:           var(--burgundy-primary);
+  --bordeaux-deep:      #4a0c1a;
+  --bordeaux-dark:      #5a1028;
+  --bordeaux-light:     var(--burgundy-secondary);
+  --burgundy-deep:      var(--bordeaux-deep);
+  --burgundy-mid:       var(--burgundy-primary);
+  --burgundy-light:     var(--burgundy-secondary);
+  --gold:               #CFA54A;
+  --gold-light:         #E8C878;
+  --gold-deep:          #A97A1F;
+  --gold-border:        rgba(212, 175, 55, 0.35);
+  --gold-glow:          rgba(212, 175, 55, 0.32);
+  --marble-white:       #FAF7F2;
+  --warm-white:         #FFFDF8;
+  --accent-rgb:         107, 0, 28;
+  --gold-rgb:           207, 165, 74;
+
+  /* Tailwind-compatible scale (crimson-* used across components) */
+  --crimson-950: var(--bordeaux-deep);
+  --crimson-900: var(--bordeaux-dark);
+  --crimson-800: #421018;
+  --crimson-700: var(--gold);
+  --crimson-600: #D4B35C;
+  --crimson-400: var(--gold-light);
+  --crimson-300: #EDD89A;
 
   /* Backgrounds */
   --bg-base:     #080810;
@@ -20,7 +40,7 @@
 
   /* Glass */
   --glass-bg:     rgba(8, 6, 18, 0.88);
-  --glass-border: rgba(196, 30, 58, 0.28);
+  --glass-border: var(--gold-border);
   --glass-blur:   6px;
 
   /* Text */
@@ -28,13 +48,17 @@
   --text-secondary: #9b8f82;
   --text-muted:     #5a5260;
 
+  /* Layout chrome */
+  --site-header-offset: 96px;
+  --site-bottom-offset: 72px;
+
   /* Fonts — Google Fonts via link tag in layout */
   --font-inter:     'Inter', system-ui, sans-serif;
   --font-playfair:  'Playfair Display', Georgia, serif;
 
   /* Borders */
   --border-subtle: rgba(255, 255, 255, 0.07);
-  --border-accent: rgba(196, 30, 58, 0.35);
+  --border-accent: rgba(var(--accent-rgb), 0.35);
 
   /* Transitions */
   --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
@@ -50,14 +74,14 @@ html.light {
   --bg-elevated: #e4ddd4;
 
   --glass-bg:     rgba(255, 251, 245, 0.90);
-  --glass-border: rgba(196, 30, 58, 0.30);
+  --glass-border: rgba(var(--accent-rgb), 0.30);
 
   --text-primary:   #1a1218;
   --text-secondary: #6b5e58;
   --text-muted:     #a09080;
 
   --border-subtle: rgba(0, 0, 0, 0.08);
-  --border-accent: rgba(196, 30, 58, 0.35);
+  --border-accent: rgba(var(--accent-rgb), 0.35);
 }
 
 html.light body {
@@ -75,7 +99,7 @@ html.light .glass-card {
 
 html.light .glass-card:hover {
   border-color: var(--border-accent);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 0 0 1px rgba(196,30,58,0.15);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 0 0 1px rgba(var(--accent-rgb),0.15);
 }
 
 /* Light mode — inputs */
@@ -172,7 +196,7 @@ body {
 
 /* ── Selection ──────────────────────────────────────────────── */
 ::selection {
-  background: rgba(196, 30, 58, 0.35);
+  background: rgba(var(--accent-rgb), 0.35);
   color: #fff;
 }
 
@@ -188,7 +212,7 @@ body {
 }
 
 .text-gradient-crimson {
-  background: linear-gradient(135deg, #e85472 0%, #c41e3a 100%);
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -196,28 +220,28 @@ body {
 
 /* ── City card crimson border hover ──────────────────────────── */
 .city-card-link {
-  border: 2.5px solid #c41e3a;
-  box-shadow: 0 0 0 1px rgba(196,30,58,0.25), 0 4px 20px rgba(196,30,58,0.18);
+  border: 2.5px solid var(--gold);
+  box-shadow: 0 0 0 1px rgba(var(--accent-rgb),0.25), 0 4px 20px rgba(var(--accent-rgb),0.18);
   transition: box-shadow 280ms ease, border-color 280ms ease;
 }
 .city-card-link:hover {
-  border-color: #e85472;
-  box-shadow: 0 0 0 2px rgba(232,84,114,0.35), 0 8px 32px rgba(196,30,58,0.38);
+  border-color: var(--gold-light);
+  box-shadow: 0 0 0 2px rgba(var(--gold-rgb),0.35), 0 8px 32px rgba(var(--accent-rgb),0.38);
 }
 
 /* ── Themed utility classes (use CSS vars, work in both modes) ── */
 .search-panel {
   background: var(--glass-bg);
-  border: 1.5px solid rgba(196,30,58,0.35);
+  border: 1.5px solid rgba(var(--accent-rgb),0.35);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(196,30,58,0.12);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(var(--accent-rgb),0.12);
 }
 html.light .search-panel {
   background: rgba(255,251,245,0.88);
-  border-color: rgba(196,30,58,0.40);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.12), 0 0 0 1px rgba(196,30,58,0.12);
+  border-color: rgba(var(--accent-rgb),0.40);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12), 0 0 0 1px rgba(var(--accent-rgb),0.12);
 }
 
 .surface-card {
@@ -257,8 +281,8 @@ html.light .property-type-list-item {
   font-size: 0.8125rem;
   padding: 4px 10px;
 }
-.type-option:hover { background: rgba(196,30,58,0.10); }
-.type-option.active { background: #c41e3a; color: #fff; }
+.type-option:hover { background: rgba(var(--accent-rgb),0.10); }
+.type-option.active { background: var(--gold); color: #fff; }
 .type-option:last-child { border-bottom: none; }
 
 .bath-btn {
@@ -271,8 +295,8 @@ html.light .property-type-list-item {
   transition: all 150ms;
   flex: 1;
 }
-.bath-btn:hover { border-color: #c41e3a; color: var(--text-primary); }
-.bath-btn.active { background: #c41e3a; border-color: #c41e3a; color: #fff; }
+.bath-btn:hover { border-color: var(--gold); color: var(--text-primary); }
+.bath-btn.active { background: var(--gold); border-color: var(--gold); color: #fff; }
 
 .filter-label {
   font-size: 0.6875rem;
@@ -289,7 +313,7 @@ html.light .property-type-list-item {
   transition: background 300ms;
   flex-shrink: 0;
 }
-.toggle-switch.on  { background: #c41e3a; }
+.toggle-switch.on  { background: var(--gold); }
 .toggle-switch.off { background: var(--border-subtle); }
 html.light .toggle-switch.off { background: rgba(0,0,0,0.15); }
 .toggle-knob {
@@ -311,32 +335,32 @@ html.light .toggle-switch.off { background: rgba(0,0,0,0.15); }
   overflow: hidden;
   height: 100%;
   background: var(--bg-surface);
-  border: 1.5px solid rgba(196,30,58,0.28);
+  border: 1.5px solid rgba(var(--accent-rgb),0.28);
   box-shadow: 0 4px 20px rgba(0,0,0,0.25);
 }
 html.light .info-card {
   background: rgba(255,251,245,0.92);
-  border-color: rgba(196,30,58,0.32);
+  border-color: rgba(var(--accent-rgb),0.32);
   box-shadow: 0 4px 16px rgba(0,0,0,0.10);
 }
 
 /* Property card surface */
 .property-card-surface {
   background: var(--bg-surface);
-  border: 1.5px solid rgba(196,30,58,0.22);
+  border: 1.5px solid rgba(var(--accent-rgb),0.22);
   border-radius: 12px;
   overflow: hidden;
   transition: border-color 280ms ease, transform 280ms ease, box-shadow 280ms ease;
   box-shadow: 0 2px 12px rgba(0,0,0,0.20);
 }
 .property-card-surface:hover {
-  border-color: rgba(196,30,58,0.55);
+  border-color: rgba(var(--accent-rgb),0.55);
   transform: translateY(-3px);
   box-shadow: 0 10px 32px rgba(0,0,0,0.30);
 }
 html.light .property-card-surface {
   background: rgba(255,251,245,0.92);
-  border-color: rgba(196,30,58,0.28);
+  border-color: rgba(var(--accent-rgb),0.28);
   box-shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
 html.light .property-card-surface:hover {
@@ -354,59 +378,58 @@ html.light .property-card-surface:hover {
   background: var(--glass-bg);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  border: 1.5px solid rgba(196,30,58,0.30);
+  border: 1.5px solid rgba(var(--accent-rgb),0.30);
 }
 
 .glass-card {
   background: rgba(15, 12, 30, 0.88);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  border: 1.5px solid rgba(196,30,58,0.28);
+  border: 1.5px solid rgba(var(--accent-rgb),0.28);
   border-radius: 12px;
   transition: border-color var(--duration-base) var(--ease-luxury),
               transform var(--duration-base) var(--ease-luxury),
               box-shadow var(--duration-base) var(--ease-luxury);
 }
 .glass-card:hover {
-  border-color: rgba(196,30,58,0.55);
+  border-color: rgba(var(--accent-rgb),0.55);
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(196,30,58,0.25);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(var(--accent-rgb),0.25);
 }
 html.light .glass-card {
   background: rgba(255,251,245,0.90);
-  border-color: rgba(196,30,58,0.30);
+  border-color: rgba(var(--accent-rgb),0.30);
 }
 
-/* ── Crimson Button ─────────────────────────────────────────── */
+/* ── Luxury CTA ─────────────────────────────────────────────── */
 .btn-crimson {
-  background: var(--crimson-700);
-  color: #fff;
-  font-family: var(--font-inter), sans-serif;
+  background: linear-gradient(180deg, var(--burgundy-light) 0%, var(--burgundy-mid) 50%, var(--burgundy-deep) 100%);
+  color: var(--gold-light);
+  font-family: var(--font-playfair), Georgia, serif;
   font-size: 0.875rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  border: none;
+  border: 1px solid var(--gold-border);
   border-radius: 8px;
   padding: 14px 28px;
   cursor: pointer;
-  transition: background var(--duration-fast) var(--ease-luxury),
-              box-shadow  var(--duration-fast) var(--ease-luxury),
-              transform   var(--duration-fast) var(--ease-luxury);
-  box-shadow: 0 4px 16px rgba(196,30,58,0.45);
+  transition: filter var(--duration-fast) var(--ease-luxury),
+              box-shadow var(--duration-fast) var(--ease-luxury),
+              transform var(--duration-fast) var(--ease-luxury);
+  box-shadow: 0 0 18px var(--gold-glow), inset 0 1px 0 rgba(255, 230, 190, 0.2);
   display: inline-flex;
   align-items: center;
   gap: 8px;
   white-space: nowrap;
 }
 .btn-crimson:hover {
-  background: #a31830;
-  box-shadow: 0 6px 24px rgba(196,30,58,0.65);
+  filter: brightness(1.08);
+  box-shadow: 0 0 28px rgba(var(--gold-rgb), 0.45);
   transform: translateY(-1px);
 }
 .btn-crimson:active {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(196,30,58,0.4);
 }
 
 /* ── Ghost Button ───────────────────────────────────────────── */
@@ -586,14 +609,14 @@ input[type='range']::-webkit-slider-thumb {
   border-radius: 50%;
   background: var(--crimson-700);
   border: 2px solid rgba(255,255,255,0.25);
-  box-shadow: 0 2px 8px rgba(196,30,58,0.5);
+  box-shadow: 0 2px 8px rgba(var(--accent-rgb),0.5);
   cursor: pointer;
   transition: transform 150ms, box-shadow 150ms;
   margin-top: -8px;
 }
 input[type='range']::-webkit-slider-thumb:hover {
   transform: scale(1.2);
-  box-shadow: 0 4px 14px rgba(196,30,58,0.7);
+  box-shadow: 0 4px 14px rgba(var(--accent-rgb),0.7);
 }
 input[type='range']::-webkit-slider-runnable-track {
   height: 3px;
@@ -614,6 +637,16 @@ input[type='range']::-moz-range-thumb {
 }
 
 /* ── City background overlay — dark: heavy, light: crystal clear ── */
+.city-panorama-vignette {
+  background: radial-gradient(ellipse 90% 80% at 50% 40%, transparent 25%, rgba(8, 4, 14, 0.35) 100%);
+}
+.city-panorama-shade {
+  background: linear-gradient(to bottom, rgba(8, 4, 14, 0.12) 0%, rgba(8, 4, 14, 0.55) 70%, rgba(8, 4, 14, 0.82) 100%);
+}
+html.light .city-panorama-shade {
+  background: linear-gradient(to bottom, transparent 50%, rgba(245, 240, 232, 0.5) 100%);
+}
+
 .city-bg-overlay { opacity: 0.80; }
 html.light .city-bg-overlay { opacity: 0.18; }
 
@@ -642,7 +675,7 @@ html.light .city-bg-overlay { opacity: 0.18; }
 /* ── Admin CRM ────────────────────────────────────────────────── */
 .admin-card {
   background: rgba(4, 2, 14, 0.82);
-  border: 1px solid rgba(196, 30, 58, 0.28);
+  border: 1px solid rgba(var(--accent-rgb), 0.28);
 }
 .admin-heading {
   color: #ffffff;
@@ -667,11 +700,11 @@ html.light .city-bg-overlay { opacity: 0.18; }
 }
 .admin-kanban-card {
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(196, 30, 58, 0.12);
+  border: 1px solid rgba(var(--accent-rgb), 0.12);
 }
 .admin-modal-panel {
   background: rgba(8, 6, 18, 0.98);
-  border: 1.5px solid rgba(196, 30, 58, 0.4);
+  border: 1.5px solid rgba(var(--accent-rgb), 0.4);
 }
 .admin-modal-backdrop {
   background: rgba(4, 2, 12, 0.78);
@@ -680,7 +713,7 @@ html.light .city-bg-overlay { opacity: 0.18; }
 /* Admin CRM light mode */
 html.light .admin-sidebar {
   background: rgba(255, 251, 245, 0.98) !important;
-  border-right-color: rgba(196, 30, 58, 0.22) !important;
+  border-right-color: rgba(var(--accent-rgb), 0.22) !important;
 }
 html.light .admin-sidebar .text-white,
 html.light .admin-sidebar .admin-sidebar-status-text {
@@ -691,7 +724,7 @@ html.light .admin-sidebar [class*='text-[rgba(255,255,255'] {
 }
 html.light .admin-topbar {
   background: rgba(255, 251, 245, 0.95) !important;
-  border-bottom-color: rgba(196, 30, 58, 0.18) !important;
+  border-bottom-color: rgba(var(--accent-rgb), 0.18) !important;
 }
 html.light .admin-topbar button {
   color: var(--text-secondary) !important;
@@ -711,7 +744,7 @@ html.light .admin-bg-overlay {
 }
 html.light .admin-panel .admin-card {
   background: rgba(255, 255, 255, 0.97) !important;
-  border-color: rgba(196, 30, 58, 0.22) !important;
+  border-color: rgba(var(--accent-rgb), 0.22) !important;
 }
 html.light .admin-panel .admin-heading {
   color: var(--text-primary) !important;
@@ -734,11 +767,11 @@ html.light .admin-panel .admin-kanban-bg {
 }
 html.light .admin-panel .admin-kanban-card {
   background: rgba(255, 255, 255, 0.95) !important;
-  border-color: rgba(196, 30, 58, 0.15) !important;
+  border-color: rgba(var(--accent-rgb), 0.15) !important;
 }
 html.light .admin-panel .admin-modal-panel {
   background: #ffffff !important;
-  border-color: rgba(196, 30, 58, 0.35) !important;
+  border-color: rgba(var(--accent-rgb), 0.35) !important;
 }
 html.light .admin-panel .admin-modal-backdrop {
   background: rgba(30, 20, 30, 0.35) !important;
@@ -751,9 +784,9 @@ html.light .admin-panel [class*='text-[rgba(255,255,255'] {
 }
 html.light .admin-panel select {
   color: var(--text-secondary) !important;
-  border-color: rgba(196, 30, 58, 0.25) !important;
+  border-color: rgba(var(--accent-rgb), 0.25) !important;
 }
 html.light .property-card-surface {
   background: rgba(255, 255, 255, 0.88) !important;
-  border-color: rgba(196, 30, 58, 0.18) !important;
+  border-color: rgba(var(--accent-rgb), 0.18) !important;
 }

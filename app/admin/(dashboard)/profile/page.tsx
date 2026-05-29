@@ -93,7 +93,7 @@ export default function ProfilePage() {
               <img src={avatarUrl} alt="" className="w-20 h-20 rounded-full object-cover" />
             ) : (
               <div className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold text-white"
-                style={{ background: '#c41e3a' }}>
+                style={{ background: '#A86B3D' }}>
                 {name.charAt(0).toUpperCase() || '?'}
               </div>
             )}

@@ -1,0 +1,599 @@
+/* Pixel-perfect homepage mockup — Имоти Надежда */
+
+:root {
+  --mock-burgundy: #6b001c;
+  --mock-burgundy-2: #7a0d28;
+  --mock-gold: #cfa54a;
+  --mock-gold-deep: #a97a1f;
+  --mock-marble: #faf7f2;
+  --mock-header-h: 118px;
+  --mock-bottom-h: 56px;
+  --mock-content-x: clamp(18px, 2.8vw, 42px);
+  --mock-search-max: min(1180px, calc(100vw - var(--mock-content-x) * 2));
+}
+
+.main--home-mockup {
+  min-height: 0 !important;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  background: #000;
+}
+
+/* ── Header (all pages) ── */
+.mockup-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: var(--mock-header-h);
+  pointer-events: none;
+}
+
+.mockup-header__grid {
+  display: grid;
+  grid-template-columns: minmax(248px, 292px) 1fr;
+  height: 100%;
+  pointer-events: auto;
+}
+
+.mockup-header__logo-zone {
+  position: relative;
+  background: linear-gradient(180deg, #fffefb 0%, var(--mock-marble) 100%);
+  padding: 10px 20px 36px 22px;
+  box-shadow: 6px 0 28px rgba(0, 0, 0, 0.14);
+}
+
+.mockup-header__logo-zone::after {
+  content: '';
+  position: absolute;
+  left: -4px;
+  right: -48px;
+  bottom: -2px;
+  height: 38px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 48' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L0,30 Q80,48 160,28 T320,24 L320,0 Z' fill='%23faf7f2'/%3E%3Cpath d='M0,0 L0,24 Q100,40 200,26 T320,22 L320,0 Z' fill='none' stroke='%23cfa54a' stroke-width='2.5'/%3E%3C/svg%3E") center bottom / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
+.mockup-header__nav-zone {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding-top: 14px;
+  padding-right: 0;
+}
+
+.mockup-header__nav {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 6px 0 22px;
+  background: linear-gradient(180deg, var(--mock-burgundy-2) 0%, var(--mock-burgundy) 100%);
+  border: 1px solid rgba(207, 165, 74, 0.4);
+  border-left: none;
+  clip-path: polygon(22px 0, 100% 0, 100% 100%, 0 100%);
+  box-shadow: 0 6px 24px rgba(107, 0, 28, 0.4);
+}
+
+.mockup-header__nav-link {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #fff;
+  padding: 11px 18px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.mockup-header__nav-link:hover,
+.mockup-header__nav-link.is-active {
+  color: var(--mock-gold);
+}
+
+.mockup-header__nav-sep {
+  width: 1px;
+  height: 20px;
+  background: linear-gradient(180deg, transparent, rgba(207, 165, 74, 0.55), transparent);
+  flex-shrink: 0;
+}
+
+.mockup-header__icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin: 0 8px 0 4px;
+  border-radius: 50%;
+  border: 1px solid rgba(207, 165, 74, 0.5);
+  color: var(--mock-gold);
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.mockup-header__icon-btn:hover {
+  color: #fff;
+  box-shadow: 0 0 14px rgba(207, 165, 74, 0.35);
+}
+
+/* Logo — marble header block */
+.logo--marble-header {
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.logo--marble-header__icon {
+  width: 118px;
+  height: auto;
+  line-height: 0;
+}
+
+.logo--marble-header__img {
+  width: 118px;
+  height: auto;
+  display: block;
+}
+
+.logo--marble-header__eyebrow {
+  display: block;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #1a1218;
+  margin-top: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--mock-gold);
+}
+
+.logo--marble-header__title {
+  display: block;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(17px, 1.5vw, 21px);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mock-burgundy);
+  margin-top: 6px;
+  line-height: 1.1;
+}
+
+/* ── Homepage shell ── */
+.mockup-home {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.mockup-home__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.mockup-home__bg .terrace-bg,
+.mockup-home__bg .terrace-bg__picture,
+.mockup-home__bg .terrace-bg__img {
+  width: 100%;
+  height: 100%;
+}
+
+.mockup-home__bg .terrace-bg__img {
+  object-fit: cover;
+  object-position: center 42%;
+  display: block;
+}
+
+.mockup-home__bg .terrace-bg__shade {
+  opacity: 0.35;
+}
+
+.mockup-home__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.08) 0%,
+    transparent 35%,
+    rgba(74, 8, 20, 0.45) 78%,
+    rgba(74, 8, 20, 0.65) 100%
+  );
+  pointer-events: none;
+}
+
+.mockup-home__body {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--mock-header-h) + 10px) var(--mock-content-x) calc(var(--mock-bottom-h) + 8px);
+  box-sizing: border-box;
+}
+
+/* Search strip */
+.mockup-home__search-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: clamp(12px, 2.5vh, 28px);
+}
+
+.mockup-home__search-row .mockup-search {
+  width: var(--mock-search-max);
+  max-width: 100%;
+}
+
+/* Main row: title left + cards right */
+.mockup-home__main {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(200px, 240px) 1fr;
+  gap: clamp(16px, 3vw, 36px);
+  align-items: end;
+}
+
+.mockup-home__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-bottom: 8px;
+}
+
+.mockup-home__title {
+  margin: 0;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.65rem, 3.2vw, 2.35rem);
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.12;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
+}
+
+.mockup-home__all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 11px 22px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--mock-burgundy);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+
+.mockup-home__all-btn:hover {
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+  transform: translateY(-1px);
+}
+
+.mockup-home__cards-wrap {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mockup-home__cards {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 4px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mockup-home__cards::-webkit-scrollbar {
+  height: 5px;
+}
+
+.mockup-home__cards::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 3px;
+}
+
+.mockup-home__cards::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Vertical city card */
+.mockup-city-card {
+  flex: 0 0 158px;
+  scroll-snap-align: start;
+  text-decoration: none;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--mock-marble);
+  border: 1px solid rgba(207, 165, 74, 0.45);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+  display: flex;
+  flex-direction: column;
+  height: 196px;
+  transition: transform 0.3s var(--ease-luxury), box-shadow 0.3s;
+}
+
+.mockup-city-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 40px rgba(107, 0, 28, 0.35);
+}
+
+.mockup-city-card__photo {
+  flex: 1 1 58%;
+  min-height: 0;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.mockup-city-card__photo::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 48%;
+  background: linear-gradient(to bottom, transparent, rgba(250, 247, 242, 0.95));
+  pointer-events: none;
+}
+
+.mockup-city-card__body {
+  flex: 0 0 auto;
+  padding: 10px 12px 12px;
+  background: var(--mock-marble);
+}
+
+.mockup-city-card__name {
+  margin: 0 0 8px;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--mock-burgundy);
+  line-height: 1.1;
+}
+
+.mockup-city-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.mockup-city-card__label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mock-gold-deep);
+}
+
+.mockup-city-card__plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(207, 165, 74, 0.5);
+  color: var(--mock-burgundy);
+  background: #fff;
+  flex-shrink: 0;
+}
+
+/* Search bar mockup */
+.mockup-search {
+  display: flex;
+  align-items: stretch;
+  min-height: 58px;
+  border-radius: 0 12px 12px 0;
+  overflow: hidden;
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(207, 165, 74, 0.4);
+}
+
+.mockup-search__white {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  background: linear-gradient(180deg, #fffefb, var(--mock-marble));
+}
+
+.mockup-search__field {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  min-width: 0;
+  border-right: 1px solid rgba(207, 165, 74, 0.28);
+}
+
+.mockup-search__field:last-child {
+  border-right: none;
+}
+
+.mockup-search__icon {
+  color: var(--mock-gold);
+  flex-shrink: 0;
+}
+
+.mockup-search__meta {
+  min-width: 0;
+  flex: 1;
+}
+
+.mockup-search__label {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(107, 0, 28, 0.5);
+  margin-bottom: 2px;
+}
+
+.mockup-search__select,
+.mockup-search__value {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--mock-burgundy);
+  padding: 0;
+  cursor: pointer;
+  appearance: none;
+}
+
+.mockup-search__burgundy {
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+}
+
+.mockup-search__filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 18px;
+  border: none;
+  border-left: 1px solid rgba(207, 165, 74, 0.35);
+  background: linear-gradient(180deg, var(--mock-burgundy-2), var(--mock-burgundy));
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.mockup-search__submit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 26px;
+  border: none;
+  border-left: 1px solid rgba(207, 165, 74, 0.35);
+  background: linear-gradient(180deg, #5a0a1e, #4a0814);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  border-radius: 0 12px 12px 0;
+}
+
+.mockup-search__filters:hover,
+.mockup-search__submit:hover {
+  filter: brightness(1.08);
+}
+
+/* Bottom bar mockup */
+.mockup-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: var(--mock-bottom-h);
+  background: linear-gradient(180deg, var(--mock-burgundy-2), var(--mock-burgundy));
+  border-top: 1px solid rgba(207, 165, 74, 0.35);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.25);
+}
+
+.mockup-bottom-bar__grid {
+  max-width: 1280px;
+  margin: 0 auto;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.mockup-bottom-bar__cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+  text-decoration: none;
+  color: #fff;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.2s;
+}
+
+.mockup-bottom-bar__cell:last-child {
+  border-right: none;
+}
+
+.mockup-bottom-bar__cell:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.mockup-bottom-bar__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(207, 165, 74, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mock-gold);
+  flex-shrink: 0;
+}
+
+.mockup-bottom-bar__label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.mockup-bottom-bar__sub {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: var(--mock-gold);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@media (max-width: 900px) {
+  .mockup-home__main {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .mockup-header__grid {
+    grid-template-columns: 200px 1fr;
+  }
+
+  .mockup-search__field {
+    padding: 8px 10px;
+  }
+
+  .mockup-search {
+    flex-wrap: wrap;
+    border-radius: 8px;
+  }
+
+  .mockup-search__burgundy {
+    width: 100%;
+  }
+
+  .mockup-search__submit {
+    flex: 1;
+    border-radius: 0 0 8px 0;
+  }
+}

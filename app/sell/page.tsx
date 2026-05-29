@@ -1,31 +1,23 @@
 import type { Metadata } from 'next'
 import SellPropertyForm from '@/components/sell/SellPropertyForm'
-import BuySellBackground from '@/components/layout/BuySellBackground'
 import { FALLBACK_CITIES, QUARTERS_BY_CITY } from '@/lib/data/fallback'
 
 export const metadata: Metadata = {
-  title: 'Продай имот',
-  description:
-    'Продайте имота си чрез Имоти Надежда — безплатна оценка и професионална обработка на обявата.',
+  title: 'Продай имот — Имоти Надежда',
+  description: 'Продайте имота си чрез Имоти Надежда — безплатна оценка и професионална обработка на обявата.',
 }
 
 export default function SellPage() {
   const allQuarters = Object.values(QUARTERS_BY_CITY).flat()
 
   return (
-    <div className="min-h-screen pb-[68px] relative">
-      <BuySellBackground />
-      <div className="max-w-[860px] mx-auto px-5 lg:px-8" style={{ paddingTop: 88 }}>
-        <div className="mb-8">
-          <h1 className="font-display text-themed-primary text-3xl font-bold mb-2">
-            Продай имот
-          </h1>
-          <p className="text-themed-secondary text-sm leading-relaxed max-w-xl">
-            Попълнете формата по-долу и нашият екип ще се свърже с вас за безплатна
-            оценка и публикуване на обявата. Заявката се преглежда от брокер преди
-            публикуване.
-          </p>
-        </div>
+    <div className="rd-sell">
+      <div className="rd-sell__inner">
+        <h1 className="rd-sell__title">Продай имот</h1>
+        <p className="rd-sell__sub">
+          Попълнете формата по-долу и нашият екип ще се свърже с вас за безплатна
+          оценка и публикуване на обявата.
+        </p>
         <SellPropertyForm cities={FALLBACK_CITIES} allQuarters={allQuarters} />
       </div>
     </div>

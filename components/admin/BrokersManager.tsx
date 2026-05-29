@@ -209,7 +209,7 @@ export default function BrokersManager({ brokers: initial, unassignedClients, is
                     <img src={broker.avatar_url} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
                   ) : (
                     <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0"
-                      style={{ background: '#c41e3a' }}>
+                      style={{ background: '#A86B3D' }}>
                       {broker.name.charAt(0).toUpperCase()}
                     </div>
                   )}

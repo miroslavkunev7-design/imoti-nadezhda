@@ -24,6 +24,7 @@ const FolderIcon = () => <svg {...ip}><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-
 const GearIcon   = () => <svg {...ip}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
 const AiIcon     = () => <svg {...ip}><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7v1a2 2 0 01-2 2h-1v1.27a2 2 0 11-4 0V17h-1a2 2 0 01-2-2v-1H8a7 7 0 017-7h1V5.73A2 2 0 0112 2z"/><path d="M9 21h6"/></svg>
 const MarketIcon = () => <svg {...ip}><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+const OwnerIcon  = () => <svg {...ip}><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/><circle cx="12" cy="7" r="1.5" fill="currentColor"/></svg>
 
 type NavKey = keyof SidebarBadges
 
@@ -39,6 +40,7 @@ const NAV: Array<{
   { href: '/admin/marketplace',      label: 'Извлечени имоти', icon: <MarketIcon />, adminOnly: true, badgeKey: 'extractedLeads' },
   { href: '/admin/brokers',          label: 'Брокери',    icon: <BrokerIcon />,   badgeKey: 'brokers', adminOnly: true },
   { href: '/admin/clients',          label: 'Клиенти',    icon: <CrmIcon />,      badgeKey: 'clients' },
+  { href: '/admin/owners',           label: 'Собственици', icon: <OwnerIcon />,   badgeKey: 'owners' },
   { href: '/admin/inquiries',        label: 'Запитвания', icon: <MailIcon />,     badgeKey: 'inquiries' },
   { href: '/admin/chat',             label: 'Чат',        icon: <ChatIcon /> },
   { href: '/admin/calendar',         label: 'Календар',   icon: <CalIcon /> },
@@ -95,20 +97,20 @@ export default function AdminSidebar({ badges, session, restrictedPages }: Props
       className="fixed top-0 left-0 bottom-0 z-50 flex flex-col admin-sidebar"
       style={{
         width: 200,
-        background: 'rgba(4,2,12,0.92)',
+        background: 'linear-gradient(180deg, rgba(80, 11, 26, 0.98) 0%, rgba(42, 7, 14, 0.99) 100%)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        borderRight: '1px solid rgba(196,30,58,0.25)',
+        borderRight: '1px solid var(--gold-border)',
       }}
     >
       <div
         className="flex items-center gap-2.5 px-4 cursor-pointer select-none"
-        style={{ height: 56, borderBottom: '1px solid rgba(196,30,58,0.18)' }}
+        style={{ height: 56, borderBottom: '1px solid var(--gold-border)' }}
         onClick={handleLogoClick}
       >
         <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-          style={{ background: 'rgba(196,30,58,0.2)', border: '1px solid rgba(196,30,58,0.4)' }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c41e3a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          style={{ background: 'rgba(212,175,95,0.15)', border: '1px solid var(--gold-border)' }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
           </svg>
         </div>
@@ -126,7 +128,7 @@ export default function AdminSidebar({ badges, session, restrictedPages }: Props
             <img src={session.avatar_url} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
           ) : (
             <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
-              style={{ background: '#c41e3a' }}>
+              style={{ background: '#A86B3D' }}>
               {(session.name ?? 'U').charAt(0).toUpperCase()}
             </div>
           )}
@@ -155,8 +157,8 @@ export default function AdminSidebar({ badges, session, restrictedPages }: Props
                   : 'text-[rgba(255,255,255,0.50)] hover:text-white hover:bg-[rgba(196,30,58,0.08)]',
               ].join(' ')}
               style={active ? {
-                background: 'linear-gradient(135deg, rgba(196,30,58,0.38), rgba(100,10,25,0.45))',
-                border: '1px solid rgba(196,30,58,0.35)',
+                background: 'linear-gradient(135deg, rgba(80, 11, 26, 0.65), rgba(42, 7, 14, 0.85))',
+                border: '1px solid var(--gold-border)',
               } : {}}
             >
               <span className={active ? 'text-white' : 'text-crimson-700 opacity-75'} style={{ flexShrink: 0 }}>
@@ -165,7 +167,7 @@ export default function AdminSidebar({ badges, session, restrictedPages }: Props
               <span className="flex-1 truncate">{item.label}</span>
               {badge > 0 && (
                 <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full text-white flex-shrink-0"
-                  style={{ background: '#c41e3a', minWidth: 18, textAlign: 'center' }}>
+                  style={{ background: '#A86B3D', minWidth: 18, textAlign: 'center' }}>
                   {badge > 99 ? '99+' : badge}
                 </span>
               )}

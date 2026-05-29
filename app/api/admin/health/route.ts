@@ -36,8 +36,12 @@ export async function GET() {
     dbError = 'POSTGRES_URL или DATABASE_URL не е зададен в Vercel'
   }
 
+  const { milenaLlmAvailable } = await import('@/lib/ai/milena/provider')
+  const milenaAi = await milenaLlmAvailable()
+
   return NextResponse.json({
     success: dbOk,
+    milenaAi,
     supabaseConfigured,
     supabaseUrl: getSupabaseUrl() || null,
     dbConfigured,

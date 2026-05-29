@@ -1,34 +1,54 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import './design-system.css'
+import './collage-theme.css'
+import './redesign.css'
+import './home-exact.css'
+import './globals-luxury.css'
+import './virtual-tour.css'
 import ConditionalShell from '@/components/layout/ConditionalShell'
 import ThemeProvider    from '@/components/providers/ThemeProvider'
+import SiteJsonLd from '@/components/seo/SiteJsonLd'
+import { SEO_KEYWORDS, SITE_NAME, SITE_URL } from '@/lib/seo/site'
+
+const siteUrl = SITE_URL
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-  ),
+  metadataBase: new URL(siteUrl),
   title: {
-    default:  'Имоти Надежда — Луксозни недвижими имоти',
+    default: 'Имоти Надежда — imotinadezhda.bg | Сайт за имоти',
     template: '%s | Имоти Надежда',
   },
   description:
-    'Намерете мечтания си имот в Шумен, Варна, Бургас и Нови пазар. ' +
-    'Апартаменти, къщи, мезонети и парцели от водещата агенция за недвижими имоти.',
-  keywords: [
-    'имоти', 'недвижими имоти', 'Шумен', 'Варна', 'Бургас', 'Нови пазар',
-    'апартаменти', 'къщи', 'имоти Надежда',
-  ],
+    'Имоти Надежда (imoti nadezhda) — официален сайт за имоти imotinadezhda.bg. ' +
+    'Апартаменти, къщи и парцели в Шумен, Варна, Бургас и Нови пазар. Купи или продай имот с Надежда.',
+  keywords: SEO_KEYWORDS,
+  applicationName: SITE_NAME,
+  alternates: {
+    canonical: siteUrl,
+  },
   openGraph: {
-    type:        'website',
-    locale:      'bg_BG',
-    siteName:    'Имоти Надежда',
-    title:       'Имоти Надежда — Луксозни недвижими имоти',
-    description: 'Водещата агенция за недвижими имоти в Североизточна България.',
+    type: 'website',
+    locale: 'bg_BG',
+    url: siteUrl,
+    siteName: SITE_NAME,
+    title: 'Имоти Надежда — imotinadezhda.bg',
+    description:
+      'Сайтове за имоти №1 в региона — Имоти Надежда. Търсене, огледи, 360° виртуални турове.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Имоти Надежда — imotinadezhda.bg',
+    description: 'Луксозни и достъпни имоти в Североизточна България.',
   },
   robots: {
-    index:  true,
+    index: true,
     follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
   },
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
 }
 
 export const viewport: Viewport = {
@@ -44,8 +64,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="bg" className="dark" suppressHydrationWarning>
+    <html lang="bg" className="light" suppressHydrationWarning>
       <head>
+        <link rel="canonical" href={siteUrl} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -54,12 +75,10 @@ export default function RootLayout({
         />
       </head>
       <body
-        className="font-body antialiased transition-colors duration-300"
-        style={{
-          backgroundColor: 'var(--bg-base)',
-          color: 'var(--text-primary)',
-        }}
+        className="font-body antialiased luxury-site-body"
+        style={{ backgroundColor: 'var(--rd-marble)', color: 'var(--rd-burg)' }}
       >
+        <SiteJsonLd />
         <ThemeProvider>
           <ConditionalShell>
             {children}

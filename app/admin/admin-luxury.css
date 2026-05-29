@@ -1,0 +1,379 @@
+/* CRM luxury marble theme — admin only, never affects public site */
+
+/* ─── Marble Background ───────────────────────────────────────────── */
+.admin-luxury-root {
+  --gold: #CFA847;
+  --gold-border: rgba(207,168,71,0.28);
+  --gold-glow: rgba(207,168,71,0.12);
+  --crimson: #4E0B1F;
+  --crimson-mid: #7A1230;
+  --ivory: #F5EDD8;
+  --ivory-dim: rgba(245,237,216,0.75);
+  --marble-light: rgba(248,242,228,0.06);
+  --marble-vein: rgba(207,168,71,0.08);
+}
+
+/* Marble texture overlay on the whole admin root */
+.admin-luxury-root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -5;
+  background:
+    repeating-linear-gradient(
+      128deg,
+      transparent 0px,
+      transparent 60px,
+      rgba(207,168,71,0.03) 60px,
+      rgba(207,168,71,0.03) 61px
+    ),
+    repeating-linear-gradient(
+      42deg,
+      transparent 0px,
+      transparent 100px,
+      rgba(255,255,255,0.015) 100px,
+      rgba(255,255,255,0.015) 101px
+    );
+  pointer-events: none;
+}
+
+.admin-luxury-root .admin-bg-overlay {
+  background: linear-gradient(
+    165deg,
+    rgba(20, 8, 14, 0.97) 0%,
+    rgba(36, 10, 20, 0.96) 40%,
+    rgba(14, 6, 10, 0.98) 100%
+  ) !important;
+}
+
+/* ─── Sidebar ─────────────────────────────────────────────────────── */
+.admin-luxury-root .admin-sidebar,
+.admin-luxury-root aside[class*='sidebar'] {
+  background: linear-gradient(
+    180deg,
+    rgba(72, 8, 24, 0.98) 0%,
+    rgba(38, 6, 14, 0.99) 100%
+  ) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border-right: 1px solid rgba(207,168,71,0.22) !important;
+  box-shadow: 4px 0 40px rgba(0,0,0,0.5), inset -1px 0 0 rgba(207,168,71,0.06) !important;
+}
+
+/* Marble shimmer line on sidebar */
+.admin-luxury-root .admin-sidebar::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; right: 0;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(207,168,71,0.4) 30%,
+    rgba(255,255,255,0.15) 50%,
+    rgba(207,168,71,0.4) 70%,
+    transparent 100%
+  );
+}
+
+/* ─── Topbar ──────────────────────────────────────────────────────── */
+.admin-luxury-root .admin-topbar,
+.admin-luxury-root header[class*='topbar'] {
+  background: rgba(20, 8, 14, 0.92) !important;
+  backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid rgba(207,168,71,0.2) !important;
+  box-shadow: 0 1px 24px rgba(0,0,0,0.35) !important;
+}
+
+/* ─── Cards — Marble Panels ───────────────────────────────────────── */
+.admin-luxury-root .admin-card,
+.admin-luxury-root [class*='AdminCard'],
+.admin-luxury-root .admin-kanban-bg {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(32,14,22,0.82) 0%,
+      rgba(22,10,16,0.75) 60%,
+      rgba(36,16,24,0.8) 100%
+    ) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(207,168,71,0.22) !important;
+  border-radius: 16px !important;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.45),
+    0 1px 0 rgba(207,168,71,0.08) inset,
+    0 0 0 1px rgba(255,255,255,0.02) inset !important;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Marble veining on cards */
+.admin-luxury-root .admin-card::before {
+  content: '';
+  position: absolute;
+  top: -40%; left: -20%;
+  width: 140%; height: 180%;
+  background:
+    linear-gradient(
+      108deg,
+      transparent 0%,
+      rgba(207,168,71,0.04) 30%,
+      transparent 32%,
+      rgba(255,255,255,0.02) 50%,
+      transparent 52%,
+      rgba(207,168,71,0.03) 70%,
+      transparent 72%
+    );
+  pointer-events: none;
+}
+
+.admin-luxury-root .admin-card:hover {
+  border-color: rgba(207,168,71,0.42) !important;
+  box-shadow:
+    0 12px 44px rgba(78,11,31,0.35),
+    0 0 24px rgba(207,168,71,0.08),
+    0 1px 0 rgba(207,168,71,0.12) inset !important;
+}
+
+/* ─── Tables ──────────────────────────────────────────────────────── */
+.admin-luxury-root table {
+  border-collapse: separate;
+  border-spacing: 0 5px;
+}
+
+.admin-luxury-root thead th {
+  color: rgba(207,168,71,0.9) !important;
+  font-size: 0.68rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  border: none !important;
+  background: transparent !important;
+  font-weight: 700;
+}
+
+.admin-luxury-root tbody tr {
+  background: rgba(26,10,18,0.6);
+  transition: background 0.22s ease, box-shadow 0.22s ease;
+}
+
+.admin-luxury-root tbody tr:hover {
+  background: rgba(78,11,31,0.5) !important;
+  box-shadow: 0 0 20px rgba(207,168,71,0.06);
+}
+
+.admin-luxury-root tbody td {
+  border: none !important;
+  color: var(--ivory) !important;
+  padding: 12px 16px !important;
+}
+
+.admin-luxury-root tbody tr td:first-child {
+  border-radius: 10px 0 0 10px;
+}
+.admin-luxury-root tbody tr td:last-child {
+  border-radius: 0 10px 10px 0;
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────────── */
+.admin-luxury-root .btn-crimson,
+.admin-luxury-root button[class*='btn-crimson'] {
+  background: linear-gradient(
+    135deg,
+    rgba(90,14,32,0.95) 0%,
+    rgba(52,8,18,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(207,168,71,0.5) !important;
+  color: var(--ivory) !important;
+  box-shadow:
+    0 0 20px rgba(207,168,71,0.12),
+    inset 0 1px 0 rgba(207,168,71,0.15) !important;
+  transition: box-shadow 0.25s ease, transform 0.18s ease;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.admin-luxury-root .btn-crimson:hover,
+.admin-luxury-root button[class*='btn-crimson']:hover {
+  box-shadow:
+    0 0 32px rgba(207,168,71,0.3),
+    0 4px 16px rgba(78,11,31,0.4),
+    inset 0 1px 0 rgba(207,168,71,0.25) !important;
+  transform: translateY(-1px);
+  border-color: rgba(207,168,71,0.7) !important;
+}
+
+.admin-luxury-root .btn-ghost {
+  color: rgba(245,237,216,0.75) !important;
+  border-color: rgba(207,168,71,0.28) !important;
+  background: rgba(207,168,71,0.04) !important;
+}
+.admin-luxury-root .btn-ghost:hover {
+  color: var(--ivory) !important;
+  background: rgba(207,168,71,0.08) !important;
+  border-color: rgba(207,168,71,0.45) !important;
+}
+
+/* ─── Status Badges ───────────────────────────────────────────────── */
+.admin-luxury-root [class*='badge'],
+.admin-luxury-root .status-badge {
+  border-radius: 999px;
+  padding: 3px 11px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  border: 1px solid rgba(207,168,71,0.4);
+  background: rgba(78,11,31,0.65);
+  color: var(--ivory);
+}
+
+/* ─── Headings & Text ─────────────────────────────────────────────── */
+.admin-luxury-root h1,
+.admin-luxury-root h2,
+.admin-luxury-root .font-display,
+.admin-luxury-root .admin-heading {
+  color: var(--ivory) !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+}
+
+.admin-luxury-root h1 {
+  letter-spacing: -0.01em;
+}
+
+.admin-luxury-root .text-themed-secondary,
+.admin-luxury-root .admin-text-muted {
+  color: rgba(245,237,216,0.55) !important;
+}
+
+.admin-luxury-root .admin-text {
+  color: var(--ivory) !important;
+}
+
+.admin-luxury-root .admin-text-faint {
+  color: rgba(245,237,216,0.38) !important;
+}
+
+/* Gold accent text */
+.admin-luxury-root .admin-table-head,
+.admin-luxury-root .text-crimson-700 {
+  color: var(--gold) !important;
+}
+
+/* ─── Inputs ──────────────────────────────────────────────────────── */
+.admin-luxury-root input,
+.admin-luxury-root select,
+.admin-luxury-root textarea,
+.admin-luxury-root .input-dark {
+  background: rgba(14,8,12,0.88) !important;
+  border: 1px solid rgba(207,168,71,0.28) !important;
+  color: var(--ivory) !important;
+  border-radius: 10px !important;
+  transition: border-color 0.2s;
+}
+
+.admin-luxury-root input:focus,
+.admin-luxury-root select:focus,
+.admin-luxury-root textarea:focus,
+.admin-luxury-root .input-dark:focus {
+  outline: none !important;
+  border-color: rgba(207,168,71,0.55) !important;
+  box-shadow: 0 0 0 2px rgba(207,168,71,0.08) !important;
+}
+
+.admin-luxury-root input::placeholder,
+.admin-luxury-root textarea::placeholder {
+  color: rgba(245,237,216,0.3) !important;
+}
+
+/* ─── Modals ──────────────────────────────────────────────────────── */
+.admin-luxury-root .admin-modal-backdrop,
+.admin-modal-backdrop {
+  background: rgba(8,4,6,0.72) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.admin-luxury-root .admin-modal-panel,
+.admin-modal-panel {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(30,12,20,0.97) 0%,
+      rgba(20,8,14,0.98) 100%
+    ) !important;
+  border: 1px solid rgba(207,168,71,0.3) !important;
+  box-shadow:
+    0 24px 80px rgba(0,0,0,0.7),
+    0 0 0 1px rgba(207,168,71,0.06) inset !important;
+  /* Marble effect on modal */
+  background-image:
+    linear-gradient(
+      145deg,
+      rgba(30,12,20,0.97) 0%,
+      rgba(20,8,14,0.98) 100%
+    ),
+    repeating-linear-gradient(
+      115deg,
+      transparent 0px, transparent 48px,
+      rgba(207,168,71,0.04) 48px, rgba(207,168,71,0.04) 49px
+    ) !important;
+}
+
+/* ─── Kanban ──────────────────────────────────────────────────────── */
+.admin-luxury-root .admin-kanban-card {
+  background: rgba(24,10,16,0.7) !important;
+  border: 1px solid rgba(207,168,71,0.14) !important;
+  border-radius: 10px;
+}
+
+.admin-luxury-root .admin-kanban-card:hover {
+  background: rgba(78,11,31,0.45) !important;
+  border-color: rgba(207,168,71,0.28) !important;
+}
+
+/* ─── Sidebar Status / AI Button ──────────────────────────────────── */
+.admin-luxury-root .admin-sidebar-status {
+  background: rgba(207,168,71,0.06) !important;
+  border: 1px solid rgba(207,168,71,0.15) !important;
+}
+.admin-luxury-root .admin-sidebar-status-text {
+  color: rgba(207,168,71,0.7) !important;
+}
+
+/* ─── Virtual Tour CRM panel ─────────────────────────────────────── */
+.admin-luxury-root .vt-crm {
+  border: 1px solid rgba(207,168,71,0.22);
+  border-radius: 14px;
+  padding: 20px;
+  background: rgba(14,8,12,0.55);
+  backdrop-filter: blur(14px);
+}
+
+/* ─── Page scroll area ────────────────────────────────────────────── */
+.admin-luxury-root .admin-scroll-main {
+  background: transparent;
+}
+
+/* ─── Scrollbars ──────────────────────────────────────────────────── */
+.admin-luxury-root *::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.admin-luxury-root *::-webkit-scrollbar-track {
+  background: transparent;
+}
+.admin-luxury-root *::-webkit-scrollbar-thumb {
+  background: rgba(207,168,71,0.25);
+  border-radius: 4px;
+}
+
+/* ─── Gold dividers ───────────────────────────────────────────────── */
+.admin-luxury-root hr,
+.admin-luxury-root [style*='border-top'] {
+  border-color: rgba(207,168,71,0.15) !important;
+}
+
+/* ─── Selection ───────────────────────────────────────────────────── */
+.admin-luxury-root ::selection {
+  background: rgba(207,168,71,0.25);
+  color: var(--ivory);
+}
