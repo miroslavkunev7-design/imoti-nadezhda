@@ -30,22 +30,27 @@ export default function HomeHero({ cities }: Props) {
       <section className="hp-top" aria-label="Главна навигация">
         <svg className="hp-top__surface" viewBox="0 0 940 166" preserveAspectRatio="none" aria-hidden>
           <defs>
+            {/* Ivory-marble base: warm cream → golden ivory → deeper amber cream */}
             <linearGradient id="hpMarbleBase" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#f8ecda" />
-              <stop offset="0.42" stopColor="#fffaf0" />
-              <stop offset="0.72" stopColor="#f6ead7" />
-              <stop offset="1" stopColor="#ead8bc" />
+              <stop offset="0"    stopColor="#f5e6c8" />
+              <stop offset="0.28" stopColor="#fdf5e4" />
+              <stop offset="0.55" stopColor="#f9ead4" />
+              <stop offset="0.78" stopColor="#f2ddb8" />
+              <stop offset="1"    stopColor="#e8ccaa" />
             </linearGradient>
+            {/* Gold ribbon: dark amber → bright gold highlight → warm gold → dark amber */}
             <linearGradient id="hpGold" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stopColor="#87520f" />
-              <stop offset="0.18" stopColor="#d4a844" />
-              <stop offset="0.46" stopColor="#fff0a8" />
-              <stop offset="0.67" stopColor="#c58a22" />
-              <stop offset="1" stopColor="#6e3f0b" />
+              <stop offset="0"    stopColor="#6b3c08" />
+              <stop offset="0.14" stopColor="#c4922a" />
+              <stop offset="0.38" stopColor="#f5d97a" />
+              <stop offset="0.52" stopColor="#ffe9a0" />
+              <stop offset="0.68" stopColor="#c48a1e" />
+              <stop offset="1"    stopColor="#5c3407" />
             </linearGradient>
+            {/* Marble vein noise filter — golden-amber tones */}
             <filter id="hpMarbleNoise" x="-10%" y="-10%" width="120%" height="120%">
-              <feTurbulence type="fractalNoise" baseFrequency="0.018 0.032" numOctaves="4" seed="17" result="noise" />
-              <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0.85 0 0 0 0 0.68 0 0 0 0 0.35 0 0 0 0.18 0" />
+              <feTurbulence type="fractalNoise" baseFrequency="0.016 0.028" numOctaves="5" seed="23" result="noise" />
+              <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0.78 0 0 0 0 0.56 0 0 0 0 0.18 0 0 0 0.22 0" />
             </filter>
           </defs>
           <path className="hp-top__surface-main" d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z" />
