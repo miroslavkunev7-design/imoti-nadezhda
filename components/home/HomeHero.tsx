@@ -30,77 +30,61 @@ export default function HomeHero({ cities }: Props) {
       <section className="hp-top" aria-label="Главна навигация">
         <svg className="hp-top__surface" viewBox="0 0 940 166" preserveAspectRatio="none" aria-hidden>
           <defs>
-            {/* Marble texture — fills full SVG area, clipped to panel shape */}
             <pattern id="hpMarbleTile" patternUnits="userSpaceOnUse" x="0" y="0" width="940" height="166">
               <image href="/images/texture-marble-white-gold.png"
                 x="0" y="0" width="940" height="166"
                 preserveAspectRatio="xMidYMid slice" />
             </pattern>
 
-            {/* 3D ribbon gradient — userSpaceOnUse aligned to ribbon band y=114..134 */}
-            <linearGradient id="hpRibbon" gradientUnits="userSpaceOnUse" x1="0" y1="112" x2="0" y2="134">
-              <stop offset="0%"    stopColor="#2a1000" />
-              <stop offset="8%"    stopColor="#6b3608" />
-              <stop offset="20%"   stopColor="#c48518" />
-              <stop offset="34%"   stopColor="#f5d560" />
-              <stop offset="46%"   stopColor="#fff6b8" />
-              <stop offset="54%"   stopColor="#ffe880" />
-              <stop offset="66%"   stopColor="#d4980e" />
-              <stop offset="80%"   stopColor="#8a5210" />
-              <stop offset="92%"   stopColor="#4a2406" />
-              <stop offset="100%"  stopColor="#1e0e00" />
+            {/* 3D ribbon — vertical gradient across ribbon thickness */}
+            <linearGradient id="hpGoldRibbon" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stopColor="#2a1000" />
+              <stop offset="7%"   stopColor="#6b3608" />
+              <stop offset="18%"  stopColor="#c48518" />
+              <stop offset="33%"  stopColor="#f5d560" />
+              <stop offset="46%"  stopColor="#fff6b8" />
+              <stop offset="56%"  stopColor="#ffe070" />
+              <stop offset="70%"  stopColor="#c68e10" />
+              <stop offset="84%"  stopColor="#7a4a08" />
+              <stop offset="100%" stopColor="#1e0e00" />
             </linearGradient>
 
-            {/* Ribbon drop shadow */}
-            <filter id="hpRibbonShadow" x="-5%" y="-10%" width="110%" height="140%">
-              <feDropShadow dx="0" dy="3" stdDeviation="3.5" floodColor="#000" floodOpacity="0.45"/>
+            <filter id="hpRibbonShadow">
+              <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#000" floodOpacity="0.42"/>
             </filter>
-
-            {/* Clip to panel shape */}
-            <clipPath id="hpPanelClip">
-              <path d="M0 0 H940 V88 C600 88 350 120 0 140 Z" />
-            </clipPath>
           </defs>
 
-          {/* ── Marble surface (panel shape) ── */}
+          {/* ── Marble panel — original shape ── */}
           <path
-            d="M0 0 H940 V88 C600 88 350 120 0 140 Z"
+            d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z"
             fill="url(#hpMarbleTile)"
-            stroke="rgba(190,138,42,0.32)"
-            strokeWidth="0.8"
+            stroke="rgba(190,138,42,0.35)"
+            strokeWidth="1"
           />
 
-          {/* ── Gold ribbon body ── */}
-          {/* Top edge:    M0 140 C350 120 600 88 940 88  */}
-          {/* Bottom edge: M0 160 C350 140 600 108 940 108 */}
+          {/* ── 3D Gold ribbon — original curve, new gradient ── */}
           <path
-            d="M0 140 C350 120 600 88 940 88 L940 108 C600 108 350 140 0 160 Z"
-            fill="url(#hpRibbon)"
+            d="M0 156 C77 169 168 168 216 143 C238 128 247 107 277 91 C315 70 363 54 392 0 H478 C438 25 416 52 371 70 C330 86 300 89 281 105 C257 125 246 147 216 159 C153 181 70 174 0 164 Z"
+            fill="url(#hpGoldRibbon)"
             filter="url(#hpRibbonShadow)"
           />
 
-          {/* ── Highlight: bright top edge line ── */}
+          {/* ── Bright top-edge highlight line ── */}
           <path
-            d="M0 140 C350 120 600 88 940 88"
-            fill="none"
-            stroke="rgba(255,253,218,0.92)"
-            strokeWidth="1.8"
+            d="M0 156 C77 169 168 168 216 143 C238 128 247 107 277 91 C315 70 363 54 392 0"
+            fill="none" stroke="rgba(255,252,210,0.90)" strokeWidth="1.8"
           />
 
-          {/* ── Inner highlight band (2px inside top edge) ── */}
+          {/* ── Second bright streak just inside top edge ── */}
           <path
-            d="M0 142 C350 122 600 90 940 90"
-            fill="none"
-            stroke="rgba(255,248,180,0.55)"
-            strokeWidth="1.2"
+            d="M0 157.5 C78 170 168 170 216 145 C238 130 248 109 278 93 C316 72 363 56 393 2"
+            fill="none" stroke="rgba(255,245,170,0.50)" strokeWidth="1.0"
           />
 
-          {/* ── Dark shadow bottom edge ── */}
+          {/* ── Dark bottom-edge shadow ── */}
           <path
-            d="M0 160 C350 140 600 108 940 108"
-            fill="none"
-            stroke="rgba(30,10,0,0.60)"
-            strokeWidth="1.5"
+            d="M0 164 C70 174 153 181 216 159 C246 147 257 125 281 105 C300 89 330 86 371 70 C416 52 438 25 478 0"
+            fill="none" stroke="rgba(25,8,0,0.62)" strokeWidth="1.4"
           />
         </svg>
         <Link href="/" className="hp-brand" aria-label="Начало">

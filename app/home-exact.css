@@ -60,10 +60,10 @@
 
 .hp-top {
   position: absolute;
-  top: 0;
+  top: 1.39vh;
   left: 0;
   width: 91.8vw;
-  height: 30.56vh; /* 176/576 * 100 = 30.56 — matches reference panel height */
+  height: 28.82vh;
   z-index: 5;
   overflow: visible;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.30));
