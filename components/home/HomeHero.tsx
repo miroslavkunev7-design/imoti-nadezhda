@@ -25,6 +25,7 @@ export default function HomeHero({ cities }: Props) {
         <source srcSet="/images/hero-bg.webp" type="image/webp" />
         <img src="/images/hero-bg.jpg" alt="" className="hp-bg__img" draggable={false} />
       </picture>
+      <div className="hp-window-view" aria-hidden />
       <div className="hp__vignette" aria-hidden />
 
       <section className="hp-top" aria-label="Главна навигация">
