@@ -1,72 +1,4 @@
-/* ══════════════════════════════════════════════════
-   HOME PAGE — 1:1 pixel-exact от screenshot
-   ══════════════════════════════════════════════════ */
-.hp-clone {
-  aspect-ratio: 16 / 9;
-}
-
-.hp-clone__hit {
-  position: absolute;
-  z-index: 5;
-  display: block;
-  text-decoration: none;
-  background: transparent;
-}
-
-/* Coordinates are mapped from the supplied 1024x576 screenshot. */
-.hp-clone__logo {
-  left: 0%;
-  top: 0%;
-  width: 25.2%;
-  height: 28.7%;
-}
-
-.hp-clone__nav-sale {
-  left: 60.1%;
-  top: 5.7%;
-  width: 10.4%;
-  height: 7.1%;
-}
-
-.hp-clone__nav-rent {
-  left: 70.7%;
-  top: 5.7%;
-  width: 10.0%;
-  height: 7.1%;
-}
-
-.hp-clone__nav-about {
-  left: 80.9%;
-  top: 5.7%;
-  width: 7.0%;
-  height: 7.1%;
-}
-
-.hp-clone__nav-user {
-  left: 87.8%;
-  top: 5.0%;
-  width: 4.0%;
-  height: 7.2%;
-}
-
-.hp-clone__search {
-  left: 50.2%;
-  top: 42.5%;
-  width: 49.2%;
-  height: 8.8%;
-}
-
-.hp-clone__city {
-  top: 69.1%;
-  width: 14.35%;
-  height: 25.9%;
-}
-
-.hp-clone__city--1 { left: 17.2%; }
-.hp-clone__city--2 { left: 32.0%; }
-.hp-clone__city--3 { left: 46.6%; }
-.hp-clone__city--4 { left: 61.2%; }
-
+/* Native 1:1 homepage implementation */
 .main--home-exact {
   min-height: 0 !important;
   height: 100dvh !important;
@@ -78,403 +10,373 @@
 
 .hp {
   --hp-burg: #6b001c;
-  --hp-burg2: #7a0d28;
+  --hp-burg-dark: #4f0014;
   --hp-gold: #cfa54a;
-  --hp-gold2: #e8c878;
-  --hp-gold-deep: #a97a1f;
-  --hp-marble: #faf7f2;
+  --hp-gold-light: #e8c878;
+  --hp-gold-dark: #a97a1f;
   --hp-cream: #fffdf8;
-
+  --hp-marble: #faf7f2;
   position: relative;
   width: 100%;
   height: 100dvh;
   overflow: hidden;
-  background: #0a0608;
+  background: #16070b;
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
 
-/* Full-bleed background */
-.hp .terrace-bg {
+/* Values below are authored against the supplied 1024x576 frame.
+   vw/vh units preserve the exact desktop composition at any 16:9 viewport. */
+
+.hp-bg,
+.hp-bg__img {
   position: absolute;
   inset: 0;
-  z-index: 0;
-}
-
-.hp .terrace-bg__img {
-  object-position: center 38%;
-}
-
-/* Subtle dark shade */
-.hp__shade {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.04) 0%,
-    transparent 28%,
-    rgba(20,4,10,0.30) 68%,
-    rgba(20,4,10,0.52) 100%
-  );
-}
-
-/* ─── Logo panel — PNG фон + НАДЕЖДА HTML текст ─── */
-.hp__panel-wrap {
-  position: absolute;
-  top: 0; left: 0;
-  z-index: 20;
-  width: clamp(300px, 42vw, 580px);
-  pointer-events: none;
-}
-
-.hp__panel-bg-img {
-  display: block;
   width: 100%;
+  height: 100%;
+}
+
+.hp-bg {
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hp-bg__img {
+  object-fit: cover;
+  object-position: center center;
+  transform: none;
+  user-select: none;
+}
+
+.hp__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(84, 0, 26, 0.46) 0%, rgba(84, 0, 26, 0.14) 11.5%, transparent 28%, transparent 76%, rgba(18, 0, 8, 0.16) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, transparent 48%, rgba(44, 3, 15, 0.34) 100%);
+}
+
+/* Top marble panel */
+.hp-top {
+  position: absolute;
+  top: 1.39vh;
+  left: 0;
+  width: 91.8vw;
+  height: 19.97vh;
+  z-index: 5;
+}
+
+.hp-top__marble {
+  position: absolute;
+  top: 0;
+  left: 0.78vw;
+  width: 91.02vw;
+  height: 19.79vh;
+  border-radius: 0.59vw 0.59vw 0.39vw 0.39vw;
+  border: 1px solid rgba(190, 138, 42, 0.42);
+  background:
+    radial-gradient(ellipse 48% 80% at 18% 20%, rgba(255, 255, 255, 0.95), transparent 70%),
+    radial-gradient(ellipse 32% 70% at 78% 8%, rgba(223, 184, 96, 0.32), transparent 62%),
+    linear-gradient(112deg, transparent 0 42%, rgba(170, 105, 18, 0.18) 44%, rgba(255, 245, 215, 0.72) 46%, rgba(174, 116, 23, 0.42) 48%, transparent 52%),
+    linear-gradient(180deg, #f9f0df 0%, #fffaf0 54%, #efe0c9 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.24);
+}
+
+.hp-top__logo-panel {
+  position: absolute;
+  top: -0.35vh;
+  left: 0;
+  width: 60.55vw;
   height: auto;
+  z-index: 2;
   pointer-events: none;
   user-select: none;
-  -webkit-user-drag: none;
 }
 
-/* Клик зона върху мраморния панел (лявата ~38% от изображението) */
-.hp__panel-content {
+.hp-top__logo-hit {
   position: absolute;
-  top: 0; left: 0;
-  width: 38%;
-  height: 100%;
+  top: 0;
+  left: 0;
+  width: 24.41vw;
+  height: 24.65vh;
+  z-index: 3;
+}
+
+.hp-nav {
+  position: absolute;
+  top: 5.73vh;
+  right: 1.66vw;
+  z-index: 4;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  padding-bottom: 14%;
-  text-decoration: none;
-  pointer-events: auto;
+  height: 7.46vh;
 }
 
-/* Кремав блок — покрива "ИЛДЖ.ИА" от PNG-то */
-.hp__panel-text-cover {
-  position: absolute;
-  bottom: 7%;
-  left: 6%; right: 6%;
-  height: 22%;
-  background: linear-gradient(180deg, #f5ecde 0%, #faf7f2 55%, #fffdf8 100%);
-  border-radius: 2px;
-  z-index: 1;
-}
-
-/* НАДЕЖДА текст — точно на позицията на покрития текст */
-.hp__panel-nadejda {
-  position: relative;
-  z-index: 2;
+.hp-nav__link {
+  display: inline-flex;
+  align-items: center;
+  height: 7.46vh;
+  padding: 0 1.95vw;
   font-family: var(--font-playfair), Georgia, serif;
-  font-size: clamp(10px, 1.1vw, 15px);
-  font-weight: 800;
-  letter-spacing: 0.26em;
-  color: #6b001c;
-  text-align: center;
+  font-size: 1.46vw;
+  line-height: 1;
+  font-weight: 600;
+  color: #3a2119;
+  text-decoration: none;
   white-space: nowrap;
+}
+
+.hp-nav__sep {
+  width: 1px;
+  height: 2.78vh;
+  background: rgba(190, 138, 42, 0.54);
+}
+
+.hp-nav__user {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.42vw;
+  height: 6.08vh;
+  margin-left: 1.27vw;
+  border-radius: 999px;
+  border: 1.4px solid rgba(190, 138, 42, 0.66);
+  color: #be8a2a;
+}
+
+.hp-nav__user svg {
+  width: 1.76vw;
+  height: 3.13vh;
+}
+
+/* Search bar */
+.hp-search {
+  position: absolute;
+  z-index: 6;
+  top: 42.53vh;
+  left: 50.29vw;
+  width: 48.83vw;
+  height: 8.33vh;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  border-radius: 0.78vw;
+  border: 1px solid rgba(207, 165, 74, 0.48);
+  background: linear-gradient(180deg, #fffdf8 0%, #faf7f2 100%);
+  box-shadow: 0 7px 30px rgba(0, 0, 0, 0.28), 0 1px 4px rgba(0, 0, 0, 0.14);
+}
+
+.hp-search__field,
+.hp-search__filter,
+.hp-search__submit {
+  border: 0;
+  margin: 0;
+  font: inherit;
+}
+
+.hp-search__field {
+  display: flex;
+  align-items: center;
+  gap: 0.59vw;
+  height: 100%;
+  padding: 0 0.88vw;
+  color: var(--hp-gold);
+  border-right: 1px solid rgba(207, 165, 74, 0.29);
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.hp-search__field svg,
+.hp-search__filter svg,
+.hp-search__submit svg {
+  width: 1.17vw;
+  height: 2.08vh;
+  flex: 0 0 auto;
+  stroke-width: 1.8;
+}
+
+.hp-search__field span {
+  display: block;
+  margin-bottom: 0.35vh;
+  font-size: 0.66vw;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(107, 0, 28, 0.43);
   text-transform: uppercase;
 }
 
-@media (max-width: 640px) {
-  .hp__panel-wrap { width: min(90vw, 340px); }
-  .hp__panel-nadejda { font-size: 10px; }
-}
-
-/* ─── Navigation top-right ─── */
-.hp__nav {
-  position: absolute;
-  top: clamp(18px,2.8vh,30px);
-  right: clamp(24px,3.5vw,52px);
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  gap: 0;
-  pointer-events: auto;
-}
-
-.hp__nav-link {
-  font-family: var(--font-playfair), Georgia, serif;
-  font-size: clamp(13px,1.1vw,16px);
-  font-weight: 600;
-  color: #fff;
-  text-decoration: none;
-  padding: 0 clamp(14px,1.5vw,22px);
-  white-space: nowrap;
-  text-shadow: 0 1px 8px rgba(0,0,0,0.4);
-  transition: color 0.18s;
-}
-
-.hp__nav-link:hover { color: var(--hp-gold2); }
-
-.hp__nav-sep {
-  width: 1px; height: 16px;
-  background: rgba(255,255,255,0.3);
-}
-
-.hp__nav-user {
-  display: flex; align-items: center; justify-content: center;
-  width: 38px; height: 38px; border-radius: 50%;
-  border: 1.5px solid rgba(207,165,74,0.7);
-  color: var(--hp-gold);
-  text-decoration: none;
-  margin-left: 10px;
-  transition: background 0.2s;
-}
-
-.hp__nav-user:hover { background: rgba(207,165,74,0.15); }
-
-/* ─── Search bar — floating, compact ─── */
-.hp__search-wrap {
-  position: absolute;
-  /* center-right, middle-ish vertically */
-  top: clamp(28%, 33%, 38%);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 20;
-  width: min(92vw, 920px);
-  pointer-events: auto;
-}
-
-@media (max-width: 900px) {
-  .hp__search-wrap {
-    left: clamp(8px, 3vw, 24px);
-    right: clamp(8px, 3vw, 24px);
-    transform: none;
-    width: auto;
-    top: auto;
-    bottom: calc(clamp(218px,28vh,268px) + clamp(12px,2vh,18px));
-  }
-}
-
-.hp__search {
-  display: flex;
-  align-items: stretch;
-  height: 60px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: linear-gradient(180deg, var(--hp-cream) 0%, var(--hp-marble) 100%);
-  border: 1px solid rgba(207,165,74,0.45);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.15);
-}
-
-.hp__search-segs {
-  flex: 1;
-  display: flex;
-  align-items: stretch;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.hp__search-seg {
-  flex: 1 1 0;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 14px;
-  border-right: 1px solid rgba(207,165,74,0.3);
-  background: transparent;
-  border-top: none; border-bottom: none; border-left: none;
-  text-align: left;
-  cursor: pointer;
-}
-
-.hp__search-seg:last-child { border-right: none; }
-
-.hp__search-icon { color: var(--hp-gold); flex-shrink: 0; }
-
-.hp__search-text { min-width: 0; flex: 1; }
-
-.hp__search-label {
-  display: block;
-  font-size: 8.5px; font-weight: 700;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: rgba(107,0,28,0.42);
-  margin-bottom: 1px;
-  white-space: nowrap;
-}
-
-.hp__search-val {
+.hp-search__field strong {
   display: block;
   font-family: var(--font-playfair), Georgia, serif;
-  font-size: clamp(11px, 0.9vw, 13px);
-  font-weight: 700;
-  color: var(--hp-burg);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border: none; background: transparent;
-  padding: 0; width: 100%; appearance: none; cursor: pointer;
-}
-
-.hp__search-btns { display: flex; align-items: stretch; flex-shrink: 0; }
-
-.hp__search-filter {
-  display: flex; align-items: center; gap: 6px;
-  padding: 0 14px;
-  border: none; border-right: 1px solid rgba(207,165,74,0.3);
-  background: transparent;
-  color: rgba(107,0,28,0.75);
-  font-size: 12px; font-weight: 600;
-  cursor: pointer; white-space: nowrap;
-}
-
-.hp__search-submit {
-  display: flex; align-items: center; gap: 7px;
-  padding: 0 clamp(18px,2vw,28px);
-  border: none;
-  background: linear-gradient(135deg, var(--hp-gold2) 0%, var(--hp-gold) 50%, #b8923a 100%);
-  color: #2e0612;
-  font-family: var(--font-playfair), Georgia, serif;
-  font-size: 14px; font-weight: 800;
-  cursor: pointer;
-  border-radius: 0 12px 12px 0;
-  white-space: nowrap;
-  letter-spacing: 0.04em;
-}
-
-.hp__search-submit:hover { filter: brightness(1.06); }
-
-/* Expanded filters */
-.hp__search-exp {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0; right: 0;
-  z-index: 35;
-  padding: 16px 18px;
-  border-radius: 10px;
-  border: 1px solid rgba(207,165,74,0.38);
-  background: linear-gradient(180deg, var(--hp-cream), var(--hp-marble));
-  box-shadow: 0 12px 40px rgba(0,0,0,0.22);
-}
-
-/* ─── City cards — bottom row ─── */
-.hp__cards-wrap {
-  position: absolute;
-  bottom: clamp(12px,2vh,22px);
-  left: 0; right: 0;
-  z-index: 20;
-  display: flex;
-  justify-content: center;
-  padding: 0 clamp(14px,2.5vw,32px);
-  gap: clamp(12px,1.5vw,18px);
-  pointer-events: auto;
-}
-
-.hp__card {
-  flex: 0 0 clamp(165px,16vw,205px);
-  height: clamp(215px,25vh,252px);
-  border-radius: 14px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  background: var(--hp-marble);
-  border: 1px solid rgba(207,165,74,0.5);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
-  text-decoration: none;
-  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s;
-  cursor: pointer;
-}
-
-.hp__card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 56px rgba(107,0,28,0.4);
-}
-
-.hp__card-media {
-  position: relative;
-  flex: 0 0 57%;
-  overflow: hidden;
-}
-
-.hp__card-photo {
-  position: absolute; inset: 0;
-  background-size: cover;
-  background-position: center;
-  transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
-}
-
-.hp__card:hover .hp__card-photo { transform: scale(1.06); }
-
-/* Бяло+златисто мраморно разпръскване — само долната ~25% на снимката */
-.hp__card-dust {
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  /* Само долната четвъртина на снимката (photo е 57% от картата) */
-  height: 26%;
-  z-index: 1; pointer-events: none;
-  background:
-    /* Вертикален преход: мраморен крем → прозрачен */
-    linear-gradient(
-      to top,
-      rgba(250,247,242,1)   0%,
-      rgba(252,248,240,0.96) 18%,
-      rgba(255,250,240,0.80) 38%,
-      rgba(248,240,220,0.52) 58%,
-      rgba(240,225,190,0.22) 78%,
-      transparent 100%
-    ),
-    /* Хоризонтални златисто-мраморни блестящи точки */
-    radial-gradient(ellipse 22% 55% at  4% 100%, rgba(207,165,74,0.72) 0%, transparent 100%),
-    radial-gradient(ellipse 16% 48% at 13% 98%,  rgba(255,253,248,0.88) 0%, transparent 100%),
-    radial-gradient(ellipse 20% 52% at 23% 100%, rgba(212,175,55,0.62)  0%, transparent 100%),
-    radial-gradient(ellipse 18% 50% at 33% 99%,  rgba(250,240,210,0.80) 0%, transparent 100%),
-    radial-gradient(ellipse 22% 54% at 43% 100%, rgba(207,165,74,0.58)  0%, transparent 100%),
-    radial-gradient(ellipse 16% 46% at 54% 98%,  rgba(255,248,220,0.82) 0%, transparent 100%),
-    radial-gradient(ellipse 20% 52% at 64% 100%, rgba(212,175,55,0.65)  0%, transparent 100%),
-    radial-gradient(ellipse 17% 48% at 74% 99%,  rgba(250,245,225,0.78) 0%, transparent 100%),
-    radial-gradient(ellipse 22% 54% at 84% 100%, rgba(207,165,74,0.60)  0%, transparent 100%),
-    radial-gradient(ellipse 18% 50% at 94% 98%,  rgba(255,250,230,0.80) 0%, transparent 100%);
-}
-
-.hp__card-body {
-  position: relative; z-index: 2;
-  flex: 1;
-  display: flex; flex-direction: column; justify-content: space-between;
-  padding: 11px 14px 14px;
-  background: linear-gradient(180deg, var(--hp-marble) 0%, var(--hp-cream) 100%);
-}
-
-.hp__card-name-row {
-  display: flex; align-items: center; gap: 6px;
-}
-
-.hp__card-pin { color: var(--hp-gold); flex-shrink: 0; }
-
-.hp__card-name {
-  margin: 0;
-  font-family: var(--font-playfair), Georgia, serif;
-  font-size: clamp(1.05rem, 1.2vw, 1.22rem);
+  font-size: 0.88vw;
+  line-height: 1.05;
   font-weight: 800;
   color: var(--hp-burg);
-  line-height: 1.1;
+  white-space: nowrap;
 }
 
-.hp__card-footer {
-  display: flex; align-items: center; justify-content: space-between; gap: 6px;
-}
-
-.hp__card-cta {
-  font-size: 9px; font-weight: 700;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--hp-gold-deep);
-}
-
-.hp__card-arrow {
-  display: flex; align-items: center; justify-content: center;
-  width: 30px; height: 30px; border-radius: 50%;
-  border: 1.5px solid rgba(207,165,74,0.55);
+.hp-search__field em {
+  display: block;
+  margin-top: 0.17vh;
+  font-style: normal;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 0.68vw;
+  line-height: 1;
+  font-weight: 800;
   color: var(--hp-burg);
-  background: #fff;
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  white-space: nowrap;
 }
 
-/* Mobile */
-@media (max-width: 640px) {
-  .hp__nav-link { font-size: 12px; padding: 0 8px; }
-  .hp__search { height: auto; flex-wrap: wrap; }
-  .hp__search-segs { flex-wrap: wrap; }
-  .hp__search-seg { flex: 1 1 45%; min-height: 52px; }
-  .hp__search-submit { border-radius: 0 0 12px 12px; flex: 1; justify-content: center; }
-  .hp__cards-wrap { gap: 10px; padding: 0 10px; }
-  .hp__card { flex: 0 0 44vw; height: 48vw; }
+.hp-search__field--city { width: 14.4%; }
+.hp-search__field--quarter { width: 15%; }
+.hp-search__field--type { width: 18.6%; }
+.hp-search__field--price { width: 17%; }
+.hp-search__field--area { width: 15.6%; }
+
+.hp-search__filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.39vw;
+  width: 11%;
+  height: 100%;
+  padding: 0;
+  border-right: 1px solid rgba(207, 165, 74, 0.29);
+  background: transparent;
+  color: rgba(107, 0, 28, 0.74);
+  font-size: 0.82vw;
+  font-weight: 700;
+  cursor: pointer;
 }
+
+.hp-search__submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.49vw;
+  width: 8.4%;
+  height: 100%;
+  padding: 0;
+  background: linear-gradient(135deg, #e8c878 0%, #cfa54a 52%, #b8923a 100%);
+  color: #2e0612;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 0.88vw;
+  line-height: 1;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* City cards */
+.hp-cities {
+  position: absolute;
+  z-index: 6;
+  left: 17.19vw;
+  bottom: 5.21vh;
+  display: flex;
+  gap: 0.68vw;
+}
+
+.hp-city {
+  display: flex;
+  flex-direction: column;
+  width: 14.26vw;
+  height: 25.69vh;
+  overflow: hidden;
+  border-radius: 0.78vw;
+  border: 1px solid rgba(207, 165, 74, 0.52);
+  background: var(--hp-marble);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.34);
+  text-decoration: none;
+}
+
+.hp-city__photo {
+  position: relative;
+  height: 15.45vh;
+  flex: 0 0 15.45vh;
+  background-size: cover;
+  background-position: center;
+}
+
+.hp-city__fade {
+  height: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.hp-city__fade::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.69vh;
+  height: 5.56vh;
+  background:
+    linear-gradient(to top, rgba(250, 247, 242, 1) 0%, rgba(250, 247, 242, 0.92) 30%, rgba(250, 247, 242, 0.58) 62%, transparent 100%),
+    radial-gradient(ellipse 18% 56% at 8% 100%, rgba(207, 165, 74, 0.58), transparent 100%),
+    radial-gradient(ellipse 16% 54% at 28% 100%, rgba(255, 252, 240, 0.84), transparent 100%),
+    radial-gradient(ellipse 20% 54% at 52% 100%, rgba(207, 165, 74, 0.52), transparent 100%),
+    radial-gradient(ellipse 18% 52% at 76% 100%, rgba(255, 252, 240, 0.78), transparent 100%);
+  pointer-events: none;
+}
+
+.hp-city__body {
+  position: relative;
+  z-index: 3;
+  height: 10.24vh;
+  padding: 1.39vh 0.98vw 1.22vh;
+  background: linear-gradient(180deg, #faf7f2 0%, #fffdf8 100%);
+  box-sizing: border-box;
+}
+
+.hp-city__body h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.39vw;
+  margin: 0 0 1.74vh;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.27vw;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--hp-burg);
+}
+
+.hp-city__body h2 svg {
+  width: 0.88vw;
+  height: 1.56vh;
+  color: var(--hp-gold);
+  stroke-width: 2;
+}
+
+.hp-city__body > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hp-city__body span {
+  font-size: 0.68vw;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--hp-gold-dark);
+  text-transform: uppercase;
+}
+
+.hp-city__body b {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.15vw;
+  height: 3.82vh;
+  border-radius: 999px;
+  border: 1px solid rgba(207, 165, 74, 0.55);
+  background: #fff;
+  color: var(--hp-burg);
+  font-size: 1.17vw;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
