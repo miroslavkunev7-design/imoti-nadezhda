@@ -63,36 +63,36 @@ export default function AdminTopbar() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-5 admin-topbar"
+      className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-5"
       style={{
         height: 56,
         marginLeft: 200,
-        background: 'rgba(8,6,18,0.72)',
-        backdropFilter: 'blur(16px)',
-        borderBottom: '1px solid rgba(196,30,58,0.20)',
+        background: 'rgba(253,250,245,0.97)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
+        borderBottom: '1px solid rgba(207,168,71,0.30)',
+        boxShadow: '0 2px 16px rgba(0,0,0,0.10)',
       }}
     >
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm">
-        <Link href="/admin" className="text-themed-muted hover:text-themed-primary transition-colors">
+        <Link href="/admin" className="transition-colors font-medium" style={{ color: 'rgba(78,11,31,0.5)' }}>
           Admin
         </Link>
         {pathname !== '/admin' && (
           <>
-            <span className="text-themed-muted">/</span>
-            <span className="text-themed-primary font-medium">{current}</span>
+            <span style={{ color: 'rgba(78,11,31,0.35)' }}>/</span>
+            <span className="font-semibold" style={{ color: '#4E0B1F' }}>{current}</span>
           </>
         )}
       </div>
 
-      {/* Right controls */}
       <div className="flex items-center gap-2">
-        {/* Theme toggle */}
         <button
           onClick={toggleTheme}
           title={theme === 'dark' ? 'Светъл режим' : 'Тъмен режим'}
-          className="w-8 h-8 rounded-lg flex items-center justify-center transition-all admin-theme-toggle"
-          style={{ border: '1px solid rgba(255,255,255,0.08)' }}
+          className="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+          style={{ border: '1px solid rgba(207,168,71,0.35)', color: '#4E0B1F' }}
         >
           {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
         </button>
@@ -100,8 +100,8 @@ export default function AdminTopbar() {
         <Link
           href="/"
           target="_blank"
-          className="flex items-center gap-1.5 text-xs text-themed-secondary hover:text-themed-primary transition-colors px-3 py-1.5 rounded-lg"
-          style={{ border: '1px solid rgba(255,255,255,0.08)' }}
+          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg transition-colors font-medium"
+          style={{ border: '1px solid rgba(207,168,71,0.3)', color: '#4E0B1F' }}
         >
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
@@ -111,8 +111,8 @@ export default function AdminTopbar() {
         </Link>
         <button
           onClick={logout}
-          className="flex items-center gap-1.5 text-xs text-themed-secondary hover:text-crimson-700 transition-colors px-3 py-1.5 rounded-lg"
-          style={{ border: '1px solid rgba(255,255,255,0.08)' }}
+          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg transition-colors font-medium"
+          style={{ border: '1px solid rgba(207,168,71,0.3)', color: 'rgba(78,11,31,0.7)' }}
         >
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>

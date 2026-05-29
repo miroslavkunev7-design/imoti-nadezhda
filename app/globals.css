@@ -346,25 +346,25 @@ html.light .info-card {
 
 /* Property card surface */
 .property-card-surface {
-  background: var(--bg-surface);
-  border: 1.5px solid rgba(var(--accent-rgb),0.22);
-  border-radius: 12px;
+  background: linear-gradient(128deg, #FAF7F2 0%, #F5EDE0 35%, #FAF7F2 60%, #F0E8DB 100%);
+  border: 1px solid rgba(207,168,71,0.38);
+  border-radius: 16px;
   overflow: hidden;
   transition: border-color 280ms ease, transform 280ms ease, box-shadow 280ms ease;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.20);
+  box-shadow: 0 6px 28px rgba(0,0,0,0.22), 0 1px 0 rgba(255,255,255,0.9) inset;
 }
 .property-card-surface:hover {
-  border-color: rgba(var(--accent-rgb),0.55);
+  border-color: rgba(207,168,71,0.58);
   transform: translateY(-3px);
-  box-shadow: 0 10px 32px rgba(0,0,0,0.30);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.28), 0 0 20px rgba(207,168,71,0.08);
 }
 html.light .property-card-surface {
-  background: rgba(255,251,245,0.92);
-  border-color: rgba(var(--accent-rgb),0.28);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  background: linear-gradient(128deg, #FAF7F2 0%, #F5EDE0 35%, #FAF7F2 60%, #F0E8DB 100%);
+  border-color: rgba(207,168,71,0.38);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
 }
 html.light .property-card-surface:hover {
-  box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
 }
 
 /* Divider using CSS var */

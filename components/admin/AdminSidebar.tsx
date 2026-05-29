@@ -97,10 +97,9 @@ export default function AdminSidebar({ badges, session, restrictedPages }: Props
       className="fixed top-0 left-0 bottom-0 z-50 flex flex-col admin-sidebar"
       style={{
         width: 200,
-        background: 'linear-gradient(180deg, rgba(80, 11, 26, 0.98) 0%, rgba(42, 7, 14, 0.99) 100%)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderRight: '1px solid var(--gold-border)',
+        background: 'linear-gradient(180deg, #FDFAF5 0%, #F8F2E8 55%, #F3EBE0 100%)',
+        borderRight: '2px solid rgba(207,168,71,0.45)',
+        boxShadow: '4px 0 32px rgba(0,0,0,0.22), inset -1px 0 0 rgba(207,168,71,0.15)',
       }}
     >
       <div
@@ -109,32 +108,33 @@ export default function AdminSidebar({ badges, session, restrictedPages }: Props
         onClick={handleLogoClick}
       >
         <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-          style={{ background: 'rgba(212,175,95,0.15)', border: '1px solid var(--gold-border)' }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          style={{ background: 'rgba(78,11,31,0.08)', border: '1px solid rgba(207,168,71,0.4)' }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4E0B1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
           </svg>
         </div>
         <div className="leading-none min-w-0">
-          <p className="text-white font-bold text-sm tracking-wide truncate">Имоти</p>
-          <p className="text-crimson-700 text-[9px] uppercase tracking-widest">Надежда</p>
+          <p className="font-bold text-sm tracking-wide truncate" style={{ color: '#4E0B1F' }}>Имоти</p>
+          <p className="text-[9px] uppercase tracking-widest" style={{ color: '#CFA847' }}>Надежда</p>
         </div>
       </div>
 
       {session && (
         <Link href="/admin/profile"
-          className="mx-2 mt-2 mb-1 flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-[rgba(196,30,58,0.08)] transition-colors">
+          className="mx-2 mt-2 mb-1 flex items-center gap-2 px-3 py-2 rounded-lg transition-colors"
+          style={{ background: 'rgba(78,11,31,0.05)' }}>
           {session.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={session.avatar_url} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+            <img src={session.avatar_url} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" style={{ border: '1.5px solid rgba(207,168,71,0.4)' }} />
           ) : (
-            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
-              style={{ background: '#A86B3D' }}>
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+              style={{ background: '#4E0B1F', color: '#F5EDD8', border: '1.5px solid rgba(207,168,71,0.4)' }}>
               {(session.name ?? 'U').charAt(0).toUpperCase()}
             </div>
           )}
           <div className="min-w-0">
-            <p className="text-white text-xs font-medium truncate">{session.name ?? 'Профил'}</p>
-            <p className="text-[10px] text-[rgba(255,255,255,0.4)]">{isAdmin ? 'Админ' : 'Брокер'}</p>
+            <p className="text-xs font-semibold truncate" style={{ color: '#4E0B1F' }}>{session.name ?? 'Профил'}</p>
+            <p className="text-[10px]" style={{ color: 'rgba(78,11,31,0.5)' }}>{isAdmin ? 'Админ' : 'Брокер'}</p>
           </div>
         </Link>
       )}
@@ -152,22 +152,22 @@ export default function AdminSidebar({ badges, session, restrictedPages }: Props
               className={[
                 'flex items-center gap-2.5 px-3 py-2 rounded-lg mb-0.5 text-[13px] font-medium',
                 'transition-all duration-150',
-                active
-                  ? 'text-white'
-                  : 'text-[rgba(255,255,255,0.50)] hover:text-white hover:bg-[rgba(196,30,58,0.08)]',
               ].join(' ')}
               style={active ? {
-                background: 'linear-gradient(135deg, rgba(80, 11, 26, 0.65), rgba(42, 7, 14, 0.85))',
-                border: '1px solid var(--gold-border)',
-              } : {}}
+                background: 'rgba(78,11,31,0.09)',
+                border: '1px solid rgba(207,168,71,0.38)',
+                color: '#4E0B1F',
+              } : {
+                color: 'rgba(78,11,31,0.6)',
+              }}
             >
-              <span className={active ? 'text-white' : 'text-crimson-700 opacity-75'} style={{ flexShrink: 0 }}>
+              <span style={{ flexShrink: 0, color: active ? '#4E0B1F' : 'rgba(78,11,31,0.55)' }}>
                 {item.icon}
               </span>
               <span className="flex-1 truncate">{item.label}</span>
               {badge > 0 && (
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full text-white flex-shrink-0"
-                  style={{ background: '#A86B3D', minWidth: 18, textAlign: 'center' }}>
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
+                  style={{ background: '#4E0B1F', color: '#F5EDD8', minWidth: 18, textAlign: 'center' }}>
                   {badge > 99 ? '99+' : badge}
                 </span>
               )}
@@ -180,26 +180,23 @@ export default function AdminSidebar({ badges, session, restrictedPages }: Props
         <button
           type="button"
           onClick={() => setAiOpen(!aiOpen)}
-          className={[
-            'w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg mb-2 text-[13px] font-semibold transition-all',
-            aiOpen
-              ? 'text-white'
-              : 'text-[rgba(255,255,255,0.55)] hover:text-white hover:bg-[rgba(196,30,58,0.08)]',
-          ].join(' ')}
+          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg mb-2 text-[13px] font-semibold transition-all"
           style={aiOpen ? {
-            background: 'linear-gradient(135deg, rgba(196,30,58,0.45), rgba(100,10,25,0.5))',
-            border: '1px solid rgba(196,30,58,0.4)',
-          } : { border: '1px solid rgba(196,30,58,0.2)' }}
+            background: 'rgba(78,11,31,0.12)',
+            border: '1px solid rgba(207,168,71,0.45)',
+            color: '#4E0B1F',
+          } : {
+            border: '1px solid rgba(207,168,71,0.25)',
+            color: 'rgba(78,11,31,0.65)',
+          }}
         >
-          <span className={aiOpen ? 'text-white' : 'text-crimson-700'} style={{ flexShrink: 0 }}>
-            <AiIcon />
-          </span>
+          <span style={{ flexShrink: 0, color: '#4E0B1F' }}><AiIcon /></span>
           <span className="flex-1 text-left truncate">AI Асистент</span>
         </button>
-        <div className="rounded-lg px-3 py-2 mb-1 flex items-center gap-2 admin-sidebar-status"
-          style={{ background: 'rgba(196,30,58,0.08)', border: '1px solid rgba(196,30,58,0.15)' }}>
+        <div className="rounded-lg px-3 py-2 mb-1 flex items-center gap-2"
+          style={{ background: 'rgba(207,168,71,0.07)', border: '1px solid rgba(207,168,71,0.22)' }}>
           <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 animate-pulse ${statusColor}`} />
-          <span className="text-[10px] admin-sidebar-status-text font-medium">{statusText}</span>
+          <span className="text-[10px] font-medium" style={{ color: 'rgba(78,11,31,0.6)' }}>{statusText}</span>
         </div>
         <LogoutButton />
       </div>
@@ -211,7 +208,8 @@ function LogoutButton() {
   return (
     <button
       onClick={async () => { await fetch('/api/auth/admin-logout', { method: 'POST' }); window.location.href = '/admin/login' }}
-      className="flex items-center gap-2 px-3 py-2 rounded-lg text-[12px] text-[rgba(255,255,255,0.4)] hover:text-crimson-700 transition-colors w-full"
+      className="flex items-center gap-2 px-3 py-2 rounded-lg text-[12px] transition-colors w-full"
+      style={{ color: 'rgba(78,11,31,0.45)' }}
     >
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>

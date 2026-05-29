@@ -206,37 +206,41 @@ export default function BrokersManager({ brokers: initial, unassignedClients, is
                 <div className="flex items-center gap-3">
                   {broker.avatar_url ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={broker.avatar_url} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+                    <img src={broker.avatar_url} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                      style={{ border: '2px solid rgba(207,168,71,0.4)' }} />
                   ) : (
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0"
-                      style={{ background: '#A86B3D' }}>
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
+                      style={{ background: '#4E0B1F', color: '#F5EDD8', border: '2px solid rgba(207,168,71,0.4)' }}>
                       {broker.name.charAt(0).toUpperCase()}
                     </div>
                   )}
                   <div>
-                    <p className="text-white font-semibold text-sm">{broker.name}</p>
-                    <p className="text-[rgba(255,255,255,0.4)] text-xs">{broker.role === 'admin' ? 'Администратор' : 'Брокер'}</p>
+                    <p className="font-bold text-sm" style={{ color: '#4E0B1F' }}>{broker.name}</p>
+                    <p className="text-xs" style={{ color: 'rgba(78,11,31,0.5)' }}>{broker.role === 'admin' ? 'Администратор' : 'Брокер'}</p>
                   </div>
                 </div>
-                <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${broker.is_active ? 'bg-green-900/30 text-green-400' : 'text-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.1)]'}`}>
+                <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold"
+                  style={broker.is_active
+                    ? { background: 'rgba(34,197,94,0.12)', color: '#16a34a', border: '1px solid rgba(34,197,94,0.3)' }
+                    : { color: 'rgba(78,11,31,0.4)', border: '1px solid rgba(78,11,31,0.15)' }}>
                   {broker.is_active ? 'Активен' : 'Неактивен'}
                 </span>
               </div>
 
               <div className="flex flex-col gap-1 mb-4">
-                <a href={`mailto:${broker.email}`} className="text-xs text-[rgba(255,255,255,0.55)] hover:text-crimson-700 transition-colors">{broker.email}</a>
-                {broker.phone && <a href={`tel:${broker.phone}`} className="text-xs text-[rgba(255,255,255,0.55)]">{broker.phone}</a>}
+                <a href={`mailto:${broker.email}`} className="text-xs transition-colors" style={{ color: 'rgba(78,11,31,0.6)' }}>{broker.email}</a>
+                {broker.phone && <a href={`tel:${broker.phone}`} className="text-xs" style={{ color: 'rgba(78,11,31,0.6)' }}>{broker.phone}</a>}
               </div>
 
-              <div className="grid grid-cols-3 gap-2 mb-2 pt-3" style={{ borderTop: '1px solid rgba(196,30,58,0.12)' }}>
+              <div className="grid grid-cols-3 gap-2 mb-2 pt-3" style={{ borderTop: '1px solid rgba(207,168,71,0.18)' }}>
                 {[
                   { label: 'Клиенти', value: broker.total_clients },
                   { label: 'Активни', value: broker.active_clients },
                   { label: 'Имоти',   value: broker.total_properties },
                 ].map(s => (
                   <div key={s.label} className="text-center">
-                    <p className="text-lg font-bold text-crimson-700 font-display">{s.value}</p>
-                    <p className="text-[10px] text-[rgba(255,255,255,0.4)]">{s.label}</p>
+                    <p className="text-lg font-bold font-display" style={{ color: '#CFA847' }}>{s.value}</p>
+                    <p className="text-[10px]" style={{ color: 'rgba(78,11,31,0.5)' }}>{s.label}</p>
                   </div>
                 ))}
               </div>
@@ -245,9 +249,9 @@ export default function BrokersManager({ brokers: initial, unassignedClients, is
                   { label: 'Задачи ✓', value: broker.tasks_done ?? 0 },
                   { label: 'Сделки', value: broker.deals ?? 0 },
                 ].map(s => (
-                  <div key={s.label} className="text-center py-1 rounded-lg" style={{ background: 'rgba(196,30,58,0.06)' }}>
-                    <p className="text-base font-bold text-white font-display">{s.value}</p>
-                    <p className="text-[10px] text-[rgba(255,255,255,0.4)]">{s.label}</p>
+                  <div key={s.label} className="text-center py-1 rounded-lg" style={{ background: 'rgba(78,11,31,0.05)', border: '1px solid rgba(207,168,71,0.15)' }}>
+                    <p className="text-base font-bold font-display" style={{ color: '#4E0B1F' }}>{s.value}</p>
+                    <p className="text-[10px]" style={{ color: 'rgba(78,11,31,0.5)' }}>{s.label}</p>
                   </div>
                 ))}
               </div>
@@ -298,18 +302,18 @@ export default function BrokersManager({ brokers: initial, unassignedClients, is
 
       {permBroker && (
         <Modal title={`Права: ${permBroker.name}`} onClose={() => setPermBroker(null)}>
-          <p className="text-xs text-[rgba(255,255,255,0.5)] mb-3">Отметни страниците, които брокерът НЕ може да вижда:</p>
+          <p className="text-xs mb-3" style={{ color: 'rgba(78,11,31,0.55)' }}>Отметни страниците, които брокерът НЕ може да вижда:</p>
           <div className="flex flex-col gap-2 max-h-[320px] overflow-y-auto mb-4">
             {ADMIN_PAGE_OPTIONS.filter(p => p.slug !== 'dashboard').map(page => (
-              <label key={page.slug} className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-[rgba(196,30,58,0.06)]"
-                style={{ border: '1px solid rgba(196,30,58,0.12)' }}>
+              <label key={page.slug} className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer"
+                style={{ border: '1px solid rgba(207,168,71,0.2)', background: 'rgba(78,11,31,0.03)' }}>
                 <input type="checkbox" checked={permPages.includes(page.slug)}
                   onChange={e => {
                     setPermPages(prev => e.target.checked
                       ? [...prev, page.slug]
                       : prev.filter(s => s !== page.slug))
                   }} />
-                <span className="text-sm text-white">{page.label}</span>
+                <span className="text-sm" style={{ color: '#4E0B1F' }}>{page.label}</span>
               </label>
             ))}
           </div>

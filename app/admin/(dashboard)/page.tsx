@@ -52,77 +52,78 @@ export default async function AdminDashboard() {
     { label: 'CRM клиенти',     value: stats.clients,    href: '/admin/clients'    },
   ]
 
-  const cardStyle = {
-    background: 'rgba(8,6,18,0.80)',
-    border: '1.5px solid rgba(196,30,58,0.30)',
-    backdropFilter: 'blur(12px)',
-    WebkitBackdropFilter: 'blur(12px)',
-    borderRadius: 14,
+  const MC = {
+    background: 'linear-gradient(128deg, #FAF7F2 0%, #F5EDE0 35%, #FAF7F2 60%, #F0E8DB 100%)',
+    border: '1px solid rgba(207,168,71,0.38)',
+    borderRadius: 16,
+    boxShadow: '0 6px 28px rgba(0,0,0,0.22), 0 1px 0 rgba(255,255,255,0.9) inset',
   }
 
   return (
     <div style={{ maxWidth: 1000 }}>
       <div style={{ marginBottom: 28 }}>
-        <h1 className="font-display text-white text-2xl font-bold">Табло</h1>
-        <p className="text-[rgba(255,255,255,0.45)] text-sm mt-1">Преглед на всички активности</p>
+        <h1 className="font-display text-2xl font-bold" style={{ color: '#FAF7F2', textShadow: '0 2px 12px rgba(0,0,0,0.4)' }}>Табло</h1>
+        <p className="text-sm mt-1" style={{ color: 'rgba(250,247,242,0.55)' }}>Преглед на всички активности</p>
       </div>
 
       <div className="grid grid-cols-3 gap-4" style={{ marginBottom: 24 }}>
         {statCards.map(s => (
           <a key={s.label} href={s.href}
-            className="block p-5 rounded-xl hover:scale-[1.02] transition-all duration-200"
-            style={cardStyle}>
-            <p className="text-[10px] text-[rgba(255,255,255,0.45)] uppercase tracking-widest mb-2">{s.label}</p>
-            <p className="text-3xl font-bold text-crimson-700 font-display">{s.value}</p>
+            className="block p-5 rounded-2xl hover:scale-[1.02] transition-all duration-200"
+            style={MC}>
+            <p className="text-[10px] uppercase tracking-widest mb-2" style={{ color: 'rgba(78,11,31,0.55)' }}>{s.label}</p>
+            <p className="text-3xl font-bold font-display" style={{ color: '#4E0B1F' }}>{s.value}</p>
           </a>
         ))}
       </div>
 
       <div className="grid grid-cols-2 gap-5">
-        <div className="p-5 rounded-xl" style={cardStyle}>
+        <div className="p-5 rounded-2xl" style={MC}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-display text-white font-semibold">Последни имоти</h2>
+            <h2 className="font-display font-bold text-base" style={{ color: '#4E0B1F' }}>Последни имоти</h2>
             <a href="/admin/properties/new" className="btn-crimson text-xs px-3 py-1.5">+ Добави</a>
           </div>
           {recentProps.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-[rgba(255,255,255,0.4)] text-sm mb-4">Няма добавени имоти</p>
+              <p className="text-sm mb-4" style={{ color: 'rgba(78,11,31,0.45)' }}>Няма добавени имоти</p>
               <a href="/admin/properties/new" className="btn-crimson text-sm px-5 py-2">Добави първия имот</a>
             </div>
           ) : recentProps.map(p => (
             <div key={p.id} className="flex justify-between py-2.5"
-              style={{ borderBottom: '1px solid rgba(196,30,58,0.10)' }}>
+              style={{ borderBottom: '1px solid rgba(207,168,71,0.15)' }}>
               <div className="min-w-0">
-                <p className="text-sm text-white font-medium truncate">{p.title}</p>
-                <p className="text-xs text-[rgba(255,255,255,0.4)]">{p.quarter_name}, {p.city_name}</p>
+                <p className="text-sm font-semibold truncate" style={{ color: '#4E0B1F' }}>{p.title}</p>
+                <p className="text-xs" style={{ color: 'rgba(78,11,31,0.5)' }}>{p.quarter_name}, {p.city_name}</p>
               </div>
-              <span className="text-crimson-700 font-bold text-sm ml-3 whitespace-nowrap">
+              <span className="font-bold text-sm ml-3 whitespace-nowrap" style={{ color: '#CFA847' }}>
                 {formatPrice(p.price_eur)}
               </span>
             </div>
           ))}
         </div>
 
-        <div className="p-5 rounded-xl" style={cardStyle}>
+        <div className="p-5 rounded-2xl" style={MC}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-display text-white font-semibold">Последни запитвания</h2>
-            <a href="/admin/inquiries"
-              className="text-xs text-crimson-700 hover:text-crimson-400 transition-colors">
+            <h2 className="font-display font-bold text-base" style={{ color: '#4E0B1F' }}>Последни запитвания</h2>
+            <a href="/admin/inquiries" className="text-xs font-semibold transition-colors" style={{ color: '#CFA847' }}>
               Виж всички →
             </a>
           </div>
           {inquiries.length === 0 ? (
-            <p className="text-[rgba(255,255,255,0.4)] text-sm text-center py-8">Няма запитвания</p>
+            <p className="text-sm text-center py-8" style={{ color: 'rgba(78,11,31,0.45)' }}>Няма запитвания</p>
           ) : inquiries.map(inq => (
             <div key={inq.id} className="py-2.5"
-              style={{ borderBottom: '1px solid rgba(196,30,58,0.10)' }}>
+              style={{ borderBottom: '1px solid rgba(207,168,71,0.15)' }}>
               <div className="flex justify-between mb-1">
-                <p className="text-sm text-white font-medium">{inq.name}</p>
-                <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
-                  inq.status === 'new' ? 'bg-crimson-700 text-white' : 'text-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.1)]'
-                }`}>{inq.status === 'new' ? 'Ново' : 'Прочетено'}</span>
+                <p className="text-sm font-semibold" style={{ color: '#4E0B1F' }}>{inq.name}</p>
+                <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold"
+                  style={inq.status === 'new'
+                    ? { background: '#4E0B1F', color: '#F5EDD8' }
+                    : { color: 'rgba(78,11,31,0.4)', border: '1px solid rgba(78,11,31,0.15)' }}>
+                  {inq.status === 'new' ? 'Ново' : 'Прочетено'}
+                </span>
               </div>
-              <p className="text-xs text-[rgba(255,255,255,0.4)] truncate">{inq.message}</p>
+              <p className="text-xs truncate" style={{ color: 'rgba(78,11,31,0.5)' }}>{inq.message}</p>
             </div>
           ))}
         </div>
