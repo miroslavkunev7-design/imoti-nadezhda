@@ -36,7 +36,10 @@ export default function LuxurySearchBar({
   const [quarters, setQuarters] = useState<Quarter[]>(initialQuarters)
   const [propType, setPropType] = useState('')
   const [detailedType, setDetailedType] = useState('')
+  const [priceMin, setPriceMin] = useState(PRICE_MIN)
   const [priceMax, setPriceMax] = useState(PRICE_MAX)
+  const [areaMin, setAreaMin] = useState(0)
+  const [areaMax, setAreaMax] = useState(0)
   const [bathrooms, setBathrooms] = useState('')
   const [features, setFeatures] = useState<string[]>([])
   const [moreFilters, setMoreFilters] = useState(false)
@@ -61,10 +64,24 @@ export default function LuxurySearchBar({
     )
   }, [])
 
-  function formatPrice(val: number) {
-    if (val >= 1_000_000) return `€${(val / 1_000_000).toFixed(1)} млн.+`
-    if (val <= PRICE_MIN) return 'Без значение'
-    return `€${(val / 1000).toFixed(0)}к`
+  function fmt(val: number, prefix = '€') {
+    if (!val || val <= 0) return '—'
+    if (val >= 1_000_000) return `${prefix}${(val / 1_000_000).toFixed(1)} млн.`
+    if (val >= 1000) return `${prefix}${(val / 1000).toFixed(0)}к`
+    return `${prefix}${val}`
+  }
+
+  function priceLabel() {
+    const lo = priceMin > PRICE_MIN ? fmt(priceMin) : `от ${fmt(PRICE_MIN)}`
+    const hi = priceMax < PRICE_MAX ? fmt(priceMax) : `до ${fmt(PRICE_MAX)}`
+    return `${lo} — ${hi}`
+  }
+
+  function areaLabel() {
+    if (!areaMin && !areaMax) return 'Площ'
+    const lo = areaMin ? `от ${areaMin} м²` : ''
+    const hi = areaMax ? `до ${areaMax} м²` : ''
+    return [lo, hi].filter(Boolean).join(' ')
   }
 
   function handleSearch() {
@@ -73,7 +90,10 @@ export default function LuxurySearchBar({
     if (quarter) params.set('quarter', quarter)
     if (propType) params.set('type', propType)
     if (detailedType) params.set('detailed_type', detailedType)
+    if (priceMin > PRICE_MIN) params.set('price_min', String(priceMin))
     if (priceMax < PRICE_MAX) params.set('price_max', String(priceMax))
+    if (areaMin) params.set('area_min', String(areaMin))
+    if (areaMax) params.set('area_max', String(areaMax))
     if (bathrooms) params.set('bathrooms', bathrooms.replace('+', ''))
     if (features.length) params.set('features', features.join(','))
     router.push(`/buy?${params.toString()}`)
@@ -134,7 +154,11 @@ export default function LuxurySearchBar({
           </Segment>
           <span className="luxury-search-vrule" aria-hidden />
           <Segment icon={<WalletIcon />} label="Цена">
-            <span className="luxury-search-value">{formatPrice(priceMax)}</span>
+            <span className="luxury-search-value">{priceLabel()}</span>
+          </Segment>
+          <span className="luxury-search-vrule" aria-hidden />
+          <Segment icon={<AreaIcon />} label="Площ">
+            <span className="luxury-search-value">{areaLabel()}</span>
           </Segment>
         </div>
         <button
@@ -156,8 +180,8 @@ export default function LuxurySearchBar({
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
-          className="search-panel luxury-search-expanded mt-3"
-          style={{ padding: '16px 18px' }}
+          className="luxury-search-expanded mt-0"
+          style={{ padding: '16px 20px' }}
         >
           <SearchFiltersExpanded
             detailedType={detailedType}
@@ -172,8 +196,14 @@ export default function LuxurySearchBar({
             toggleFeature={toggleFeature}
             priceMin={PRICE_MIN}
             priceMaxLimit={PRICE_MAX}
-            formatPrice={formatPrice}
+            formatPrice={(v) => fmt(v)}
             showTypeChips
+            areaMin={areaMin}
+            setAreaMin={setAreaMin}
+            areaMax={areaMax}
+            setAreaMax={setAreaMax}
+            priceMinVal={priceMin}
+            setPriceMinVal={setPriceMin}
           />
         </motion.div>
       )}
@@ -210,4 +240,7 @@ function FilterIcon() {
 }
 function SearchIcon() {
   return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><circle cx="11" cy="11" r="7" /><path d="M20 20l-3-3" /></svg>
+}
+function AreaIcon() {
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 7h4M7 7v4M17 17h-4M17 17v-4"/></svg>
 }

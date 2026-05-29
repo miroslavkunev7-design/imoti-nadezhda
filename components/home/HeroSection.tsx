@@ -77,6 +77,7 @@ export default function HeroSection({ cities }: HeroSectionProps) {
           </div>
 
           <div className="hero-home__cities-stack">
+            {/* Real floating search panel */}
             <div className="hero-home__search-slot">
               <SearchWidget cities={cities} luxuryBar homeLayout marbleSearch />
             </div>

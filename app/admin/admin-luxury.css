@@ -1,109 +1,184 @@
-/* CRM luxury marble theme — admin only, never affects public site */
+/* ═══════════════════════════════════════════════════════
+   CRM LUXURY THEME — Admin only, never touches public site
+   Design: White/ivory marble sidebar + cards
+           Bordeaux damask wallpaper background
+           Bordeaux/gold shimmer text in cards
+   ═══════════════════════════════════════════════════════ */
 
-/* ─── Marble Background ───────────────────────────────────────────── */
+/* ─── Design tokens ───────────────────────────────────── */
 .admin-luxury-root {
-  --gold: #CFA847;
-  --gold-border: rgba(207,168,71,0.28);
-  --gold-glow: rgba(207,168,71,0.12);
-  --crimson: #4E0B1F;
-  --crimson-mid: #7A1230;
-  --ivory: #F5EDD8;
-  --ivory-dim: rgba(245,237,216,0.75);
-  --marble-light: rgba(248,242,228,0.06);
-  --marble-vein: rgba(207,168,71,0.08);
+  --crm-bordeaux:      #4E0B1F;
+  --crm-bordeaux-mid:  #6B1428;
+  --crm-bordeaux-deep: #380812;
+  --crm-gold:          #CFA847;
+  --crm-gold-light:    #E8C96B;
+  --crm-gold-dim:      rgba(207,168,71,0.38);
+  --crm-ivory:         #FAF7F2;
+  --crm-ivory-warm:    #F5EDE0;
+  --crm-ivory-dim:     rgba(250,247,242,0.88);
+  --crm-marble-vein:   rgba(207,168,71,0.08);
 }
 
-/* Marble texture overlay on the whole admin root */
-.admin-luxury-root::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -5;
-  background:
-    repeating-linear-gradient(
-      128deg,
-      transparent 0px,
-      transparent 60px,
-      rgba(207,168,71,0.03) 60px,
-      rgba(207,168,71,0.03) 61px
-    ),
-    repeating-linear-gradient(
-      42deg,
-      transparent 0px,
-      transparent 100px,
-      rgba(255,255,255,0.015) 100px,
-      rgba(255,255,255,0.015) 101px
-    );
-  pointer-events: none;
-}
-
+/* ─── Bordeaux Damask Wallpaper Background ────────────── */
 .admin-luxury-root .admin-bg-overlay {
-  background: linear-gradient(
-    165deg,
-    rgba(20, 8, 14, 0.97) 0%,
-    rgba(36, 10, 20, 0.96) 40%,
-    rgba(14, 6, 10, 0.98) 100%
-  ) !important;
+  /* Rich bordeaux + damask diamond lattice via SVG data URI */
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40 4 L76 40 L40 76 L4 40 Z' fill='none' stroke='rgba(207,168,71,0.07)' stroke-width='0.8'/%3E%3Ccircle cx='40' cy='40' r='5' fill='none' stroke='rgba(207,168,71,0.06)' stroke-width='0.7'/%3E%3Ccircle cx='0' cy='0' r='3' fill='none' stroke='rgba(207,168,71,0.05)' stroke-width='0.6'/%3E%3Ccircle cx='80' cy='0' r='3' fill='none' stroke='rgba(207,168,71,0.05)' stroke-width='0.6'/%3E%3Ccircle cx='0' cy='80' r='3' fill='none' stroke='rgba(207,168,71,0.05)' stroke-width='0.6'/%3E%3Ccircle cx='80' cy='80' r='3' fill='none' stroke='rgba(207,168,71,0.05)' stroke-width='0.6'/%3E%3Cpath d='M40 14 L50 24 L40 34 L30 24 Z M40 46 L50 56 L40 66 L30 56 Z M14 40 L24 30 L34 40 L24 50 Z M46 40 L56 30 L66 40 L56 50 Z' fill='rgba(255,255,255,0.018)'/%3E%3C/svg%3E"),
+    linear-gradient(160deg, #5A1028 0%, #420B17 35%, #380812 60%, #4A0C1A 100%) !important;
+  background-repeat: repeat, no-repeat !important;
+  background-size: 80px 80px, cover !important;
 }
 
-/* ─── Sidebar ─────────────────────────────────────────────────────── */
+/* Actual fixed BG */
+.admin-luxury-root > div[class*='fixed'][style*='z-[-20]'],
+.admin-luxury-root > div:first-child {
+  background: linear-gradient(160deg, #5A1028 0%, #420B17 40%, #380812 70%, #4A0C1A 100%) !important;
+}
+
+/* ─── WHITE IVORY MARBLE SIDEBAR ────────────────────────── */
 .admin-luxury-root .admin-sidebar,
 .admin-luxury-root aside[class*='sidebar'] {
   background: linear-gradient(
     180deg,
-    rgba(72, 8, 24, 0.98) 0%,
-    rgba(38, 6, 14, 0.99) 100%
+    #FDFAF5 0%,
+    #F8F2E8 50%,
+    #F3EBE0 100%
   ) !important;
-  backdrop-filter: blur(24px) !important;
-  -webkit-backdrop-filter: blur(24px) !important;
-  border-right: 1px solid rgba(207,168,71,0.22) !important;
-  box-shadow: 4px 0 40px rgba(0,0,0,0.5), inset -1px 0 0 rgba(207,168,71,0.06) !important;
+  backdrop-filter: none !important;
+  border-right: 2px solid rgba(207,168,71,0.45) !important;
+  box-shadow: 4px 0 32px rgba(0,0,0,0.18), inset -1px 0 0 rgba(207,168,71,0.2) !important;
 }
 
-/* Marble shimmer line on sidebar */
-.admin-luxury-root .admin-sidebar::after {
+/* Marble vein overlay on sidebar */
+.admin-luxury-root .admin-sidebar::before {
   content: '';
   position: absolute;
-  top: 0; bottom: 0; right: 0;
-  width: 1px;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(207,168,71,0.4) 30%,
-    rgba(255,255,255,0.15) 50%,
-    rgba(207,168,71,0.4) 70%,
-    transparent 100%
-  );
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      112deg,
+      transparent 0px, transparent 45px,
+      rgba(207,168,71,0.04) 45px, rgba(207,168,71,0.04) 46px
+    ),
+    repeating-linear-gradient(
+      68deg,
+      transparent 0px, transparent 70px,
+      rgba(207,168,71,0.025) 70px, rgba(207,168,71,0.025) 71px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+.admin-luxury-root .admin-sidebar > * { position: relative; z-index: 1; }
+
+/* Sidebar logo text */
+.admin-luxury-root .admin-sidebar p.text-white,
+.admin-luxury-root .admin-sidebar .leading-none p {
+  color: var(--crm-bordeaux) !important;
+  font-weight: 700;
 }
 
-/* ─── Topbar ──────────────────────────────────────────────────────── */
+/* Sidebar sub-label (НАДЕЖДА) */
+.admin-luxury-root .admin-sidebar .text-crimson-700 {
+  color: var(--crm-gold) !important;
+}
+
+/* Sidebar user name */
+.admin-luxury-root .admin-sidebar .text-white.text-xs {
+  color: var(--crm-bordeaux) !important;
+}
+.admin-luxury-root .admin-sidebar .text-\[rgba\(255\,255\,255\,0\.4\)\] {
+  color: rgba(78,11,31,0.5) !important;
+}
+
+/* Nav links — default state */
+.admin-luxury-root .admin-sidebar a.text-\[rgba\(255\,255\,255\,0\.50\)\],
+.admin-luxury-root .admin-sidebar a[class*='text-[rgba(255'] {
+  color: rgba(78,11,31,0.6) !important;
+}
+.admin-luxury-root .admin-sidebar nav a {
+  color: rgba(78,11,31,0.62) !important;
+}
+.admin-luxury-root .admin-sidebar nav a:hover {
+  color: var(--crm-bordeaux) !important;
+  background: rgba(78,11,31,0.06) !important;
+}
+
+/* Active nav item */
+.admin-luxury-root .admin-sidebar nav a[style*='border'] {
+  background: linear-gradient(135deg, rgba(78,11,31,0.1), rgba(78,11,31,0.06)) !important;
+  border-color: rgba(207,168,71,0.45) !important;
+  color: var(--crm-bordeaux) !important;
+}
+.admin-luxury-root .admin-sidebar nav a span.text-white {
+  color: var(--crm-bordeaux) !important;
+}
+.admin-luxury-root .admin-sidebar nav a span.text-crimson-700 {
+  color: var(--crm-bordeaux) !important;
+  opacity: 0.8;
+}
+
+/* Sidebar badge */
+.admin-luxury-root .admin-sidebar nav span[style*='background: #A86B3D'],
+.admin-luxury-root .admin-sidebar nav span[style*='#A86B3D'] {
+  background: var(--crm-bordeaux) !important;
+  color: var(--crm-ivory) !important;
+}
+
+/* AI button in sidebar */
+.admin-luxury-root .admin-sidebar button.text-\[rgba\(255\,255\,255\,0\.55\)\],
+.admin-luxury-root .admin-sidebar button[class*='text-[rgba(255'] {
+  color: rgba(78,11,31,0.65) !important;
+}
+.admin-luxury-root .admin-sidebar button.text-white { color: var(--crm-bordeaux) !important; }
+
+/* Status indicator */
+.admin-luxury-root .admin-sidebar-status {
+  background: rgba(207,168,71,0.08) !important;
+  border: 1px solid rgba(207,168,71,0.25) !important;
+}
+.admin-luxury-root .admin-sidebar-status-text {
+  color: rgba(78,11,31,0.6) !important;
+}
+
+/* Logout */
+.admin-luxury-root .admin-sidebar .text-\[rgba\(255\,255\,255\,0\.4\)\] {
+  color: rgba(78,11,31,0.45) !important;
+}
+
+/* ─── WHITE TOPBAR ───────────────────────────────────────── */
 .admin-luxury-root .admin-topbar,
 .admin-luxury-root header[class*='topbar'] {
-  background: rgba(20, 8, 14, 0.92) !important;
-  backdrop-filter: blur(20px) !important;
-  border-bottom: 1px solid rgba(207,168,71,0.2) !important;
-  box-shadow: 0 1px 24px rgba(0,0,0,0.35) !important;
+  background: rgba(253,250,245,0.97) !important;
+  backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(207,168,71,0.3) !important;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.1) !important;
 }
 
-/* ─── Cards — Marble Panels ───────────────────────────────────────── */
+/* ─── Gold shimmer animation for headings ────────────────── */
+@keyframes crm-gold-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* ─── WHITE MARBLE CARDS ─────────────────────────────────── */
 .admin-luxury-root .admin-card,
 .admin-luxury-root [class*='AdminCard'],
 .admin-luxury-root .admin-kanban-bg {
   background:
     linear-gradient(
-      135deg,
-      rgba(32,14,22,0.82) 0%,
-      rgba(22,10,16,0.75) 60%,
-      rgba(36,16,24,0.8) 100%
+      128deg,
+      #FAF7F2 0%,
+      #F5EDE0 35%,
+      #FAF7F2 55%,
+      #F0E8DB 85%,
+      #FAF7F2 100%
     ) !important;
-  backdrop-filter: blur(20px) !important;
-  border: 1px solid rgba(207,168,71,0.22) !important;
+  border: 1px solid rgba(207,168,71,0.38) !important;
   border-radius: 16px !important;
   box-shadow:
-    0 8px 32px rgba(0,0,0,0.45),
-    0 1px 0 rgba(207,168,71,0.08) inset,
-    0 0 0 1px rgba(255,255,255,0.02) inset !important;
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    0 6px 28px rgba(0,0,0,0.22),
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 0 0 1px rgba(207,168,71,0.08) inset !important;
   position: relative;
   overflow: hidden;
 }
@@ -112,268 +187,226 @@
 .admin-luxury-root .admin-card::before {
   content: '';
   position: absolute;
-  top: -40%; left: -20%;
-  width: 140%; height: 180%;
+  top: -30%; left: -10%;
+  width: 120%; height: 160%;
   background:
     linear-gradient(
-      108deg,
+      105deg,
       transparent 0%,
-      rgba(207,168,71,0.04) 30%,
-      transparent 32%,
-      rgba(255,255,255,0.02) 50%,
-      transparent 52%,
-      rgba(207,168,71,0.03) 70%,
-      transparent 72%
+      rgba(207,168,71,0.05) 28%,
+      transparent 30%,
+      rgba(255,255,255,0.08) 48%,
+      transparent 50%,
+      rgba(207,168,71,0.04) 68%,
+      transparent 70%
     );
   pointer-events: none;
+  z-index: 0;
 }
+.admin-luxury-root .admin-card > * { position: relative; z-index: 1; }
 
 .admin-luxury-root .admin-card:hover {
-  border-color: rgba(207,168,71,0.42) !important;
+  border-color: rgba(207,168,71,0.6) !important;
   box-shadow:
-    0 12px 44px rgba(78,11,31,0.35),
-    0 0 24px rgba(207,168,71,0.08),
-    0 1px 0 rgba(207,168,71,0.12) inset !important;
+    0 10px 40px rgba(78,11,31,0.18),
+    0 0 20px rgba(207,168,71,0.1),
+    0 1px 0 rgba(255,255,255,0.9) inset !important;
 }
 
-/* ─── Tables ──────────────────────────────────────────────────────── */
+/* ─── Text in cards: bordeaux/gold ──────────────────────── */
+.admin-luxury-root .admin-card h1,
+.admin-luxury-root .admin-card h2,
+.admin-luxury-root .admin-card h3,
+.admin-luxury-root .admin-card .admin-heading,
+.admin-luxury-root .admin-card .font-display {
+  background: linear-gradient(90deg, var(--crm-bordeaux) 0%, #8B1A2F 30%, var(--crm-gold) 55%, #8B1A2F 80%, var(--crm-bordeaux) 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: crm-gold-shimmer 4s linear infinite;
+}
+
+/* Page-level headings (outside cards) stay plain ivory */
+.admin-luxury-root > * > * h1,
+.admin-luxury-root .admin-scroll-main > div > h1,
+.admin-luxury-root .admin-scroll-main > div > h2 {
+  color: var(--crm-ivory) !important;
+  -webkit-text-fill-color: var(--crm-ivory) !important;
+  animation: none !important;
+  background: none !important;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+
+/* Body text in cards: bordeaux */
+.admin-luxury-root .admin-card .admin-text,
+.admin-luxury-root .admin-card p,
+.admin-luxury-root .admin-card span:not([class*='badge']):not([class*='status']),
+.admin-luxury-root .admin-card label {
+  color: var(--crm-bordeaux) !important;
+  -webkit-text-fill-color: var(--crm-bordeaux) !important;
+}
+
+/* Muted text in cards */
+.admin-luxury-root .admin-card .admin-text-muted,
+.admin-luxury-root .admin-card .admin-text-faint {
+  color: rgba(78,11,31,0.55) !important;
+  -webkit-text-fill-color: rgba(78,11,31,0.55) !important;
+}
+
+/* ─── Tables ─────────────────────────────────────────────── */
 .admin-luxury-root table {
   border-collapse: separate;
   border-spacing: 0 5px;
 }
-
-.admin-luxury-root thead th {
-  color: rgba(207,168,71,0.9) !important;
-  font-size: 0.68rem;
-  letter-spacing: 0.13em;
+.admin-luxury-root thead th,
+.admin-luxury-root .admin-table-head {
+  color: var(--crm-bordeaux) !important;
+  font-size: 0.67rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   border: none !important;
   background: transparent !important;
   font-weight: 700;
+  opacity: 0.7;
 }
-
 .admin-luxury-root tbody tr {
-  background: rgba(26,10,18,0.6);
-  transition: background 0.22s ease, box-shadow 0.22s ease;
+  background: rgba(250,247,242,0.7);
+  transition: background 0.22s ease;
 }
-
 .admin-luxury-root tbody tr:hover {
-  background: rgba(78,11,31,0.5) !important;
-  box-shadow: 0 0 20px rgba(207,168,71,0.06);
+  background: rgba(250,247,242,0.95) !important;
+  box-shadow: 0 2px 12px rgba(78,11,31,0.08);
 }
-
 .admin-luxury-root tbody td {
   border: none !important;
-  color: var(--ivory) !important;
+  color: var(--crm-bordeaux) !important;
   padding: 12px 16px !important;
 }
+.admin-luxury-root tbody tr td:first-child { border-radius: 10px 0 0 10px; }
+.admin-luxury-root tbody tr td:last-child  { border-radius: 0 10px 10px 0; }
 
-.admin-luxury-root tbody tr td:first-child {
-  border-radius: 10px 0 0 10px;
-}
-.admin-luxury-root tbody tr td:last-child {
-  border-radius: 0 10px 10px 0;
-}
-
-/* ─── Buttons ─────────────────────────────────────────────────────── */
+/* ─── Buttons ────────────────────────────────────────────── */
 .admin-luxury-root .btn-crimson,
 .admin-luxury-root button[class*='btn-crimson'] {
-  background: linear-gradient(
-    135deg,
-    rgba(90,14,32,0.95) 0%,
-    rgba(52,8,18,0.98) 100%
-  ) !important;
-  border: 1px solid rgba(207,168,71,0.5) !important;
-  color: var(--ivory) !important;
-  box-shadow:
-    0 0 20px rgba(207,168,71,0.12),
-    inset 0 1px 0 rgba(207,168,71,0.15) !important;
-  transition: box-shadow 0.25s ease, transform 0.18s ease;
+  background: linear-gradient(135deg, #5A1028 0%, #380812 100%) !important;
+  border: 1px solid rgba(207,168,71,0.55) !important;
+  color: var(--crm-ivory) !important;
+  box-shadow: 0 4px 16px rgba(78,11,31,0.3), inset 0 1px 0 rgba(207,168,71,0.2) !important;
   font-weight: 600;
   letter-spacing: 0.02em;
+  transition: box-shadow 0.22s, transform 0.18s;
 }
-
-.admin-luxury-root .btn-crimson:hover,
-.admin-luxury-root button[class*='btn-crimson']:hover {
-  box-shadow:
-    0 0 32px rgba(207,168,71,0.3),
-    0 4px 16px rgba(78,11,31,0.4),
-    inset 0 1px 0 rgba(207,168,71,0.25) !important;
+.admin-luxury-root .btn-crimson:hover {
+  box-shadow: 0 6px 24px rgba(78,11,31,0.45), 0 0 16px rgba(207,168,71,0.22) !important;
   transform: translateY(-1px);
-  border-color: rgba(207,168,71,0.7) !important;
 }
-
 .admin-luxury-root .btn-ghost {
-  color: rgba(245,237,216,0.75) !important;
-  border-color: rgba(207,168,71,0.28) !important;
-  background: rgba(207,168,71,0.04) !important;
+  color: var(--crm-bordeaux) !important;
+  border-color: rgba(78,11,31,0.28) !important;
+  background: rgba(78,11,31,0.04) !important;
 }
 .admin-luxury-root .btn-ghost:hover {
-  color: var(--ivory) !important;
-  background: rgba(207,168,71,0.08) !important;
-  border-color: rgba(207,168,71,0.45) !important;
+  background: rgba(78,11,31,0.09) !important;
+  border-color: rgba(78,11,31,0.45) !important;
 }
 
-/* ─── Status Badges ───────────────────────────────────────────────── */
-.admin-luxury-root [class*='badge'],
-.admin-luxury-root .status-badge {
-  border-radius: 999px;
-  padding: 3px 11px;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  border: 1px solid rgba(207,168,71,0.4);
-  background: rgba(78,11,31,0.65);
-  color: var(--ivory);
-}
-
-/* ─── Headings & Text ─────────────────────────────────────────────── */
-.admin-luxury-root h1,
-.admin-luxury-root h2,
-.admin-luxury-root .font-display,
-.admin-luxury-root .admin-heading {
-  color: var(--ivory) !important;
-  text-shadow: 0 1px 8px rgba(0,0,0,0.4);
-}
-
-.admin-luxury-root h1 {
-  letter-spacing: -0.01em;
-}
-
-.admin-luxury-root .text-themed-secondary,
-.admin-luxury-root .admin-text-muted {
-  color: rgba(245,237,216,0.55) !important;
-}
-
-.admin-luxury-root .admin-text {
-  color: var(--ivory) !important;
-}
-
-.admin-luxury-root .admin-text-faint {
-  color: rgba(245,237,216,0.38) !important;
-}
-
-/* Gold accent text */
-.admin-luxury-root .admin-table-head,
-.admin-luxury-root .text-crimson-700 {
-  color: var(--gold) !important;
-}
-
-/* ─── Inputs ──────────────────────────────────────────────────────── */
+/* ─── Inputs ─────────────────────────────────────────────── */
 .admin-luxury-root input,
 .admin-luxury-root select,
 .admin-luxury-root textarea,
 .admin-luxury-root .input-dark {
-  background: rgba(14,8,12,0.88) !important;
-  border: 1px solid rgba(207,168,71,0.28) !important;
-  color: var(--ivory) !important;
+  background: rgba(250,247,242,0.95) !important;
+  border: 1px solid rgba(207,168,71,0.35) !important;
+  color: var(--crm-bordeaux) !important;
   border-radius: 10px !important;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
-
 .admin-luxury-root input:focus,
 .admin-luxury-root select:focus,
-.admin-luxury-root textarea:focus,
-.admin-luxury-root .input-dark:focus {
+.admin-luxury-root textarea:focus {
   outline: none !important;
-  border-color: rgba(207,168,71,0.55) !important;
-  box-shadow: 0 0 0 2px rgba(207,168,71,0.08) !important;
+  border-color: rgba(207,168,71,0.65) !important;
+  box-shadow: 0 0 0 3px rgba(207,168,71,0.1) !important;
 }
-
 .admin-luxury-root input::placeholder,
 .admin-luxury-root textarea::placeholder {
-  color: rgba(245,237,216,0.3) !important;
+  color: rgba(78,11,31,0.38) !important;
+}
+.admin-luxury-root select option {
+  background: #FAF7F2;
+  color: var(--crm-bordeaux);
 }
 
-/* ─── Modals ──────────────────────────────────────────────────────── */
-.admin-luxury-root .admin-modal-backdrop,
+/* ─── Modals ─────────────────────────────────────────────── */
 .admin-modal-backdrop {
-  background: rgba(8,4,6,0.72) !important;
+  background: rgba(40,6,14,0.65) !important;
   backdrop-filter: blur(10px) !important;
 }
-
-.admin-luxury-root .admin-modal-panel,
 .admin-modal-panel {
-  background:
-    linear-gradient(
-      145deg,
-      rgba(30,12,20,0.97) 0%,
-      rgba(20,8,14,0.98) 100%
-    ) !important;
-  border: 1px solid rgba(207,168,71,0.3) !important;
-  box-shadow:
-    0 24px 80px rgba(0,0,0,0.7),
-    0 0 0 1px rgba(207,168,71,0.06) inset !important;
-  /* Marble effect on modal */
-  background-image:
-    linear-gradient(
-      145deg,
-      rgba(30,12,20,0.97) 0%,
-      rgba(20,8,14,0.98) 100%
-    ),
-    repeating-linear-gradient(
-      115deg,
-      transparent 0px, transparent 48px,
-      rgba(207,168,71,0.04) 48px, rgba(207,168,71,0.04) 49px
-    ) !important;
+  background: linear-gradient(145deg, #FAF7F2 0%, #F5EDE0 60%, #FAF7F2 100%) !important;
+  border: 1px solid rgba(207,168,71,0.45) !important;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.8) inset !important;
+}
+/* Text in modals: bordeaux */
+.admin-modal-panel h3,
+.admin-modal-panel .admin-heading { color: var(--crm-bordeaux) !important; -webkit-text-fill-color: var(--crm-bordeaux) !important; animation: none !important; background: none !important; }
+.admin-modal-panel p,
+.admin-modal-panel .admin-text { color: var(--crm-bordeaux) !important; }
+.admin-modal-panel .admin-text-muted,
+.admin-modal-panel .admin-text-faint { color: rgba(78,11,31,0.5) !important; }
+
+/* ─── Badges / status ────────────────────────────────────── */
+.admin-luxury-root [class*='badge'],
+.admin-luxury-root .status-badge {
+  background: rgba(78,11,31,0.1);
+  border: 1px solid rgba(78,11,31,0.2);
+  color: var(--crm-bordeaux);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.68rem;
+  font-weight: 600;
 }
 
-/* ─── Kanban ──────────────────────────────────────────────────────── */
+/* ─── Kanban cards ───────────────────────────────────────── */
 .admin-luxury-root .admin-kanban-card {
-  background: rgba(24,10,16,0.7) !important;
-  border: 1px solid rgba(207,168,71,0.14) !important;
+  background: rgba(250,247,242,0.92) !important;
+  border: 1px solid rgba(207,168,71,0.22) !important;
   border-radius: 10px;
 }
-
 .admin-luxury-root .admin-kanban-card:hover {
-  background: rgba(78,11,31,0.45) !important;
-  border-color: rgba(207,168,71,0.28) !important;
+  background: #FAF7F2 !important;
+  border-color: rgba(207,168,71,0.45) !important;
+}
+.admin-luxury-root .admin-kanban-card p { color: var(--crm-bordeaux) !important; }
+
+/* ─── Match banner inside card ───────────────────────────── */
+.admin-luxury-root .admin-card [style*='rgba(207,168,71'] a {
+  color: var(--crm-bordeaux) !important;
 }
 
-/* ─── Sidebar Status / AI Button ──────────────────────────────────── */
-.admin-luxury-root .admin-sidebar-status {
-  background: rgba(207,168,71,0.06) !important;
-  border: 1px solid rgba(207,168,71,0.15) !important;
-}
-.admin-luxury-root .admin-sidebar-status-text {
-  color: rgba(207,168,71,0.7) !important;
-}
+/* ─── Scrollbars ─────────────────────────────────────────── */
+.admin-luxury-root *::-webkit-scrollbar { width: 4px; height: 4px; }
+.admin-luxury-root *::-webkit-scrollbar-track { background: transparent; }
+.admin-luxury-root *::-webkit-scrollbar-thumb { background: rgba(207,168,71,0.3); border-radius: 4px; }
+.admin-luxury-root { scrollbar-color: rgba(207,168,71,0.3) transparent; }
 
-/* ─── Virtual Tour CRM panel ─────────────────────────────────────── */
+/* ─── Page headings over bordeaux bg ────────────────────── */
+.admin-luxury-root .admin-heading { color: var(--crm-ivory) !important; }
+.admin-luxury-root h1 { color: var(--crm-ivory) !important; text-shadow: 0 2px 12px rgba(0,0,0,0.4); }
+.admin-luxury-root .admin-text-muted { color: rgba(250,247,242,0.55) !important; }
+.admin-luxury-root .admin-text { color: var(--crm-ivory) !important; }
+.admin-luxury-root .admin-text-faint { color: rgba(250,247,242,0.35) !important; }
+
+/* ─── HR / dividers ──────────────────────────────────────── */
+.admin-luxury-root hr { border-color: rgba(207,168,71,0.2) !important; }
+
+/* ─── Selection ──────────────────────────────────────────── */
+.admin-luxury-root ::selection { background: rgba(207,168,71,0.28); color: var(--crm-bordeaux); }
+
+/* ─── VT CRM panel ───────────────────────────────────────── */
 .admin-luxury-root .vt-crm {
-  border: 1px solid rgba(207,168,71,0.22);
+  background: rgba(250,247,242,0.9);
+  border: 1px solid rgba(207,168,71,0.35);
   border-radius: 14px;
-  padding: 20px;
-  background: rgba(14,8,12,0.55);
-  backdrop-filter: blur(14px);
-}
-
-/* ─── Page scroll area ────────────────────────────────────────────── */
-.admin-luxury-root .admin-scroll-main {
-  background: transparent;
-}
-
-/* ─── Scrollbars ──────────────────────────────────────────────────── */
-.admin-luxury-root *::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-.admin-luxury-root *::-webkit-scrollbar-track {
-  background: transparent;
-}
-.admin-luxury-root *::-webkit-scrollbar-thumb {
-  background: rgba(207,168,71,0.25);
-  border-radius: 4px;
-}
-
-/* ─── Gold dividers ───────────────────────────────────────────────── */
-.admin-luxury-root hr,
-.admin-luxury-root [style*='border-top'] {
-  border-color: rgba(207,168,71,0.15) !important;
-}
-
-/* ─── Selection ───────────────────────────────────────────────────── */
-.admin-luxury-root ::selection {
-  background: rgba(207,168,71,0.25);
-  color: var(--ivory);
 }

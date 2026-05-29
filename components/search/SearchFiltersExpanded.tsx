@@ -19,6 +19,12 @@ interface Props {
   priceMaxLimit: number
   formatPrice: (v: number) => string
   showTypeChips?: boolean
+  areaMin?: number
+  setAreaMin?: (v: number) => void
+  areaMax?: number
+  setAreaMax?: (v: number) => void
+  priceMinVal?: number
+  setPriceMinVal?: (v: number) => void
 }
 
 export default function SearchFiltersExpanded({
@@ -36,6 +42,12 @@ export default function SearchFiltersExpanded({
   priceMaxLimit,
   formatPrice,
   showTypeChips,
+  areaMin = 0,
+  setAreaMin,
+  areaMax = 0,
+  setAreaMax,
+  priceMinVal = priceMin,
+  setPriceMinVal,
 }: Props) {
   return (
     <div className="space-y-3">
@@ -126,11 +138,13 @@ export default function SearchFiltersExpanded({
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         <div className="flex flex-col gap-1.5">
           <label className="filter-label">Площ от (м²)</label>
-          <input type="number" placeholder="напр. 50" className="input-dark text-sm" />
+          <input type="number" placeholder="напр. 50" className="input-dark text-sm"
+            value={areaMin || ''} onChange={e => setAreaMin?.(Number(e.target.value) || 0)} />
         </div>
         <div className="flex flex-col gap-1.5">
           <label className="filter-label">Площ до (м²)</label>
-          <input type="number" placeholder="напр. 200" className="input-dark text-sm" />
+          <input type="number" placeholder="напр. 200" className="input-dark text-sm"
+            value={areaMax || ''} onChange={e => setAreaMax?.(Number(e.target.value) || 0)} />
         </div>
         <div className="flex flex-col gap-1.5">
           <label className="filter-label">Спални</label>
