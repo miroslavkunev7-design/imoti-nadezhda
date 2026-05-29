@@ -3,15 +3,14 @@
 import Link from 'next/link'
 import { useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import BrandLogoHouses from '@/components/ui/BrandLogoHouses'
 
 type BrandLogoSize = 'sm' | 'md' | 'lg' | 'hc'
 
-const SIZES: Record<BrandLogoSize, { icon: string; line1: string; line2: string; gap: string }> = {
-  sm: { icon: 'w-[88px]', line1: 'text-[7px] tracking-[0.26em]', line2: 'text-[11px] tracking-[0.32em]', gap: 'gap-1' },
-  md: { icon: 'w-[108px]', line1: 'text-[8px] tracking-[0.28em]', line2: 'text-[13px] tracking-[0.34em]', gap: 'gap-1.5' },
-  lg: { icon: 'w-[128px]', line1: 'text-[9px] tracking-[0.28em]', line2: 'text-[15px] tracking-[0.36em]', gap: 'gap-2' },
-  hc: { icon: 'w-[clamp(100px,10vw,140px)]', line1: 'text-[clamp(8px,0.8vw,10px)] tracking-[0.28em]', line2: 'text-[clamp(12px,1.1vw,16px)] tracking-[0.36em]', gap: 'gap-2' },
+const WIDTHS: Record<BrandLogoSize, string> = {
+  sm: 'w-[88px]',
+  md: 'w-[108px]',
+  lg: 'w-[128px]',
+  hc: 'w-[clamp(100px,10vw,140px)]',
 }
 
 interface Props {
@@ -22,7 +21,7 @@ interface Props {
 }
 
 export default function BrandLogo({ size = 'md', className = '', href = '/', asLink = true }: Props) {
-  const s = SIZES[size]
+  const w = WIDTHS[size]
   const router = useRouter()
   const clickCount = useRef(0)
   const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -41,23 +40,13 @@ export default function BrandLogo({ size = 'md', className = '', href = '/', asL
   }
 
   const content = (
-    <div className={`brand-logo flex flex-col items-center ${s.gap} ${className}`.trim()}>
-      <BrandLogoHouses className={`brand-logo__icon h-auto ${s.icon}`} />
-      <div className="brand-logo__text flex flex-col items-center text-center leading-none">
-        <span
-          className={`brand-logo__line1 font-semibold uppercase text-[#6B001C] ${s.line1}`}
-          style={{ fontFamily: 'var(--font-inter), system-ui, sans-serif' }}
-        >
-          НЕДВИЖИМИ ИМОТИ
-        </span>
-        <span
-          className={`brand-logo__line2 mt-1.5 font-bold uppercase text-[#6B001C] ${s.line2}`}
-          style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
-        >
-          • НАДЕЖДА •
-        </span>
-      </div>
-    </div>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/images/logo-nadezhda-brand.png"
+      alt="Имоти Надежда"
+      className={`brand-logo block h-auto ${w} ${className}`.trim()}
+      draggable={false}
+    />
   )
 
   if (!asLink) return content

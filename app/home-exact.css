@@ -105,58 +105,23 @@
 .hp-brand {
   position: absolute;
   z-index: 4;
-  left: 2.95vw;
-  top: 3.55vh;
-  width: 20.7vw;
-  height: 20.1vh;
+  left: 1.5vw;
+  top: 1.5vh;
+  width: 22vw;
+  height: 24.5vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-decoration: none;
-  color: var(--hp-burg);
 }
 
-.hp-brand__mark {
-  width: 17.2vw;
-  height: 9.95vh;
-  overflow: visible;
-}
-
-.hp-brand__roof {
-  fill: none;
-  stroke: var(--hp-burg);
-  stroke-width: 7.8;
-  stroke-linecap: square;
-  stroke-linejoin: miter;
-}
-
-.hp-brand__roof--mid { stroke-width: 10.2; }
-.hp-brand__wall,
-.hp-brand__window,
-.hp-brand__chimney,
-.hp-brand__spark {
-  fill: var(--hp-burg);
-  stroke: none;
-}
-
-.hp-brand__small {
-  margin-top: 0.08vh;
-  font-family: var(--font-playfair), Georgia, serif;
-  font-size: 1.42vw;
-  line-height: 1;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.hp-brand__name {
-  margin-top: 0.7vh;
-  font-family: var(--font-playfair), Georgia, serif;
-  font-size: 2.72vw;
-  line-height: 0.96;
-  font-weight: 800;
-  letter-spacing: 0.035em;
-  white-space: nowrap;
+.hp-brand__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  user-select: none;
+  pointer-events: none;
 }
 
 .hp-nav {

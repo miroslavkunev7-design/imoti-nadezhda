@@ -69,58 +69,17 @@ export default function Logo({
       ].join(' ')}
       aria-label="Имоти Надежда — начало"
     >
-      {marbleHeader ? (
-        <BrandLogo size="lg" asLink={false} className="logo--marble-header-brand" />
-      ) : (
-      <div
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/logo-nadezhda-brand.png"
+        alt="Имоти Надежда"
         className={[
-          'logo-hero-glow__icon flex-shrink-0 transition-transform duration-300 group-hover:scale-[1.03]',
-          ceiling ? 'logo--ceiling__icon' : 'overflow-hidden',
+          'logo-hero-glow__img block h-auto',
+          ceiling ? 'logo--ceiling__img' : '',
         ].join(' ')}
-        style={ceiling ? undefined : { width: s.iconW, height: containerH }}
-      >
-        {ceiling ? (
-          <picture>
-            <source
-              srcSet="/images/logo-icon-hq-lossless.webp"
-              type="image/webp"
-            />
-            <source srcSet="/images/logo-icon-hq.webp" type="image/webp" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/logo-icon-hq.png"
-              alt="Имоти Надежда"
-              className="logo-hero-glow__img logo--ceiling__img"
-              width={998}
-              height={2048}
-              decoding="sync"
-              fetchPriority="high"
-            />
-          </picture>
-        ) : (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
-            src="/images/logo-icon-transparent.png"
-            alt="Имоти Надежда"
-            className="logo-hero-glow__img"
-            style={{ width: s.iconW, height: naturalH, display: 'block' }}
-          />
-        )}
-      </div>
-      )}
-
-      {!marbleHeader && (
-        <span
-          className={[
-            'font-display font-bold uppercase leading-none mt-0.5 logo-hero-glow__text',
-            ceiling ? 'logo--ceiling__text' : '',
-            heroGlow && !ceiling ? '' : 'text-bordeaux',
-          ].join(' ')}
-          style={ceiling ? undefined : { fontSize: `${s.textSize}px`, letterSpacing: '0.14em' }}
-        >
-          ИМОТИ НАДЕЖДА
-        </span>
-      )}
+        style={ceiling ? undefined : { width: s.iconW }}
+        draggable={false}
+      />
     </Link>
   )
 }

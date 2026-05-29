@@ -59,21 +59,13 @@ export default function HomeHero({ cities }: Props) {
           <path className="hp-top__surface-marble-lines" d="M30 18 C84 7 130 13 178 4 M34 119 C80 108 137 112 188 98 M500 20 C585 4 666 12 736 0 M652 92 C735 83 824 90 920 78" />
         </svg>
         <Link href="/" className="hp-brand" aria-label="Начало">
-          <svg className="hp-brand__mark" viewBox="0 0 220 92" aria-hidden>
-            <path className="hp-brand__roof" d="M18 58 L63 22 L101 58" />
-            <path className="hp-brand__roof hp-brand__roof--mid" d="M69 58 L111 12 L154 58" />
-            <path className="hp-brand__roof" d="M122 58 L160 28 L202 58" />
-            <path className="hp-brand__wall" d="M40 58 H92 V79 H40 Z" />
-            <path className="hp-brand__wall" d="M99 58 H158 V79 H99 Z" />
-            <path className="hp-brand__wall" d="M166 58 H208 V79 H166 Z" />
-            <path className="hp-brand__window" d="M56 64 H69 V77 H56 Z M72 64 H85 V77 H72 Z" />
-            <path className="hp-brand__window" d="M113 64 H132 V77 H113 Z M135 64 H154 V77 H135 Z" />
-            <path className="hp-brand__window" d="M176 64 H189 V77 H176 Z M192 64 H205 V77 H192 Z" />
-            <path className="hp-brand__chimney" d="M142 13 H157 V29 H142 Z" />
-            <path className="hp-brand__spark" d="M158 7 H170 V19 H158 Z" />
-          </svg>
-          <span className="hp-brand__small">НЕДВИЖИМИ ИМОТИ</span>
-          <span className="hp-brand__name">•НАДЕЖДА•</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/logo-nadezhda-brand.png"
+            alt="Имоти Надежда"
+            className="hp-brand__img"
+            draggable={false}
+          />
         </Link>
         <nav className="hp-nav" aria-label="Навигация">
           <Link href="/buy" className="hp-nav__link">За продажба</Link>
