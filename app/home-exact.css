@@ -407,3 +407,149 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
+
+/* ── Interactive Search Selects ── */
+.hp-search__select-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.hp-search__select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 0.83vw;
+  font-weight: 700;
+  color: var(--hp-burg);
+  cursor: pointer;
+  padding: 0;
+  width: 100%;
+}
+
+.hp-search__select option {
+  background: #fff;
+  color: var(--hp-burg);
+  font-size: 14px;
+}
+
+/* ── City Info Card ── */
+.hp-citycard {
+  position: absolute;
+  bottom: 22vh;
+  right: 4vw;
+  z-index: 10;
+  width: 28vw;
+  max-width: 400px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(253, 245, 228, 0.95);
+  border: 1.5px solid rgba(207, 165, 74, 0.45);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(207, 165, 74, 0.15);
+  backdrop-filter: blur(12px);
+  animation: cardSlideIn 0.4s ease-out forwards;
+}
+
+@keyframes cardSlideIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.hp-citycard__photo {
+  width: 100%;
+  height: 14vh;
+  overflow: hidden;
+  border-bottom: 2px solid rgba(207, 165, 74, 0.3);
+}
+
+.hp-citycard__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hp-citycard__body {
+  padding: 1.2vw 1.4vw 1.4vw;
+}
+
+.hp-citycard__label {
+  display: block;
+  font-size: 0.6vw;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--hp-gold-dark);
+  margin-bottom: 0.4vh;
+}
+
+.hp-citycard__title {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.6vw;
+  font-weight: 800;
+  color: var(--hp-burg);
+  margin: 0 0 0.8vh;
+  line-height: 1.2;
+}
+
+.hp-citycard__desc {
+  font-size: 0.72vw;
+  line-height: 1.5;
+  color: var(--hp-burg-dark);
+  margin: 0 0 1.2vh;
+  opacity: 0.85;
+}
+
+.hp-citycard__stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5vw;
+  margin-bottom: 1.2vh;
+  padding: 0.8vh 0;
+  border-top: 1px solid rgba(207, 165, 74, 0.25);
+  border-bottom: 1px solid rgba(207, 165, 74, 0.25);
+}
+
+.hp-citycard__stats div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.hp-citycard__stats strong {
+  font-size: 0.7vw;
+  font-weight: 800;
+  color: var(--hp-burg);
+}
+
+.hp-citycard__stats span {
+  font-size: 0.55vw;
+  color: var(--hp-gold-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.hp-citycard__btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 0.9vh 0;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--hp-burg) 0%, var(--hp-burg-dark) 100%);
+  color: var(--hp-cream);
+  font-size: 0.72vw;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  border: 1px solid rgba(207, 165, 74, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.hp-citycard__btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(107, 0, 28, 0.3);
+}

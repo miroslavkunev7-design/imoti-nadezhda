@@ -1,8 +1,11 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import type { City } from '@/types'
 import { setSelectedCity } from '@/lib/client/selected-city'
+import { PROPERTY_TYPES_BG } from '@/lib/data/fallback'
 
 interface Props { cities: City[] }
 
@@ -16,8 +19,23 @@ const CITY_FALLBACK: Record<string, string> = {
 const CITY_ORDER = ['shumen', 'varna', 'burgas', 'novi-pazar'] as const
 
 export default function HomeHero({ cities }: Props) {
+  const router = useRouter()
   const bySlug = (slug: string) => cities.find(c => c.slug === slug)
   const cityCards = CITY_ORDER.map(slug => bySlug(slug)).filter(Boolean) as City[]
+
+  const [selectedCitySlug, setSelectedCitySlug] = useState('')
+  const [selectedType, setSelectedType] = useState('')
+  const [priceLabel, setPriceLabel] = useState('Без значение')
+  const [areaLabel, setAreaLabel] = useState('Без значение')
+
+  const selectedCityData = selectedCitySlug ? bySlug(selectedCitySlug) : null
+
+  function handleSearch() {
+    const params = new URLSearchParams()
+    if (selectedCitySlug) params.set('city', selectedCitySlug)
+    if (selectedType) params.set('type', selectedType)
+    router.push(`/buy?${params.toString()}`)
+  }
 
   return (
     <main className="hp" aria-label="Начална страница">
@@ -35,8 +53,6 @@ export default function HomeHero({ cities }: Props) {
                 x="0" y="0" width="940" height="166"
                 preserveAspectRatio="xMidYMid slice" />
             </pattern>
-
-            {/* Original gold ribbon gradient — horizontal */}
             <linearGradient id="hpGoldRibbon" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0"    stopColor="#6b3c08" />
               <stop offset="0.12" stopColor="#c4922a" />
@@ -45,28 +61,21 @@ export default function HomeHero({ cities }: Props) {
               <stop offset="0.66" stopColor="#c48a1e" />
               <stop offset="1"    stopColor="#5c3407" />
             </linearGradient>
-
             <filter id="hpRibbonShadow">
               <feDropShadow dx="0" dy="2" stdDeviation="2.5" floodColor="#000" floodOpacity="0.30"/>
             </filter>
           </defs>
-
-          {/* ── Marble panel — original shape ── */}
           <path
             d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z"
             fill="url(#hpMarbleTile)"
             stroke="rgba(190,138,42,0.35)"
             strokeWidth="1"
           />
-
-          {/* ── Gold ribbon ── */}
           <path
             d="M0 156 C77 169 168 168 216 143 C238 128 247 107 277 91 C315 70 363 54 392 0 H478 C438 25 416 52 371 70 C330 86 300 89 281 105 C257 125 246 147 216 159 C153 181 70 174 0 164 Z"
             fill="url(#hpGoldRibbon)"
             opacity="0.96"
           />
-
-          {/* ── Light shimmer overlay on the ribbon ── */}
           <path
             d="M274 88 C329 71 365 47 392 0 H449 C412 24 394 49 354 64 C315 79 294 79 274 88 Z"
             fill="rgba(255,242,184,0.64)"
@@ -97,61 +106,106 @@ export default function HomeHero({ cities }: Props) {
         </nav>
       </section>
 
-      <form className="hp-search" action="/buy">
+      {/* Interactive Search */}
+      <div className="hp-search">
         <div className="hp-search__field hp-search__field--city">
           <PinIcon />
-          <div>
+          <div className="hp-search__select-wrap">
             <span>Град</span>
-            <strong>Бургас</strong>
+            <select
+              value={selectedCitySlug}
+              onChange={e => setSelectedCitySlug(e.target.value)}
+              className="hp-search__select"
+            >
+              <option value="">Всички</option>
+              {cities.map(c => (
+                <option key={c.slug} value={c.slug}>{c.name}</option>
+              ))}
+            </select>
           </div>
         </div>
-        <div className="hp-search__field hp-search__field--quarter">
-          <HomeMiniIcon />
-          <div>
-            <span>Квартал</span>
-            <strong>Лазур</strong>
-          </div>
-        </div>
+
         <div className="hp-search__field hp-search__field--type">
           <BagIcon />
-          <div>
+          <div className="hp-search__select-wrap">
             <span>Вид имот</span>
-            <strong>Апартамент</strong>
+            <select
+              value={selectedType}
+              onChange={e => setSelectedType(e.target.value)}
+              className="hp-search__select"
+            >
+              <option value="">Всички</option>
+              {PROPERTY_TYPES_BG.map(t => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
           </div>
         </div>
+
         <div className="hp-search__field hp-search__field--price">
           <EuroIcon />
           <div>
             <span>Цена</span>
-            <strong>от 200 000 €</strong>
-            <em>до 500 000 €</em>
+            <strong>{priceLabel}</strong>
           </div>
         </div>
-        <div className="hp-search__field hp-search__field--area">
-          <AreaIcon />
-          <div>
-            <span>Площ</span>
-            <strong>от 100 m²</strong>
-            <em>до 200 m²</em>
-          </div>
-        </div>
-        <button type="button" className="hp-search__filter">
+
+        <button type="button" className="hp-search__filter" onClick={() => router.push('/buy')}>
           <FilterIcon />
           Филтри
         </button>
-        <button type="submit" className="hp-search__submit">
+
+        <button type="button" className="hp-search__submit" onClick={handleSearch}>
           <SearchIcon />
           Търси
         </button>
-        <input type="hidden" name="city" value="burgas" />
-        <input type="hidden" name="quarter" value="lazur" />
-        <input type="hidden" name="type" value="Апартамент" />
-        <input type="hidden" name="price_min" value="200000" />
-        <input type="hidden" name="price_max" value="500000" />
-        <input type="hidden" name="area_min" value="100" />
-        <input type="hidden" name="area_max" value="200" />
-      </form>
+      </div>
 
+      {/* City Info Card — appears when city is selected */}
+      {selectedCityData && (
+        <div className="hp-citycard">
+          <div className="hp-citycard__photo">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={selectedCityData.image_url || CITY_FALLBACK[selectedCityData.slug]}
+              alt={selectedCityData.name}
+              className="hp-citycard__img"
+            />
+          </div>
+          <div className="hp-citycard__body">
+            <span className="hp-citycard__label">ЗА ГРАДА</span>
+            <h2 className="hp-citycard__title">{selectedCityData.name}</h2>
+            <p className="hp-citycard__desc">{selectedCityData.description}</p>
+            <div className="hp-citycard__stats">
+              <div>
+                <strong>{selectedCityData.population ? `${(selectedCityData.population / 1000).toFixed(0)} 000` : '—'}</strong>
+                <span>жители</span>
+              </div>
+              <div>
+                <strong>{selectedCityData.area_km2 ?? '—'} km²</strong>
+                <span>площ</span>
+              </div>
+              <div>
+                <strong>{selectedCityData.region ?? '—'}</strong>
+                <span>регион</span>
+              </div>
+              <div>
+                <strong>{selectedCityData.property_count ?? 0}</strong>
+                <span>активни имоти</span>
+              </div>
+            </div>
+            <Link
+              href={`/cities/${selectedCityData.slug}`}
+              className="hp-citycard__btn"
+              onClick={() => setSelectedCity(selectedCityData.slug)}
+            >
+              Разгледай имоти в {selectedCityData.name}
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* City cards at bottom */}
       <section className="hp-cities" aria-label="Градове">
         {cityCards.map(city => (
           <Link
@@ -182,17 +236,11 @@ export default function HomeHero({ cities }: Props) {
 function PinIcon() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Z" /><circle cx="12" cy="9" r="2.4" /></svg>
 }
-function HomeMiniIcon() {
-  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10Z" /></svg>
-}
 function BagIcon() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 7h12l1 14H5L6 7Z" /><path d="M9 7a3 3 0 0 1 6 0" /></svg>
 }
 function EuroIcon() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 10h11M5 14h9M19 5.5A8 8 0 1 0 19 18.5" /></svg>
-}
-function AreaIcon() {
-  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="4" width="16" height="16" rx="1" /><path d="M8 8h4M8 8v4M16 16h-4M16 16v-4" /></svg>
 }
 function FilterIcon() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 6h16M7 12h10M10 18h4" /></svg>

@@ -9,14 +9,14 @@ export const FALLBACK_CITIES: City[] = [
     name: 'Шумен',
     slug: 'shumen',
     description:
-      'Исторически и модерен град с богато културно наследство и отлични възможности за инвестиции. Разнообразие от имоти — апартаменти, къщи и парцели.',
+      'Исторически и модерен град с богато културно наследство, развита инфраструктура и отлични възможности за живот и инвестиции.',
     image_url: '/images/cities/shumen.jpg',
     population: 85000,
     area_km2: 83.6,
     region: 'Североизток',
     sort_order: 1,
     property_count: 0,
-    quarter_count: 28,
+    quarter_count: 8,
   },
   {
     id: 2,
@@ -30,7 +30,7 @@ export const FALLBACK_CITIES: City[] = [
     region: 'Черноморие',
     sort_order: 2,
     property_count: 0,
-    quarter_count: 18,
+    quarter_count: 12,
   },
   {
     id: 3,
@@ -44,7 +44,7 @@ export const FALLBACK_CITIES: City[] = [
     region: 'Черноморие',
     sort_order: 3,
     property_count: 0,
-    quarter_count: 11,
+    quarter_count: 9,
   },
   {
     id: 4,
