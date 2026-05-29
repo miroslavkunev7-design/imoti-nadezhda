@@ -60,13 +60,13 @@
 
 .hp-top {
   position: absolute;
-  top: 1.2vh;
+  top: 0;
   left: 0;
   width: 91.8vw;
-  height: 28.82vh;
+  height: 30.56vh; /* 176/576 * 100 = 30.56 — matches reference panel height */
   z-index: 5;
   overflow: visible;
-  filter: drop-shadow(0 0.62vh 0.78vh rgba(0, 0, 0, 0.28));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.30));
 }
 
 .hp-top__surface {

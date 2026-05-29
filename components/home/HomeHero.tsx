@@ -30,73 +30,78 @@ export default function HomeHero({ cities }: Props) {
       <section className="hp-top" aria-label="Главна навигация">
         <svg className="hp-top__surface" viewBox="0 0 940 166" preserveAspectRatio="none" aria-hidden>
           <defs>
-            {/* Marble texture */}
+            {/* Marble texture — fills full SVG area, clipped to panel shape */}
             <pattern id="hpMarbleTile" patternUnits="userSpaceOnUse" x="0" y="0" width="940" height="166">
               <image href="/images/texture-marble-white-gold.png"
                 x="0" y="0" width="940" height="166"
                 preserveAspectRatio="xMidYMid slice" />
             </pattern>
 
-            {/* 3D gold ribbon — main body (dark→bright→dark across the band width) */}
-            <linearGradient id="hpGoldRibbon" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0"    stopColor="#3d1f00" />
-              <stop offset="0.06" stopColor="#7a4210" />
-              <stop offset="0.18" stopColor="#d4960a" />
-              <stop offset="0.32" stopColor="#f7d96a" />
-              <stop offset="0.46" stopColor="#fff3a0" />
-              <stop offset="0.58" stopColor="#f0c836" />
-              <stop offset="0.72" stopColor="#c68e10" />
-              <stop offset="0.86" stopColor="#7a4a08" />
-              <stop offset="1"    stopColor="#3a1e02" />
+            {/* 3D ribbon gradient — userSpaceOnUse aligned to ribbon band y=114..134 */}
+            <linearGradient id="hpRibbon" gradientUnits="userSpaceOnUse" x1="0" y1="112" x2="0" y2="134">
+              <stop offset="0%"    stopColor="#2a1000" />
+              <stop offset="8%"    stopColor="#6b3608" />
+              <stop offset="20%"   stopColor="#c48518" />
+              <stop offset="34%"   stopColor="#f5d560" />
+              <stop offset="46%"   stopColor="#fff6b8" />
+              <stop offset="54%"   stopColor="#ffe880" />
+              <stop offset="66%"   stopColor="#d4980e" />
+              <stop offset="80%"   stopColor="#8a5210" />
+              <stop offset="92%"   stopColor="#4a2406" />
+              <stop offset="100%"  stopColor="#1e0e00" />
             </linearGradient>
 
-            {/* Bright highlight streak on top edge of ribbon */}
-            <linearGradient id="hpGoldEdge" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0"    stopColor="rgba(255,255,255,0)" />
-              <stop offset="0.15" stopColor="rgba(255,248,200,0.85)" />
-              <stop offset="0.42" stopColor="rgba(255,252,220,0.96)" />
-              <stop offset="0.70" stopColor="rgba(255,240,160,0.72)" />
-              <stop offset="1"    stopColor="rgba(255,255,255,0)" />
-            </linearGradient>
-
-            {/* Shadow under ribbon */}
-            <linearGradient id="hpGoldShadow" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0"   stopColor="rgba(0,0,0,0.32)" />
-              <stop offset="1"   stopColor="rgba(0,0,0,0)" />
-            </linearGradient>
-
-            <filter id="hpRibbonBlur">
-              <feGaussianBlur stdDeviation="1.2" />
+            {/* Ribbon drop shadow */}
+            <filter id="hpRibbonShadow" x="-5%" y="-10%" width="110%" height="140%">
+              <feDropShadow dx="0" dy="3" stdDeviation="3.5" floodColor="#000" floodOpacity="0.45"/>
             </filter>
-            <clipPath id="hpClip">
-              <path d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z"/>
+
+            {/* Clip to panel shape */}
+            <clipPath id="hpPanelClip">
+              <path d="M0 0 H940 V88 C600 88 350 120 0 140 Z" />
             </clipPath>
           </defs>
 
-          {/* 1. Marble surface */}
-          <path d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z"
+          {/* ── Marble surface (panel shape) ── */}
+          <path
+            d="M0 0 H940 V88 C600 88 350 120 0 140 Z"
             fill="url(#hpMarbleTile)"
-            stroke="rgba(190,138,42,0.38)" strokeWidth="1" />
+            stroke="rgba(190,138,42,0.32)"
+            strokeWidth="0.8"
+          />
 
-          {/* 2. Drop shadow under ribbon */}
-          <path d="M0 148 C72 165 158 165 210 143 C234 133 248 116 278 100 C318 80 362 60 394 8 H420 C388 62 342 84 300 104 C270 118 254 136 222 148 C168 170 72 172 0 158 Z"
-            fill="url(#hpGoldShadow)" filter="url(#hpRibbonBlur)" opacity="0.6" />
+          {/* ── Gold ribbon body ── */}
+          {/* Top edge:    M0 140 C350 120 600 88 940 88  */}
+          {/* Bottom edge: M0 160 C350 140 600 108 940 108 */}
+          <path
+            d="M0 140 C350 120 600 88 940 88 L940 108 C600 108 350 140 0 160 Z"
+            fill="url(#hpRibbon)"
+            filter="url(#hpRibbonShadow)"
+          />
 
-          {/* 3. Thick 3D gold ribbon — main body */}
-          <path d="M0 140 C72 158 156 158 208 136 C232 126 246 108 276 92 C316 70 360 50 392 0 H476 C444 18 428 38 396 56 C354 78 320 96 294 112 C266 128 248 144 216 154 C164 172 74 168 0 156 Z"
-            fill="url(#hpGoldRibbon)" />
+          {/* ── Highlight: bright top edge line ── */}
+          <path
+            d="M0 140 C350 120 600 88 940 88"
+            fill="none"
+            stroke="rgba(255,253,218,0.92)"
+            strokeWidth="1.8"
+          />
 
-          {/* 4. Top bright highlight edge */}
-          <path d="M0 140 C72 158 156 158 208 136 C232 126 246 108 276 92 C316 70 360 50 392 0 H406 C374 46 330 66 290 88 C264 104 248 120 220 132 C168 152 76 156 0 144 Z"
-            fill="url(#hpGoldEdge)" opacity="0.9" />
+          {/* ── Inner highlight band (2px inside top edge) ── */}
+          <path
+            d="M0 142 C350 122 600 90 940 90"
+            fill="none"
+            stroke="rgba(255,248,180,0.55)"
+            strokeWidth="1.2"
+          />
 
-          {/* 5. Fine bright line on top edge of ribbon */}
-          <path d="M0 140 C72 158 156 158 208 136 C232 126 246 108 276 92 C316 70 360 50 392 0"
-            fill="none" stroke="rgba(255,252,210,0.95)" strokeWidth="1.8" />
-
-          {/* 6. Fine dark line on bottom edge */}
-          <path d="M0 156 C74 168 164 172 216 154 C248 144 266 128 294 112 C320 96 354 78 396 56 C428 38 444 18 476 0"
-            fill="none" stroke="rgba(60,30,0,0.55)" strokeWidth="1.2" />
+          {/* ── Dark shadow bottom edge ── */}
+          <path
+            d="M0 160 C350 140 600 108 940 108"
+            fill="none"
+            stroke="rgba(30,10,0,0.60)"
+            strokeWidth="1.5"
+          />
         </svg>
         <Link href="/" className="hp-brand" aria-label="Начало">
           {/* eslint-disable-next-line @next/next/no-img-element */}
