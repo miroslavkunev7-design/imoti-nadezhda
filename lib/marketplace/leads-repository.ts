@@ -44,7 +44,7 @@ export async function ensureLeadsQueueTable(): Promise<void> {
   if (!isDbConfigured() || tableEnsured) return
   try {
     const getSql = (await import('@/lib/db')).default
-    await getSql().unsafe(ENSURE_SQL)
+    await getSql().query(ENSURE_SQL)
     tableEnsured = true
   } catch {
     tableEnsured = true
