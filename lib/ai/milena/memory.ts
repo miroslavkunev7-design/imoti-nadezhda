@@ -1,7 +1,8 @@
 import { mkdir, readFile, writeFile } from 'fs/promises'
 import path from 'path'
 
-const DIR = path.join(process.cwd(), 'data', 'milena-memory')
+const BASE_DIR = process.env.VERCEL ? '/tmp' : path.join(process.cwd(), 'data')
+const DIR = path.join(BASE_DIR, 'milena-memory')
 const MAX_FACTS = 80
 
 interface MemoryFile {
@@ -21,7 +22,9 @@ export interface MilenaProject {
 }
 
 async function ensureDir() {
-  await mkdir(DIR, { recursive: true })
+  try {
+    await mkdir(DIR, { recursive: true })
+  } catch { /* /tmp may already exist or fail gracefully */ }
 }
 
 function filePath(userId: number) {
@@ -45,9 +48,11 @@ async function load(userId: number): Promise<MemoryFile> {
 }
 
 async function save(data: MemoryFile) {
-  await ensureDir()
-  data.updatedAt = new Date().toISOString()
-  await writeFile(filePath(data.userId), JSON.stringify(data, null, 2), 'utf-8')
+  try {
+    await ensureDir()
+    data.updatedAt = new Date().toISOString()
+    await writeFile(filePath(data.userId), JSON.stringify(data, null, 2), 'utf-8')
+  } catch { /* graceful — memory is best-effort on serverless */ }
 }
 
 export async function getMemoryContext(userId: number): Promise<string> {

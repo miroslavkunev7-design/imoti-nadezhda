@@ -4,7 +4,8 @@ import path from 'path'
 import { isDbConfigured, queryOne, execute } from '@/lib/db'
 
 const SECRET_KEY = 'openai_api_key'
-const LOCAL_FILE = path.join(process.cwd(), 'data', 'app-secrets.json')
+const BASE_DIR = process.env.VERCEL ? '/tmp' : path.join(process.cwd(), 'data')
+const LOCAL_FILE = path.join(BASE_DIR, 'app-secrets.json')
 
 async function readLocalSecrets(): Promise<Record<string, string>> {
   try {
@@ -18,11 +19,13 @@ async function readLocalSecrets(): Promise<Record<string, string>> {
 }
 
 async function writeLocalSecret(key: string, value: string): Promise<void> {
-  const dir = path.dirname(LOCAL_FILE)
-  if (!existsSync(dir)) await mkdir(dir, { recursive: true })
-  const all = await readLocalSecrets()
-  all[key] = value
-  await writeFile(LOCAL_FILE, JSON.stringify(all, null, 2), 'utf8')
+  try {
+    const dir = path.dirname(LOCAL_FILE)
+    if (!existsSync(dir)) await mkdir(dir, { recursive: true })
+    const all = await readLocalSecrets()
+    all[key] = value
+    await writeFile(LOCAL_FILE, JSON.stringify(all, null, 2), 'utf8')
+  } catch { /* graceful on serverless */ }
 }
 
 function cleanApiKey(raw?: string | null): string | null {
@@ -41,7 +44,7 @@ export async function getStoredOpenAiKey(): Promise<string | null> {
   if (isDbConfigured()) {
     try {
       const row = await queryOne<{ value: string }>(
-        `SELECT value FROM app_secrets WHERE key = ? LIMIT 1`,
+        `SELECT value FROM app_secrets WHERE key = $1 LIMIT 1`,
         [SECRET_KEY]
       )
       const v = cleanApiKey(row?.value)
@@ -68,7 +71,7 @@ export async function saveOpenAiKey(value: string): Promise<{ db: boolean; file:
     try {
       await execute(
         `INSERT INTO app_secrets (key, value, updated_at)
-         VALUES (?, ?, NOW())
+         VALUES ($1, $2, NOW())
          ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()`,
         [SECRET_KEY, key]
       )
