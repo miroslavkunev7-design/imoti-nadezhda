@@ -60,10 +60,10 @@
 
 .hp-top {
   position: absolute;
-  top: 1.39vh;
+  top: 0;
   left: 0;
   width: 91.8vw;
-  height: 28.82vh;
+  height: 20vh;
   z-index: 5;
   overflow: visible;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.30));
@@ -312,10 +312,22 @@
   height: 25.69vh;
   overflow: hidden;
   border-radius: 0.78vw;
-  border: 1px solid rgba(207, 165, 74, 0.52);
-  background: url('/images/texture-marble-white-gold.png') center / cover no-repeat;
-  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.34);
+  border: 1.5px solid rgba(207, 165, 74, 0.6);
+  background: linear-gradient(180deg, #1a0a06 0%, #2a1008 100%);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(207, 165, 74, 0.25),
+    0 0 20px rgba(207, 165, 74, 0.08);
   text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hp-city:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(207, 165, 74, 0.35),
+    0 0 30px rgba(207, 165, 74, 0.15);
 }
 
 .hp-city__photo {
@@ -324,6 +336,15 @@
   flex: 0 0 16.5vh;
   background-size: cover;
   background-position: center;
+  border-radius: 0.78vw 0.78vw 0 0;
+}
+
+.hp-city__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(26, 10, 6, 0.85) 100%);
+  pointer-events: none;
 }
 
 .hp-city__fade {
@@ -337,14 +358,9 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -0.69vh;
-  height: 5.56vh;
-  background:
-    linear-gradient(to top, rgba(245, 230, 200, 1) 0%, rgba(253, 245, 228, 0.92) 30%, rgba(249, 234, 212, 0.58) 62%, transparent 100%),
-    radial-gradient(ellipse 18% 56% at 8% 100%, rgba(207, 165, 74, 0.58), transparent 100%),
-    radial-gradient(ellipse 16% 54% at 28% 100%, rgba(255, 252, 240, 0.84), transparent 100%),
-    radial-gradient(ellipse 20% 54% at 52% 100%, rgba(207, 165, 74, 0.52), transparent 100%),
-    radial-gradient(ellipse 18% 52% at 76% 100%, rgba(255, 252, 240, 0.78), transparent 100%);
+  bottom: 0;
+  height: 2vh;
+  background: linear-gradient(to top, rgba(26, 10, 6, 0.95) 0%, transparent 100%);
   pointer-events: none;
 }
 
@@ -353,8 +369,9 @@
   z-index: 3;
   height: 10.24vh;
   padding: 1.39vh 0.98vw 1.22vh;
-  background: linear-gradient(180deg, #f5e6c8 0%, #fdf5e4 60%, #f2ddb8 100%);
+  background: linear-gradient(180deg, rgba(26, 10, 6, 0.95) 0%, rgba(42, 16, 8, 0.98) 100%);
   box-sizing: border-box;
+  border-top: 1px solid rgba(207, 165, 74, 0.2);
 }
 
 .hp-city__body h2 {
@@ -366,7 +383,7 @@
   font-size: 1.27vw;
   line-height: 1;
   font-weight: 800;
-  color: var(--hp-burg);
+  color: var(--hp-cream);
 }
 
 .hp-city__body h2 svg {
@@ -387,7 +404,7 @@
   line-height: 1;
   font-weight: 800;
   letter-spacing: 0.16em;
-  color: var(--hp-gold-dark);
+  color: var(--hp-gold-light);
   text-transform: uppercase;
 }
 
@@ -399,8 +416,8 @@
   height: 3.82vh;
   border-radius: 999px;
   border: 1px solid rgba(207, 165, 74, 0.55);
-  background: #fff;
-  color: var(--hp-burg);
+  background: rgba(207, 165, 74, 0.1);
+  color: var(--hp-gold);
   font-size: 1.17vw;
   font-weight: 700;
   line-height: 1;

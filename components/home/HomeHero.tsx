@@ -53,13 +53,16 @@ export default function HomeHero({ cities }: Props) {
                 x="0" y="0" width="940" height="166"
                 preserveAspectRatio="xMidYMid slice" />
             </pattern>
-            <linearGradient id="hpGoldRibbon" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0"    stopColor="#6b3c08" />
-              <stop offset="0.12" stopColor="#c4922a" />
-              <stop offset="0.36" stopColor="#f5d97a" />
-              <stop offset="0.50" stopColor="#ffe9a0" />
-              <stop offset="0.66" stopColor="#c48a1e" />
-              <stop offset="1"    stopColor="#5c3407" />
+            <linearGradient id="hpGoldRibbon" x1="0" y1="0" x2="0.7" y2="1">
+              <stop offset="0"    stopColor="#3d2006" />
+              <stop offset="0.15" stopColor="#8b5e1a" />
+              <stop offset="0.30" stopColor="#c9882e" />
+              <stop offset="0.42" stopColor="#e6b44a" />
+              <stop offset="0.50" stopColor="#f0cc6a" />
+              <stop offset="0.58" stopColor="#e6b44a" />
+              <stop offset="0.70" stopColor="#c08025" />
+              <stop offset="0.85" stopColor="#7a4c14" />
+              <stop offset="1"    stopColor="#3a1e05" />
             </linearGradient>
             <filter id="hpRibbonShadow">
               <feDropShadow dx="0" dy="2" stdDeviation="2.5" floodColor="#000" floodOpacity="0.30"/>
