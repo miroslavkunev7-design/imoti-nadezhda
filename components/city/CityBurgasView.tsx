@@ -148,6 +148,7 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
                 src={BURGAS_HERO_IMAGE}
                 alt={`Панорама — ${city.name}`}
                 className="cb-frame__img"
+                style={{ objectPosition: 'center 40%' }}
                 draggable={false}
               />
             </picture>

@@ -4,7 +4,7 @@ hero-bg.jpg         → The Shumen monument landscape (screenshot 11) — used a
 cities/shumen.jpg   → The Shumen monument photo (screenshot 5)
 cities/varna.jpg    → The Varna coastline aerial (screenshot 6)
 cities/burgas.jpg   → The Burgas port/bridge aerial (screenshot 7)
-cities/burgas-hero-panorama.jpg → Hero framed photo on /cities/burgas (upload screenshot 3 here)
+cities/burgas-hero-panorama.jpg → Hero framed photo on /cities/burgas (from burgas.jpg — pier & Sea Garden)
 cities/novi-pazar.jpg → The Novi Pazar city center park (screenshot 8)
 
 All images should be placed in:
