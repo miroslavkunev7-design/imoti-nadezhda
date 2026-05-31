@@ -8,7 +8,6 @@ import { PROPERTY_TYPES_BG } from '@/lib/data/fallback'
 import { setSelectedCity } from '@/lib/client/selected-city'
 import MarbleQuarterCard from '@/components/city/MarbleQuarterCard'
 
-/** Снимка 3 — информационната карта / панорама вляво (замени файла при нужда) */
 const BURGAS_HERO_IMAGE = '/images/cities/burgas-hero-panorama.jpg'
 const BURGAS_HERO_WEBP = '/images/cities/burgas-hero-panorama.webp'
 
@@ -32,7 +31,7 @@ interface Props {
   activeListings: number
 }
 
-export default function CityBurgasView({ city, quarters, activeListings }: Props) {
+export default function CityBurgasView({ city, quarters }: Props) {
   const router = useRouter()
 
   const sortedQuarters = useMemo(() => {
@@ -56,28 +55,13 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
     router.push(`/buy?${params.toString()}`)
   }
 
-  const populationLabel = city.population
-    ? `~${city.population.toLocaleString('bg-BG')} жители`
-    : '~210 000 жители'
-  const areaLabel = city.area_km2
-    ? `${Math.round(city.area_km2)} km² площ`
-    : '253 km² площ'
-  const regionLabel = 'Югоизточен регион'
-  const listingsLabel =
-    activeListings > 0 ? `${activeListings}+ активни имоти` : '850+ активни имоти'
-
-  const description =
-    city.description ||
-    'Бургас е второто по големина черноморско пристанище в България с уникална атмосфера, развита инфраструктура и отлични възможности за живот и инвестиции.'
-
   return (
     <div className="cb-page" aria-label={`Имоти в ${city.name}`}>
-      {/* ── Header: мраморен лого + nav върху тъмен hero (макет 2) ── */}
-      <header className="cb-header" aria-label="Главна навигация">
-        <div className="cb-header__logo-panel">
-          <svg className="cb-header__marble" viewBox="0 0 940 166" preserveAspectRatio="none" aria-hidden>
+      <div className="cb-upper">
+        <header className="cb-header" aria-label="Главна навигация">
+          <svg className="cb-header__wave" viewBox="0 0 940 166" preserveAspectRatio="none" aria-hidden>
             <defs>
-              <pattern id="cbMarbleTile" patternUnits="userSpaceOnUse" width="940" height="166">
+              <pattern id="cbMarbleTile" patternUnits="userSpaceOnUse" x="0" y="0" width="940" height="166">
                 <image
                   href="/images/texture-marble-white-gold.png"
                   x="0"
@@ -89,8 +73,13 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
               </pattern>
               <linearGradient id="cbGoldRibbon" x1="0" y1="0" x2="0.7" y2="1">
                 <stop offset="0" stopColor="#3d2006" />
+                <stop offset="0.15" stopColor="#8b5e1a" />
+                <stop offset="0.30" stopColor="#c9882e" />
                 <stop offset="0.42" stopColor="#e6b44a" />
+                <stop offset="0.50" stopColor="#f0cc6a" />
                 <stop offset="0.58" stopColor="#e6b44a" />
+                <stop offset="0.70" stopColor="#c08025" />
+                <stop offset="0.85" stopColor="#7a4c14" />
                 <stop offset="1" stopColor="#3a1e05" />
               </linearGradient>
             </defs>
@@ -105,6 +94,11 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
               fill="url(#cbGoldRibbon)"
               opacity="0.96"
             />
+            <path
+              d="M274 88 C329 71 365 47 392 0 H449 C412 24 394 49 354 64 C315 79 294 79 274 88 Z"
+              fill="rgba(255,242,184,0.64)"
+              style={{ mixBlendMode: 'screen' }}
+            />
           </svg>
           <Link href="/" className="cb-header__brand" aria-label="Начало">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -115,149 +109,79 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
               draggable={false}
             />
           </Link>
-        </div>
-        <nav className="cb-header__nav" aria-label="Навигация">
-          <Link href="/buy" className="cb-header__link">
-            За продажба
-          </Link>
-          <span className="cb-header__sep" aria-hidden />
-          <Link href="/buy?deal=rent" className="cb-header__link">
-            Под наем
-          </Link>
-          <span className="cb-header__sep" aria-hidden />
-          <Link href="/about" className="cb-header__link">
-            За нас
-          </Link>
-          <Link href="/admin/login" className="cb-header__user" aria-label="Вход">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
-              <circle cx="12" cy="8" r="4" />
-              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
-            </svg>
-          </Link>
-        </nav>
-      </header>
+        </header>
 
-      {/* ── Hero: златна рамка + снимка 3 вляво, ЗА ГРАДА вдясно ── */}
-      <section className="cb-hero" aria-labelledby="cb-hero-title">
-        <div className="cb-hero__visual">
-          <div className="cb-frame" aria-hidden={false}>
-            <div className="cb-frame__gold-ring" aria-hidden />
-            <picture className="cb-frame__media">
+        <div className="cb-stack">
+          <figure className="cb-hero-card">
+          <div className="cb-hero-card__frame">
+            <picture>
               <source srcSet={BURGAS_HERO_WEBP} type="image/webp" />
               <img
                 src={BURGAS_HERO_IMAGE}
-                alt={`Панорама — ${city.name}`}
-                className="cb-frame__img"
-                style={{ objectPosition: 'center 40%' }}
+                alt={`Изглед към ${city.name} — морска градина и пир`}
+                className="cb-hero-card__img"
                 draggable={false}
               />
             </picture>
           </div>
-        </div>
+          </figure>
 
-        <div className="cb-hero__info">
-          <p className="cb-hero__eyebrow">ЗА ГРАДА</p>
-          <h1 id="cb-hero-title" className="cb-hero__title">
-            {city.name}
-          </h1>
-          <p className="cb-hero__text">{description}</p>
-          <ul className="cb-hero__stats">
-            <li>
-              <PeopleIcon />
-              <span>{populationLabel}</span>
-            </li>
-            <li>
-              <GridIcon />
-              <span>{areaLabel}</span>
-            </li>
-            <li>
-              <PinIcon />
-              <span>{regionLabel}</span>
-            </li>
-            <li>
-              <BuildingIcon />
-              <span>{listingsLabel}</span>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      {/* ── Тъмна търсачка със златна рамка ── */}
-      <div className="cb-search" role="search">
-        <div className="cb-search__field">
-          <PinFieldIcon />
-          <div className="cb-search__wrap">
-            <span>Град</span>
-            <strong>Бургас</strong>
+          <div className="cb-search" role="search">
+          <div className="cb-search__field">
+            <PinFieldIcon />
+            <div className="cb-search__wrap">
+              <span>Град</span>
+              <strong>Бургас</strong>
+            </div>
+          </div>
+          <div className="cb-search__field">
+            <PinFieldIcon />
+            <div className="cb-search__wrap">
+              <span>Квартал</span>
+              <select
+                value={quarterSlug}
+                onChange={e => {
+                  setQuarterSlug(e.target.value)
+                  if (e.target.value) runSearch()
+                }}
+                className="cb-search__select"
+                aria-label="Квартал"
+              >
+                <option value="">Всички</option>
+                {sortedQuarters.map(q => (
+                  <option key={q.slug} value={q.slug}>
+                    {q.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="cb-search__field">
+            <BagIcon />
+            <div className="cb-search__wrap">
+              <span>Вид имот</span>
+              <select
+                value={propType}
+                onChange={e => {
+                  setPropType(e.target.value)
+                  if (e.target.value) runSearch()
+                }}
+                className="cb-search__select"
+                aria-label="Вид имот"
+              >
+                <option value="">Всички</option>
+                {PROPERTY_TYPES_BG.map(t => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
-        <div className="cb-search__field">
-          <PinFieldIcon />
-          <div className="cb-search__wrap">
-            <span>Квартал</span>
-            <select
-              value={quarterSlug}
-              onChange={e => setQuarterSlug(e.target.value)}
-              className="cb-search__select"
-              aria-label="Квартал"
-            >
-              <option value="">Всички</option>
-              {sortedQuarters.map(q => (
-                <option key={q.slug} value={q.slug}>
-                  {q.name}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
-        <div className="cb-search__field">
-          <BagIcon />
-          <div className="cb-search__wrap">
-            <span>Вид имот</span>
-            <select
-              value={propType}
-              onChange={e => setPropType(e.target.value)}
-              className="cb-search__select"
-              aria-label="Вид имот"
-            >
-              <option value="">Всички</option>
-              {PROPERTY_TYPES_BG.map(t => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <div className="cb-search__field">
-          <EuroIcon />
-          <div className="cb-search__wrap">
-            <span>Цена</span>
-            <strong>Без значение</strong>
-          </div>
-        </div>
-        <div className="cb-search__field">
-          <AreaIcon />
-          <div className="cb-search__wrap">
-            <span>Площ</span>
-            <strong>Без значение</strong>
-          </div>
-        </div>
-        <button
-          type="button"
-          className="cb-search__filter"
-          onClick={() => router.push(`/buy?city=${city.slug}`)}
-        >
-          <FilterIcon />
-          Филтри
-        </button>
-        <button type="button" className="cb-search__submit" onClick={runSearch}>
-          <SearchIcon />
-          Търси
-        </button>
       </div>
 
-      {/* ── Мраморна лента + карти квартали ── */}
       <section className="cb-quarters" aria-labelledby="cb-quarters-title">
         <div className="cb-quarters__head">
           <Link
@@ -282,42 +206,9 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
   )
 }
 
-function PeopleIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-    </svg>
-  )
-}
-function GridIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <rect x="3" y="3" width="7" height="7" />
-      <rect x="14" y="3" width="7" height="7" />
-      <rect x="3" y="14" width="7" height="7" />
-      <rect x="14" y="14" width="7" height="7" />
-    </svg>
-  )
-}
-function PinIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-      <circle cx="12" cy="10" r="3" />
-    </svg>
-  )
-}
-function BuildingIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" />
-    </svg>
-  )
-}
 function PinFieldIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden>
       <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Z" />
       <circle cx="12" cy="9" r="2.4" />
     </svg>
@@ -325,38 +216,9 @@ function PinFieldIcon() {
 }
 function BagIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden>
       <path d="M6 7h12l1 14H5L6 7Z" />
       <path d="M9 7a3 3 0 016 0" />
-    </svg>
-  )
-}
-function EuroIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-      <path d="M5 10h11M5 14h9M19 5.5A8 8 0 1020 18.5" />
-    </svg>
-  )
-}
-function AreaIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-      <rect x="4" y="4" width="16" height="16" rx="2" />
-    </svg>
-  )
-}
-function FilterIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-      <path d="M4 6h16M7 12h10M10 18h4" />
-    </svg>
-  )
-}
-function SearchIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-      <circle cx="11" cy="11" r="7" />
-      <path d="m20 20-3-3" />
     </svg>
   )
 }
