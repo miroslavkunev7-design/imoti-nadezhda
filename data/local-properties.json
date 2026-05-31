@@ -1,1 +1,31 @@
-[]
+[
+  {
+    "id": 900001,
+    "user_id": 1,
+    "title": "Луксозен апартамент с морски изглед — Лазур",
+    "slug": "luksozen-apartament-lazur",
+    "description": "Просторен апартамент в кв. Лазур, Бургас — идеален за живеене или инвестиция. Демо обява за преглед на детайлната страница.",
+    "price": 185000,
+    "city": "Бургас",
+    "quarter": "Лазур",
+    "city_slug": "burgas",
+    "quarter_slug": "lazur",
+    "property_type": "Апартамент",
+    "status": "available",
+    "area": 92,
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "floor": 4,
+    "total_floors": 8,
+    "furnished": "yes",
+    "main_image": "/images/quarters/burgas/lazur.jpg",
+    "images": [
+      "/images/quarters/burgas/lazur.jpg",
+      "/images/cities/burgas-hero-panorama.jpg"
+    ],
+    "features": ["Тераса", "Изглед", "Гараж"],
+    "views": 0,
+    "created_at": "2026-05-31T09:00:00.000Z",
+    "updated_at": "2026-05-31T09:00:00.000Z"
+  }
+]

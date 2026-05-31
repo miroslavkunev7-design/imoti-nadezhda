@@ -10,6 +10,11 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   const isAdmin = pathname.startsWith('/admin')
   const isHome = pathname === '/'
   const isBurgasCity = pathname === '/cities/burgas'
+  const isBurgasQuarter =
+    pathname.startsWith('/cities/burgas/') &&
+    !pathname.includes('/property/') &&
+    pathname !== '/cities/burgas'
+  const isBurgasProperty = /^\/cities\/burgas\/[^/]+\/property\/\d+/.test(pathname)
 
   if (isAdmin) return <>{children}</>
 
@@ -21,7 +26,15 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
     )
   }
 
+  if (isBurgasProperty) {
+    return <main className="main--property-detail">{children}</main>
+  }
+
   if (isBurgasCity) {
+    return <main className="main--city-burgas-exact">{children}</main>
+  }
+
+  if (isBurgasQuarter) {
     return <main className="main--city-burgas-exact">{children}</main>
   }
 
