@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, type SyntheticEvent } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { City, Quarter } from '@/types'
@@ -10,19 +10,29 @@ import MarbleQuarterCard from '@/components/city/MarbleQuarterCard'
 import { BurgasHeader } from '@/burgas-complete/shared/BurgasChrome'
 import { BurgasSearchBar } from '@/burgas-complete/shared/BurgasSearchBar'
 
+/** Ред на картите като mockup #2 (първите 5 видими) */
 const QUARTER_ORDER: string[] = [
   'lazur',
   'slaveykov',
+  'izgrev',
+  'vazrajdane',
   'centar',
   'meden-rudnik',
   'zornica',
-  'izgrev',
-  'vazrajdane',
   'bratya-miladinovi',
   'sarafovo',
   'horizont',
   'kraimorie',
 ]
+
+const MOCKUP_STATS = {
+  population: '~210 000 жители',
+  area: '253 km² площ',
+  region: 'Югоизточен регион',
+  listings: '850+ активни имоти',
+  description:
+    'Бургас е морски град с уникална атмосфера, развита инфраструктура и отлични възможности за живот и инвестиции край Черно море.',
+}
 
 interface Props {
   city: City
@@ -30,9 +40,29 @@ interface Props {
   activeListings: number
 }
 
-export default function CityBurgasView({ city, quarters, activeListings }: Props) {
+const HERO_FALLBACK_CHAIN = [
+  '/images/cities/burgas-hero-pier.jpg',
+  '/images/cities/burgas-hero-panorama.jpg',
+  '/images/cities/burgas-city-hero-sunset.jpg',
+  '/images/cities/burgas.jpg',
+]
+
+export default function CityBurgasView({ city, quarters }: Props) {
   const router = useRouter()
   const hero = getCityPanoramaAsset(city.slug, city.image_url ?? null)
+
+  const heroSources = useMemo(() => {
+    const chain = [hero.jpg, ...HERO_FALLBACK_CHAIN.filter(u => u !== hero.jpg)]
+    return [...new Set(chain)]
+  }, [hero.jpg])
+
+  const [heroIdx, setHeroIdx] = useState(0)
+  const heroJpg = heroSources[heroIdx] ?? hero.jpg
+  const heroWebp = heroJpg.endsWith('.jpg') ? heroJpg.replace('.jpg', '.webp') : hero.webp
+
+  function onHeroError(_e: SyntheticEvent<HTMLImageElement>) {
+    setHeroIdx(i => (i + 1 < heroSources.length ? i + 1 : i))
+  }
 
   const sortedQuarters = useMemo(() => {
     const order = new Map(QUARTER_ORDER.map((s, i) => [s, i]))
@@ -61,29 +91,26 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
     router.push(`/buy?${params.toString()}`)
   }
 
-  const populationLabel = city.population
-    ? `~${Math.round(city.population / 1000)} 000 жители`
-    : '~210 000 жители'
-  const areaLabel = city.area_km2 ? `${Math.round(city.area_km2)} km² площ` : '253 km² площ'
-  const regionLabel = 'Югоизточен регион'
-  const listingsLabel =
-    activeListings > 0 ? `${activeListings}+ активни имоти` : '850+ активни имоти'
-
-  const description =
-    city.description ||
-    'Бургас е морски град с уникална атмосфера, развита инфраструктура и отлични възможности за живот и инвестиции край Черно море.'
+  const populationLabel = MOCKUP_STATS.population
+  const areaLabel = MOCKUP_STATS.area
+  const regionLabel = MOCKUP_STATS.region
+  const listingsLabel = MOCKUP_STATS.listings
+  const description = MOCKUP_STATS.description
 
   return (
     <div className="cb-page" aria-label={`Имоти в ${city.name}`}>
       <section className="cb-hero" aria-label="Бургас — hero и информация">
         <picture className="cb-hero__bg" aria-hidden>
-          {hero.webp && <source srcSet={hero.webp} type="image/webp" />}
+          {heroWebp && <source srcSet={heroWebp} type="image/webp" />}
           <img
-            src={hero.jpg}
+            src={heroJpg}
             alt=""
             className="cb-hero__bg-img"
-            style={{ objectPosition: hero.position ?? 'center 45%' }}
+            style={{ objectPosition: hero.position ?? 'center 38%' }}
             draggable={false}
+            fetchPriority="high"
+            decoding="async"
+            onError={onHeroError}
           />
         </picture>
         <div className="cb-hero__shade" aria-hidden />
@@ -124,7 +151,7 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
             variant="city"
             citySlug={city.slug}
             cityName={city.name}
-            className="cb-search cb-search--hero-dark"
+            className="cb-search--hero-dark"
             quarters={sortedQuarters}
             quarterValue={quarterSlug}
             onQuarterChange={setQuarterSlug}
@@ -137,6 +164,9 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
 
       <section className="cb-quarters cb-quarters--marble" aria-labelledby="cb-quarters-title">
         <div className="cb-quarters__head">
+          <h2 id="cb-quarters-title" className="cb-quarters__title">
+            Избери квартал в гр. {city.name}
+          </h2>
           <Link
             href={`/buy?city=${city.slug}`}
             className="cb-quarters__all-btn"
@@ -145,9 +175,6 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
             Виж всички квартали
             <span aria-hidden>→</span>
           </Link>
-          <h2 id="cb-quarters-title" className="cb-quarters__title">
-            Избери квартал в гр. {city.name}
-          </h2>
         </div>
         <div className="cb-quarters__track">
           {sortedQuarters.map((q, i) => (
