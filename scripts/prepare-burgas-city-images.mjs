@@ -14,14 +14,19 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, '..')
 const outDir = path.join(root, 'public/images/cities')
 
-/** HQ източник по подразбиране (не upscaled 612px burgas.jpg) */
-const DEFAULT_HERO_SRC = path.join(outDir, 'burgas-city-hero-sunset-wikimedia.jpg')
+/** HQ пирс (CC Wikimedia / user replace via BURGAS_SRC_HERO) */
+const DEFAULT_HERO_SRC = path.join(outDir, 'burgas-pier-source-hq.jpg')
+const FALLBACK_HERO_SRC = path.join(outDir, 'burgas-city-hero-sunset-wikimedia.jpg')
 
 /** Снимка за hero (пирс / mockup) — BURGAS_SRC_HERO=... за прикачената */
 const SRC_HERO =
   process.env.BURGAS_SRC_HERO ??
   process.env.BURGAS_SRC_BG ??
-  (fs.existsSync(DEFAULT_HERO_SRC) ? DEFAULT_HERO_SRC : path.join(outDir, 'burgas-page-bg.jpg'))
+  (fs.existsSync(DEFAULT_HERO_SRC)
+    ? DEFAULT_HERO_SRC
+    : fs.existsSync(FALLBACK_HERO_SRC)
+      ? FALLBACK_HERO_SRC
+      : path.join(outDir, 'burgas-page-bg.jpg'))
 
 /** Clone-fill corner bands where agency logos usually sit. */
 async function stripLogoCorners(input, { w, h }) {
@@ -80,6 +85,7 @@ async function main() {
     height: 1440,
     position: 'centre',
   })
+  console.log('Source:', SRC_HERO)
   console.log('Hero: public/images/cities/burgas-hero-pier.jpg')
 }
 
