@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { City, Property, Quarter } from '@/types'
-import { resolveMediaUrl } from '@/lib/upload-bridge'
+import { burgasQuarterHeroImage, burgasQuarterMapEmbedUrl } from '@/lib/data/burgas-quarter-meta'
 import { BurgasHeader } from '@/burgas-complete/shared/BurgasChrome'
 import { BurgasSearchBar } from '@/burgas-complete/shared/BurgasSearchBar'
 import BurgasListingCard from '@/burgas-complete/quarter/BurgasListingCard'
@@ -33,7 +33,8 @@ export default function QuarterBurgasView({
   total,
 }: Props) {
   const router = useRouter()
-  const heroImage = resolveMediaUrl(quarter.image_url) ?? '/images/quarters/burgas/lazur.jpg'
+  const heroImage = burgasQuarterHeroImage(quarter.slug, quarter.image_url)
+  const mapEmbedUrl = burgasQuarterMapEmbedUrl(quarter.slug)
 
   const [propType, setPropType] = useState('')
   const [quickFilter, setQuickFilter] = useState('all')
@@ -217,7 +218,7 @@ export default function QuarterBurgasView({
               <div className="bq-map__embed">
                 <iframe
                   title={`Карта — ${quarter.name}`}
-                  src="https://www.openstreetmap.org/export/embed.html?bbox=27.42%2C42.48%2C27.52%2C42.52&layer=mapnik&marker=42.5%2C27.47"
+                  src={mapEmbedUrl}
                   loading="lazy"
                 />
               </div>

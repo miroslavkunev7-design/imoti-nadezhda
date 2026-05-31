@@ -1,7 +1,12 @@
 import type { Metadata } from 'next'
+import { getQuartersForCity } from '@/lib/data/fallback'
 import QuarterBurgasPage, { generateMetadata as quarterMeta } from '@/burgas-complete/quarter/QuarterBurgasPage'
 
 export const revalidate = 60
+
+export function generateStaticParams() {
+  return getQuartersForCity('burgas').map(q => ({ quarter: q.slug }))
+}
 
 interface PageProps {
   params: { quarter: string }

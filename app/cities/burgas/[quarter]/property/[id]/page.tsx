@@ -1,4 +1,5 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
+import { getQuartersForCity } from '@/lib/data/fallback'
 import type { Metadata } from 'next'
 import PropertyDetailBurgasView from '@/burgas-complete/property/PropertyDetailBurgasView'
 import { FALLBACK_CITIES } from '@/lib/data/fallback'
@@ -29,8 +30,15 @@ export default async function BurgasPropertyDetailPage({ params }: PageProps) {
   const id = parseInt(params.id, 10)
   if (Number.isNaN(id)) notFound()
 
+  const knownQuarter = getQuartersForCity('burgas').some(q => q.slug === params.quarter)
+  if (!knownQuarter) notFound()
+
   const property = await getProperty(id)
   if (!property) notFound()
+
+  if (property.quarter_slug && property.quarter_slug !== params.quarter) {
+    redirect(`/cities/burgas/${property.quarter_slug}/property/${id}`)
+  }
 
   const city = FALLBACK_CITIES.find(c => c.slug === 'burgas')!
   const images = property.images ?? []

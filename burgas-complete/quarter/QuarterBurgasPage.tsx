@@ -1,8 +1,16 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { FALLBACK_CITIES, getQuartersForCity } from '@/lib/data/fallback'
+import { quarterImageUrl } from '@/lib/data/quarter-images'
 import type { Quarter, Property } from '@/types'
 import QuarterBurgasView from '@/burgas-complete/quarter/QuarterBurgasView'
+
+function enrichBurgasQuarter(q: Quarter): Quarter {
+  return {
+    ...q,
+    image_url: q.image_url ?? quarterImageUrl('burgas', q.slug),
+  }
+}
 
 export const revalidate = 60
 
@@ -38,13 +46,13 @@ export default async function QuarterBurgasPage({ params, searchParams }: PagePr
   const city = FALLBACK_CITIES.find(c => c.slug === params.slug)
   if (!city || params.slug !== 'burgas') notFound()
 
-  const allQuarters = getQuartersForCity('burgas')
+  const allQuarters = getQuartersForCity('burgas').map(enrichBurgasQuarter)
   const known = allQuarters.find(q => q.slug === params.quarter)
   if (!known) notFound()
 
   const data = await getData(params.slug, params.quarter, searchParams.sort, searchParams.page)
 
-  const quarter: Quarter = data.quarter ?? known
+  const quarter: Quarter = enrichBurgasQuarter(data.quarter ?? known)
   const properties: Property[] = data.listings.data
   const total: number = data.listings.total
   const quarterDisplay: Quarter = { ...quarter, property_count: total }

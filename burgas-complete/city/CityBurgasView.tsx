@@ -49,8 +49,14 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
   }, [city.slug])
 
   function runSearch() {
+    if (quarterSlug) {
+      const params = new URLSearchParams()
+      if (propType) params.set('type', propType)
+      const q = params.toString()
+      router.push(`/cities/burgas/${quarterSlug}${q ? `?${q}` : ''}`)
+      return
+    }
     const params = new URLSearchParams({ city: city.slug })
-    if (quarterSlug) params.set('quarter', quarterSlug)
     if (propType) params.set('type', propType)
     router.push(`/buy?${params.toString()}`)
   }

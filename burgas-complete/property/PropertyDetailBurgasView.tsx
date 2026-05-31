@@ -12,6 +12,7 @@ import PropertyCharacteristics from '@/components/property/PropertyCharacteristi
 import { BurgasHeader } from '@/burgas-complete/shared/BurgasChrome'
 import { BurgasSearchBar } from '@/burgas-complete/shared/BurgasSearchBar'
 import { resolveMediaUrl } from '@/lib/upload-bridge'
+import { burgasQuarterHeroImage } from '@/lib/data/burgas-quarter-meta'
 import { formatPrice, formatArea, formatFloor } from '@/lib/utils'
 import { useState } from 'react'
 
@@ -35,7 +36,7 @@ export default function PropertyDetailBurgasView({
 
   const heroUrl =
     resolveMediaUrl(galleryImages[0]?.image_url ?? property.primary_image) ??
-    '/images/quarters/burgas/lazur.jpg'
+    burgasQuarterHeroImage(property.quarter_slug ?? quarterSlug, null)
 
   const stats = [
     { label: 'Площ', value: formatArea(property.area_sqm) },
@@ -50,7 +51,10 @@ export default function PropertyDetailBurgasView({
     { label: 'Начало', href: '/' },
     { label: 'Градове', href: '/buy' },
     { label: cityName, href: `/cities/${citySlug}` },
-    { label: property.quarter_name ?? quarterSlug, href: backHref },
+    {
+      label: property.quarter_name ?? quarterSlug,
+      href: `/cities/${citySlug}/${property.quarter_slug ?? quarterSlug}`,
+    },
     { label: 'Детайл' },
   ]
 
