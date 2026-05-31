@@ -12,9 +12,14 @@ export default function MarbleQuarterCard({ quarter, index = 0 }: Props) {
   const count = quarter.property_count ?? 0
   const countLabel = count > 0 ? `${count} ${count === 1 ? 'имот' : 'имота'}` : 'Виж обяви'
 
+  const quarterHref =
+    quarter.city_slug === 'burgas'
+      ? `/cities/burgas/${quarter.slug}`
+      : `/cities/${quarter.city_slug}/${quarter.slug}`
+
   return (
     <Link
-      href={`/cities/${quarter.city_slug}/${quarter.slug}`}
+      href={quarterHref}
       className="mq-card"
       style={{ '--mq-i': index } as React.CSSProperties}
       aria-label={`Квартал ${quarter.name}`}

@@ -5,14 +5,21 @@ export type CityPanoramaAsset = {
   webp?: string
   position?: string
   label?: string
+  /** Фото в картата „ЗА ГРАДА“ (отделно от hero background) */
+  aboutCardJpg?: string
+  aboutCardWebp?: string
+  aboutCardPosition?: string
 }
 
 const CITY_PAGE_BACKGROUNDS: Record<string, CityPanoramaAsset> = {
   burgas: {
-    jpg: '/images/cities/burgas-city-hero-sunset.jpg',
-    webp: '/images/cities/burgas-city-hero-sunset.webp',
-    position: 'center 42%',
-    label: 'Бургас — залез над морската градина и пирса',
+    jpg: '/images/cities/burgas-page-bg.jpg',
+    webp: '/images/cities/burgas-page-bg.webp',
+    position: 'center 38%',
+    label: 'Бургас — морска градина и пирс (фон на страницата)',
+    aboutCardJpg: '/images/cities/burgas-about-card.jpg',
+    aboutCardWebp: '/images/cities/burgas-about-card.webp',
+    aboutCardPosition: 'center 42%',
   },
   shumen: {
     jpg: '/images/hero-bg.jpg',
@@ -56,6 +63,26 @@ export function getCityPanoramaAsset(slug: string, cardImageUrl: string | null):
 
 export function getCityPanoramaUrl(slug: string, cardImageUrl: string | null): string {
   return getCityPanoramaAsset(slug, cardImageUrl).jpg
+}
+
+export function getCityAboutCardAsset(slug: string): {
+  jpg: string
+  webp?: string
+  position?: string
+} {
+  const pano = CITY_PAGE_BACKGROUNDS[slug]
+  if (pano?.aboutCardJpg) {
+    return {
+      jpg: pano.aboutCardJpg,
+      webp: pano.aboutCardWebp,
+      position: pano.aboutCardPosition ?? 'center 42%',
+    }
+  }
+  return {
+    jpg: pano?.jpg ?? '/images/hero-bg.jpg',
+    webp: pano?.webp,
+    position: pano?.position ?? 'center 42%',
+  }
 }
 
 export const cityBackgroundStyle = (imageUrl: string, position = 'center center'): CSSProperties => ({

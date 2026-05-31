@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { City, Quarter } from '@/types'
 import { setSelectedCity } from '@/lib/client/selected-city'
-import { getCityPanoramaAsset } from '@/lib/data/city-background'
+import { getCityAboutCardAsset, getCityPanoramaAsset } from '@/lib/data/city-background'
 import MarbleQuarterCard from '@/components/city/MarbleQuarterCard'
 import { BurgasHeader } from '@/burgas-complete/shared/BurgasChrome'
 import { BurgasSearchBar } from '@/burgas-complete/shared/BurgasSearchBar'
@@ -33,6 +33,7 @@ interface Props {
 export default function CityBurgasView({ city, quarters, activeListings }: Props) {
   const router = useRouter()
   const panorama = getCityPanoramaAsset(city.slug, city.image_url ?? null)
+  const aboutCard = getCityAboutCardAsset(city.slug)
 
   const sortedQuarters = useMemo(() => {
     const order = new Map(QUARTER_ORDER.map((s, i) => [s, i]))
@@ -93,9 +94,21 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
 
         <BurgasHeader marbleId="cbMarble" />
 
-        <aside className="cb-about burgas-about-card cb-about--blend" aria-labelledby="cb-about-title">
-          <div className="cb-about__photo" aria-hidden style={{ backgroundImage: `url(${panorama.jpg})` }} />
-          <div className="cb-about__panel">
+        <aside className="cb-about cb-about--merged" aria-labelledby="cb-about-title">
+          <div className="cb-about__media" aria-hidden>
+            <picture>
+              {aboutCard.webp && <source srcSet={aboutCard.webp} type="image/webp" />}
+              <img
+                src={aboutCard.jpg}
+                alt=""
+                className="cb-about__media-img"
+                style={{ objectPosition: aboutCard.position ?? 'center 42%' }}
+                draggable={false}
+              />
+            </picture>
+            <div className="cb-about__media-edge" aria-hidden />
+          </div>
+          <div className="cb-about__panel burgas-about-card">
             <p className="burgas-about-card__eyebrow">ЗА ГРАДА</p>
             <h1 id="cb-about-title" className="burgas-about-card__title">
               {city.name}
