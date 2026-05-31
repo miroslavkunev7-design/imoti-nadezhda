@@ -39,3 +39,6 @@ public/uploads/
 data/app-secrets.json
 .vercel
 .env*
+
+# Local export zips (scripts/export-full-project-zip.sh)
+dist/
