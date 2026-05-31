@@ -1,0 +1,313 @@
+/* Burgas property detail — mockup 3 */
+
+@import '../city/city-burgas-exact.css';
+
+.main--property-detail {
+  min-height: 100dvh !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+.property-detail-layout {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.pdb-page {
+  --pdb-burg: #6b001c;
+  --pdb-gold: #cfa54a;
+  --pdb-marble: #faf7f2;
+  min-height: 100dvh;
+  background: var(--pdb-marble);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+.pdb-hero {
+  position: relative;
+  height: clamp(280px, 42vh, 380px);
+  overflow: hidden;
+  background: #0c080a;
+}
+
+.pdb-hero__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.pdb-hero__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, transparent 40%, rgba(12, 8, 10, 0.75) 100%),
+    linear-gradient(90deg, rgba(107, 0, 28, 0.35) 0%, transparent 50%);
+}
+
+.pdb-hero__frame {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 clamp(4px, 0.8vw, 8px) rgba(207, 165, 74, 0.7),
+    inset 0 0 0 clamp(6px, 1vw, 11px) rgba(255, 253, 248, 0.25);
+}
+
+.pdb-hero .cb-top {
+  position: absolute;
+}
+
+.pdb-hero__search {
+  position: absolute;
+  z-index: 7;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: clamp(10px, 2vh, 18px);
+  width: min(94%, 880px);
+}
+
+.pdb-hero__search .cb-search__field--price,
+.pdb-hero__search .cb-search__field--area {
+  display: none;
+}
+
+.pdb-body {
+  padding: clamp(16px, 3vw, 36px) clamp(16px, 3vw, 40px) 64px;
+  background:
+    radial-gradient(ellipse 70% 40% at 50% 0%, rgba(207, 165, 74, 0.1), transparent 55%),
+    linear-gradient(180deg, #fffdf8, var(--pdb-marble));
+}
+
+.pdb-crumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(107, 0, 28, 0.55);
+}
+
+.pdb-crumb a {
+  color: rgba(107, 0, 28, 0.75);
+  text-decoration: none;
+}
+
+.pdb-back {
+  display: inline-flex;
+  margin-bottom: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(107, 0, 28, 0.7);
+  text-decoration: none;
+}
+
+.pdb-back:hover {
+  color: var(--pdb-burg);
+}
+
+.pdb-head {
+  margin-bottom: clamp(20px, 3vh, 32px);
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(207, 165, 74, 0.35);
+}
+
+.pdb-head__badge {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 5px 12px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, #e8c878, var(--pdb-gold));
+  color: #2e0612;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.pdb-head__title {
+  margin: 0 0 8px;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 700;
+  color: var(--pdb-burg);
+  line-height: 1.15;
+}
+
+.pdb-head__loc {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: rgba(107, 0, 28, 0.65);
+}
+
+.pdb-head__price {
+  margin: 0 0 18px;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  font-weight: 800;
+  color: var(--pdb-burg);
+}
+
+.pdb-head__stats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.pdb-head__stats li {
+  padding: 12px 10px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid rgba(207, 165, 74, 0.4);
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(107, 0, 28, 0.06);
+}
+
+.pdb-head__stat-label {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a97a1f;
+  margin-bottom: 4px;
+}
+
+.pdb-head__stats strong {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pdb-burg);
+}
+
+.pdb-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(16px, 2vw, 28px);
+  align-items: start;
+}
+
+.pdb-gallery__main {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: #1a0812;
+  border: 1px solid rgba(207, 165, 74, 0.45);
+  box-shadow: 0 12px 36px rgba(107, 0, 28, 0.15);
+}
+
+.pdb-gallery__main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pdb-gallery__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.pdb-gallery__nav--prev {
+  left: 12px;
+}
+
+.pdb-gallery__nav--next {
+  right: 12px;
+}
+
+.pdb-gallery__actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+}
+
+.pdb-thumbs {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.pdb-thumb {
+  flex-shrink: 0;
+  width: 72px;
+  height: 52px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.65;
+  background: #1a0812;
+}
+
+.pdb-thumb.is-active {
+  opacity: 1;
+  border-color: var(--pdb-burg);
+}
+
+.pdb-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pdb-panels {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pdb-card {
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid rgba(207, 165, 74, 0.4);
+  box-shadow: 0 8px 24px rgba(107, 0, 28, 0.08);
+  overflow: hidden;
+}
+
+.pdb-agent .contact-sidebar,
+.pdb-agent .pd-contact {
+  border: none;
+  box-shadow: none;
+}
+
+.pdb-map-card {
+  min-height: 200px;
+}
+
+@media (max-width: 1000px) {
+  .pdb-head__stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .pdb-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .pdb-head__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

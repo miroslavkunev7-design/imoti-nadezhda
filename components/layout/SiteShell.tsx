@@ -35,7 +35,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   }
 
   if (isBurgasQuarter) {
-    return <main className="main--city-burgas-exact">{children}</main>
+    return <main className="main--quarter-burgas-exact">{children}</main>
   }
 
   return (

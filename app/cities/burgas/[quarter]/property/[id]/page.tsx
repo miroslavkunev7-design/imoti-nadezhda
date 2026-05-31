@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import PropertyDetailScreen from '@/burgas-complete/property/PropertyDetailScreen'
+import PropertyDetailBurgasView from '@/burgas-complete/property/PropertyDetailBurgasView'
 import { FALLBACK_CITIES } from '@/lib/data/fallback'
 import type { Property } from '@/types'
 
@@ -48,7 +48,7 @@ export default async function BurgasPropertyDetailPage({ params }: PageProps) {
         ]
 
   return (
-    <PropertyDetailScreen
+    <PropertyDetailBurgasView
       property={property}
       galleryImages={galleryImages}
       cityName={city.name}

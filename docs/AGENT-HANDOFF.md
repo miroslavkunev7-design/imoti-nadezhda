@@ -78,7 +78,8 @@ npm run lint     # има legacy warnings, exit 0
 |-----|----------|
 | `/` | Homepage — `HomeHero`, `app/home-exact.css`, `main--home-exact` |
 | `/cities/burgas` | **Dedicated Burgas** — не ползва `[slug]` |
-| `/cities/burgas/lazur` | Квартал Лазур (Burgas flow) |
+| `/cities/burgas/lazur` | Квартал (динамично: `lazur`, `centar`, `slaveykov`, …) |
+| `/cities/burgas/centar` | Пример — друг квартал |
 | `/cities/burgas/lazur/property/900001` | Детайл — demo локален имот |
 | `/cities/[slug]` | Други градове (burgas изключен от SSG) |
 | `/cities/[slug]/[quarter]` | Generic quarter (Burgas има по-специфичен route) |
@@ -88,7 +89,7 @@ npm run lint     # има legacy warnings, exit 0
 
 - `/` → `main--home-exact` (без SiteHeader/Footer)
 - `/cities/burgas` → `main--city-burgas-exact`
-- `/cities/burgas/:quarter` → същият shell (без header/footer)
+- `/cities/burgas/:quarter` → `main--quarter-burgas-exact` (scroll, без SiteHeader/Footer)
 - `/cities/burgas/:quarter/property/:id` → `main--property-detail`
 - Останалите → SiteHeader + `rd-page-content` + SiteFooter
 
@@ -107,8 +108,9 @@ Zip **не беше** в cloud workspace — кодът е в `burgas-complete/`
 ```
 burgas-complete/
   city/     → CityBurgasView.tsx, city-burgas-exact.css, MarbleQuarterCard.tsx (git 81ac8f8)
-  quarter/  → QuarterBurgasPage.tsx (+ quarter-burgas-exact.css) — замени от zip page 2
-  property/ → PropertyDetailScreen.tsx (git bc15a48, pd-* layout)
+  quarter/  → QuarterBurgasView.tsx, QuarterBurgasPage.tsx, quarter-burgas-exact.css (bq-*, динамичен slug)
+  property/ → PropertyDetailBurgasView.tsx, property-burgas-exact.css (mockup 3 hero + search)
+  shared/   → BurgasChrome.tsx (BurgasHeader)
 ```
 
 Re-export в app (не пипай логиката в `burgas-complete/`):
@@ -125,7 +127,7 @@ Re-export в app (не пипай логиката в `burgas-complete/`):
 
 ### Demo имот (без Supabase)
 
-`data/local-properties.json` — id **900001**, burgas/lazur, за тест на детайл.
+`data/local-properties.json` — ids **900001–900006** (lazur, centar, slaveykov, izgrev). Детайл: **900001**.
 
 ### Инсталация на zip (когато потребителят качи файловете)
 
@@ -141,7 +143,8 @@ npm run dev
 2. Mockup 2: dark hero + ЗА ГРАДА + 6 полета search
 3. Vertical mockup: header → gold frame hero → 3 search fields → marble quarters
 4. **Текущо city**: `81ac8f8` — hero секция с cb-hero, nav, about panel, search, долу cb-quarters
-5. **Quarter**: временно `bc15a48` (стара тема) — чака zip
+5. **Quarter**: `QuarterBurgasView` — hero + search + филтри + карти + карта (bq-*)
+6. **Property**: `PropertyDetailBurgasView` — hero interior + search overlay + 6 stats + gallery
 
 ### Hero изображение
 
@@ -209,4 +212,4 @@ Branch: `cursor/burgas-city-page-11f4` (suffix `-11f4` за cloud agents)
 
 ---
 
-*Последна актуализация: 31.05.2026, commit family `62ca2eb` на `cursor/burgas-city-page-11f4`.*
+*Последна актуализация: 31.05.2026 — динамични Burgas quarter + property views, demo listings 900001–900006.*

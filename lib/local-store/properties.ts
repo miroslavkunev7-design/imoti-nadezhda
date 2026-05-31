@@ -86,5 +86,6 @@ export function localToPropertyRow(p: StoredProperty): Record<string, unknown> {
     quarter_slug: p.quarter_slug,
     primary_image: p.main_image,
     is_new: true,
+    is_featured: p.id === 900001 || p.id === 900003,
   }
 }

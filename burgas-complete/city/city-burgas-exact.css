@@ -58,8 +58,12 @@
   z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(84, 0, 26, 0.42) 0%, transparent 38%, transparent 62%, rgba(18, 0, 8, 0.22) 100%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, transparent 45%, rgba(44, 3, 15, 0.45) 100%);
+    linear-gradient(90deg, rgba(84, 0, 26, 0.48) 0%, transparent 42%, transparent 58%, rgba(18, 0, 8, 0.28) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, transparent 40%, rgba(44, 3, 15, 0.5) 100%);
+}
+
+.cb-hero__bg-img {
+  object-position: center 38%;
 }
 
 /* Header (marble band) */
