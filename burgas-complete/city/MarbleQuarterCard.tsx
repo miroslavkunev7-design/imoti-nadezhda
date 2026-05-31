@@ -36,8 +36,9 @@ export default function MarbleQuarterCard({ quarter, index = 0 }: Props) {
         <div className="mq-card__shade" aria-hidden />
         <div className="mq-card__wave mq-card__wave--tl" aria-hidden />
         <div className="mq-card__wave mq-card__wave--br" aria-hidden />
+        <div className="mq-card__peel mq-card__peel--tr" aria-hidden />
         <div className="mq-card__dust" aria-hidden>
-          {Array.from({ length: 12 }).map((_, i) => (
+          {Array.from({ length: 15 }).map((_, i) => (
             <span key={i} className="mq-card__spark" style={{ '--si': i } as React.CSSProperties} />
           ))}
         </div>

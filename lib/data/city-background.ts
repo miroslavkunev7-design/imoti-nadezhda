@@ -13,13 +13,10 @@ export type CityPanoramaAsset = {
 
 const CITY_PAGE_BACKGROUNDS: Record<string, CityPanoramaAsset> = {
   burgas: {
-    jpg: '/images/cities/burgas-page-bg.jpg',
-    webp: '/images/cities/burgas-page-bg.webp',
-    position: 'center 38%',
-    label: 'Бургас — морска градина и пирс (фон на страницата)',
-    aboutCardJpg: '/images/cities/burgas-about-card.jpg',
-    aboutCardWebp: '/images/cities/burgas-about-card.webp',
-    aboutCardPosition: 'center 42%',
+    jpg: '/images/cities/burgas-hero-pier.jpg',
+    webp: '/images/cities/burgas-hero-pier.webp',
+    position: 'center 42%',
+    label: 'Бургас — пирс и морска градина (hero фон, mockup)',
   },
   shumen: {
     jpg: '/images/hero-bg.jpg',

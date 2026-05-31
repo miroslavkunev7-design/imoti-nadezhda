@@ -13,12 +13,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, '..')
 const outDir = path.join(root, 'public/images/cities')
 
-const SRC_BG =
+/** Снимка за hero (пирс / mockup горно поле) — замени с прикачената */
+const SRC_HERO =
+  process.env.BURGAS_SRC_HERO ??
   process.env.BURGAS_SRC_BG ??
-  path.join(outDir, 'burgas-city-hero-sunset.jpg')
-const SRC_CARD =
-  process.env.BURGAS_SRC_CARD ??
-  path.join(outDir, 'burgas-page.jpg')
+  path.join(outDir, 'burgas.jpg')
 
 /** Clone-fill corner bands where agency logos usually sit. */
 async function stripLogoCorners(input, { w, h }) {
@@ -63,20 +62,9 @@ async function writePair(base, name, resize) {
 }
 
 async function main() {
-  const bgClean = await stripLogoCorners(SRC_BG, {})
-  await writePair(bgClean, 'burgas-page-bg', { width: 1920, height: 1080, position: 'right' })
-
-  const cardClean = await stripLogoCorners(SRC_CARD, {})
-  await writePair(cardClean, 'burgas-about-card', { width: 900, height: 620, position: 'centre' })
-
-  // Keep legacy alias for hero
-  await sharp(path.join(outDir, 'burgas-page-bg.jpg'))
-    .jpeg({ quality: 90 })
-    .toFile(path.join(outDir, 'burgas-city-hero-sunset.jpg'))
-  await sharp(path.join(outDir, 'burgas-page-bg.webp'))
-    .webp({ quality: 88 })
-    .toFile(path.join(outDir, 'burgas-city-hero-sunset.webp'))
-  console.log('OK legacy burgas-city-hero-sunset')
+  const heroClean = await stripLogoCorners(SRC_HERO, {})
+  await writePair(heroClean, 'burgas-hero-pier', { width: 1920, height: 1080, position: 'center' })
+  console.log('Hero: public/images/cities/burgas-hero-pier.jpg')
 }
 
 main().catch(err => {

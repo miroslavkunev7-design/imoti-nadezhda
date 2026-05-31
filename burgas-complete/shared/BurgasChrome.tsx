@@ -2,8 +2,40 @@
 
 import Link from 'next/link'
 
+type HeaderVariant = 'marble' | 'on-photo'
+
 /** Споделен header + nav за трите Burgas екрана (макет 1–3). */
-export function BurgasHeader({ marbleId = 'burgasMarble' }: { marbleId?: string }) {
+export function BurgasHeader({
+  marbleId = 'burgasMarble',
+  variant = 'marble',
+}: {
+  marbleId?: string
+  variant?: HeaderVariant
+}) {
+  if (variant === 'on-photo') {
+    return (
+      <header className="cb-top cb-top--photo" aria-label="Главна навигация">
+        <Link href="/" className="cb-brand-badge" aria-label="Начало">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/logo-nadezhda-brand.png" alt="Имоти Надежда" className="cb-brand-badge__img" draggable={false} />
+        </Link>
+        <nav className="cb-nav cb-nav--light" aria-label="Навигация">
+          <Link href="/buy" className="cb-nav__link">За продажба</Link>
+          <span className="cb-nav__sep" aria-hidden />
+          <Link href="/buy?deal=rent" className="cb-nav__link">Под наем</Link>
+          <span className="cb-nav__sep" aria-hidden />
+          <Link href="/about" className="cb-nav__link">За нас</Link>
+          <Link href="/admin/login" className="cb-nav__user" aria-label="Вход">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+            </svg>
+          </Link>
+        </nav>
+      </header>
+    )
+  }
+
   return (
     <header className="cb-top" aria-label="Главна навигация">
       <svg className="cb-top__surface" viewBox="0 0 940 166" preserveAspectRatio="none" aria-hidden>

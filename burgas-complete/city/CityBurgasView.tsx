@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { City, Quarter } from '@/types'
 import { setSelectedCity } from '@/lib/client/selected-city'
-import { getCityAboutCardAsset, getCityPanoramaAsset } from '@/lib/data/city-background'
+import { getCityPanoramaAsset } from '@/lib/data/city-background'
 import MarbleQuarterCard from '@/components/city/MarbleQuarterCard'
 import { BurgasHeader } from '@/burgas-complete/shared/BurgasChrome'
 import { BurgasSearchBar } from '@/burgas-complete/shared/BurgasSearchBar'
@@ -32,8 +32,7 @@ interface Props {
 
 export default function CityBurgasView({ city, quarters, activeListings }: Props) {
   const router = useRouter()
-  const panorama = getCityPanoramaAsset(city.slug, city.image_url ?? null)
-  const aboutCard = getCityAboutCardAsset(city.slug)
+  const hero = getCityPanoramaAsset(city.slug, city.image_url ?? null)
 
   const sortedQuarters = useMemo(() => {
     const order = new Map(QUARTER_ORDER.map((s, i) => [s, i]))
@@ -76,45 +75,30 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
 
   return (
     <div className="cb-page" aria-label={`Имоти в ${city.name}`}>
-      <section className="cb-hero" aria-label="Панорама и информация за града">
+      <section className="cb-hero" aria-label="Бургас — hero и информация">
         <picture className="cb-hero__bg" aria-hidden>
-          {panorama.webp && <source srcSet={panorama.webp} type="image/webp" />}
+          {hero.webp && <source srcSet={hero.webp} type="image/webp" />}
           <img
-            src={panorama.jpg}
+            src={hero.jpg}
             alt=""
             className="cb-hero__bg-img"
-            style={{ objectPosition: panorama.position ?? 'center 42%' }}
+            style={{ objectPosition: hero.position ?? 'center 45%' }}
             draggable={false}
           />
         </picture>
-        <div className="cb-hero__warm" aria-hidden />
-        <div className="cb-hero__vignette" aria-hidden />
-        <div className="cb-hero__fade" aria-hidden />
-        <div className="burgas-gold-frame" aria-hidden />
+        <div className="cb-hero__shade" aria-hidden />
+        <div className="cb-hero__gold-inset" aria-hidden />
 
-        <BurgasHeader marbleId="cbMarble" />
+        <BurgasHeader variant="on-photo" />
 
-        <aside className="cb-about cb-about--merged" aria-labelledby="cb-about-title">
-          <div className="cb-about__media" aria-hidden>
-            <picture>
-              {aboutCard.webp && <source srcSet={aboutCard.webp} type="image/webp" />}
-              <img
-                src={aboutCard.jpg}
-                alt=""
-                className="cb-about__media-img"
-                style={{ objectPosition: aboutCard.position ?? 'center 42%' }}
-                draggable={false}
-              />
-            </picture>
-            <div className="cb-about__media-edge" aria-hidden />
-          </div>
-          <div className="cb-about__panel burgas-about-card">
-            <p className="burgas-about-card__eyebrow">ЗА ГРАДА</p>
-            <h1 id="cb-about-title" className="burgas-about-card__title">
+        <div className="cb-hero__overlay" aria-labelledby="cb-about-title">
+          <div className="cb-hero__panel">
+            <p className="cb-hero__eyebrow">ЗА ГРАДА</p>
+            <h1 id="cb-about-title" className="cb-hero__title">
               {city.name}
             </h1>
-            <p className="burgas-about-card__text">{description}</p>
-            <ul className="burgas-about-card__stats">
+            <p className="cb-hero__text">{description}</p>
+            <ul className="cb-hero__stats">
               <li>
                 <PeopleIcon />
                 <span>{populationLabel}</span>
@@ -133,25 +117,25 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
               </li>
             </ul>
           </div>
-        </aside>
+        </div>
+
+        <div className="cb-hero__search-wrap" aria-label="Търсене на имоти">
+          <BurgasSearchBar
+            variant="city"
+            citySlug={city.slug}
+            cityName={city.name}
+            className="cb-search cb-search--hero-dark"
+            quarters={sortedQuarters}
+            quarterValue={quarterSlug}
+            onQuarterChange={setQuarterSlug}
+            propType={propType}
+            onPropTypeChange={setPropType}
+            onSearch={runSearch}
+          />
+        </div>
       </section>
 
-      <section className="cb-search-band" aria-label="Търсене на имоти">
-        <BurgasSearchBar
-          variant="city"
-          citySlug={city.slug}
-          cityName={city.name}
-          className="cb-search-band__bar"
-          quarters={sortedQuarters}
-          quarterValue={quarterSlug}
-          onQuarterChange={setQuarterSlug}
-          propType={propType}
-          onPropTypeChange={setPropType}
-          onSearch={runSearch}
-        />
-      </section>
-
-      <section className="cb-quarters" aria-labelledby="cb-quarters-title">
+      <section className="cb-quarters cb-quarters--marble" aria-labelledby="cb-quarters-title">
         <div className="cb-quarters__head">
           <Link
             href={`/buy?city=${city.slug}`}
