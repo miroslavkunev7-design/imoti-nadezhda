@@ -101,11 +101,17 @@ export default function CityBurgasView({ city, quarters }: Props) {
     <div className="cb-page" aria-label={`Имоти в ${city.name}`}>
       <section className="cb-hero" aria-label="Бургас — hero и информация">
         <picture className="cb-hero__bg" aria-hidden>
+          <source
+            media="(min-width: 1920px)"
+            srcSet="/images/cities/burgas-hero-pier-4k.webp"
+            type="image/webp"
+          />
           {heroWebp && <source srcSet={heroWebp} type="image/webp" />}
           <img
             src={heroJpg}
             alt=""
             className="cb-hero__bg-img"
+            sizes="100vw"
             style={{ objectPosition: hero.position ?? 'center 42%' }}
             draggable={false}
             fetchPriority="high"

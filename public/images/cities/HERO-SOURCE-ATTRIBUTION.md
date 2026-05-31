@@ -8,8 +8,9 @@
 - **License:** [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)
 - **Processed:** `scripts/prepare-burgas-city-images.mjs` → `burgas-hero-pier.jpg` / `.webp` (2560×1440)
 
-Replace with your licensed iStock/asset:
+Replace with your photo (save as `burgas-city-hero-user-upload.jpg` or env):
 
 ```bash
-BURGAS_SRC_HERO=/path/to/your-pier.jpg node scripts/prepare-burgas-city-images.mjs
+# Full HD 4K + 2560 + 1920 outputs
+BURGAS_SRC_HERO=/path/to/your-photo.jpg npm run burgas:hero
 ```

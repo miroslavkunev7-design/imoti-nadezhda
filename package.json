@@ -12,7 +12,9 @@
     "vtour:batch:force": "npx tsx scripts/generate-virtual-tours-batch.ts --force",
     "vtour:remote": "node scripts/generate-virtual-tours-remote.mjs",
     "vtour:remote:force": "node scripts/generate-virtual-tours-remote.mjs --force",
-    "milena:setup": "node scripts/setup-milena-openai.mjs"
+    "milena:setup": "node scripts/setup-milena-openai.mjs",
+    "burgas:hero": "node scripts/process-burgas-hero-fullhd.mjs",
+    "burgas:seed": "node scripts/seed-burgas-demo-properties.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^9.114.3",
