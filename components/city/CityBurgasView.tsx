@@ -42,8 +42,6 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
 
   const [quarterSlug, setQuarterSlug] = useState('')
   const [propType, setPropType] = useState('')
-  const [priceLabel] = useState('Без значение')
-  const [searchAreaLabel] = useState('Без значение')
 
   const handleExplore = useCallback(() => {
     setSelectedCity(city.slug)
@@ -56,35 +54,30 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
     router.push(`/buy?${params.toString()}`)
   }
 
-  const populationLabel = city.population
-    ? `~${Math.round(city.population / 1000)} 000 жители`
-    : '~210 000 жители'
-  const areaLabel = city.area_km2 ? `${Math.round(city.area_km2)} km² площ` : '253 km² площ'
-  const regionLabel = 'Югоизточен регион'
-  const listingsLabel =
+  const areaStat = city.area_km2 ? `${Math.round(city.area_km2)} km² площ` : '256 km² площ'
+  const listingsStat =
     activeListings > 0 ? `${activeListings}+ активни имоти` : '850+ активни имоти'
 
   const description =
-    city.description ||
-    'Бургас е морски град с уникална атмосфера, развита инфраструктура и отлични възможности за живот и инвестиции край Черно море.'
+    'Бургас е второто по големина черноморско пристанище в България с уникална атмосфера, езера и прекрасна морска среда.'
 
   return (
     <div className="cb-page" aria-label={`Имоти в ${city.name}`}>
-      <section className="cb-hero">
-        <picture className="cb-hero__bg" aria-hidden>
+      <div className="cb-hero-stage">
+        <picture className="hp-bg" aria-hidden>
           {panorama.webp && <source srcSet={panorama.webp} type="image/webp" />}
           <img
             src={panorama.jpg}
             alt=""
-            className="cb-hero__bg-img"
+            className="hp-bg__img"
             style={{ objectPosition: panorama.position ?? 'center 42%' }}
             draggable={false}
           />
         </picture>
-        <div className="cb-hero__vignette" aria-hidden />
+        <div className="hp__vignette cb-hero__vignette" aria-hidden />
 
-        <header className="cb-top" aria-label="Главна навигация">
-          <svg className="cb-top__surface" viewBox="0 0 940 166" preserveAspectRatio="none" aria-hidden>
+        <header className="hp-top" aria-label="Главна навигация">
+          <svg className="hp-top__surface" viewBox="0 0 940 166" preserveAspectRatio="none" aria-hidden>
             <defs>
               <pattern id="cbMarbleTile" patternUnits="userSpaceOnUse" width="940" height="166">
                 <image
@@ -115,28 +108,28 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
               opacity="0.96"
             />
           </svg>
-          <Link href="/" className="cb-brand" aria-label="Начало">
+          <Link href="/" className="hp-brand" aria-label="Начало">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/logo-nadezhda-brand.png"
               alt="Имоти Надежда"
-              className="cb-brand__img"
+              className="hp-brand__img"
               draggable={false}
             />
           </Link>
-          <nav className="cb-nav" aria-label="Навигация">
-            <Link href="/buy" className="cb-nav__link">
+          <nav className="hp-nav" aria-label="Навигация">
+            <Link href="/buy" className="hp-nav__link">
               За продажба
             </Link>
-            <span className="cb-nav__sep" aria-hidden />
-            <Link href="/buy?deal=rent" className="cb-nav__link">
+            <span className="hp-nav__sep" aria-hidden />
+            <Link href="/buy?deal=rent" className="hp-nav__link">
               Под наем
             </Link>
-            <span className="cb-nav__sep" aria-hidden />
-            <Link href="/about" className="cb-nav__link">
+            <span className="hp-nav__sep" aria-hidden />
+            <Link href="/about" className="hp-nav__link">
               За нас
             </Link>
-            <Link href="/admin/login" className="cb-nav__user" aria-label="Вход">
+            <Link href="/admin/login" className="hp-nav__user" aria-label="Вход">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
                 <circle cx="12" cy="8" r="4" />
                 <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
@@ -153,40 +146,32 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
           <p className="cb-about__text">{description}</p>
           <ul className="cb-about__stats">
             <li>
-              <PeopleIcon />
-              <span>{populationLabel}</span>
-            </li>
-            <li>
               <GridIcon />
-              <span>{areaLabel}</span>
-            </li>
-            <li>
-              <PinLineIcon />
-              <span>{regionLabel}</span>
+              <span>{areaStat}</span>
             </li>
             <li>
               <BuildingIcon />
-              <span>{listingsLabel}</span>
+              <span>{listingsStat}</span>
             </li>
           </ul>
         </aside>
 
-        <div className="cb-search" role="search">
-          <div className="cb-search__field cb-search__field--city">
+        <div className="hp-search cb-search-bridge" role="search">
+          <div className="hp-search__field hp-search__field--city">
             <PinFieldIcon />
-            <div className="cb-search__wrap">
+            <div className="hp-search__select-wrap">
               <span>Град</span>
               <strong>Бургас</strong>
             </div>
           </div>
-          <div className="cb-search__field cb-search__field--quarter">
+          <div className="hp-search__field hp-search__field--quarter">
             <PinFieldIcon />
-            <div className="cb-search__wrap">
+            <div className="hp-search__select-wrap">
               <span>Квартал</span>
               <select
                 value={quarterSlug}
                 onChange={e => setQuarterSlug(e.target.value)}
-                className="cb-search__select"
+                className="hp-search__select"
                 aria-label="Квартал"
               >
                 <option value="">Всички</option>
@@ -198,14 +183,14 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
               </select>
             </div>
           </div>
-          <div className="cb-search__field cb-search__field--type">
+          <div className="hp-search__field hp-search__field--type">
             <BagIcon />
-            <div className="cb-search__wrap">
+            <div className="hp-search__select-wrap">
               <span>Вид имот</span>
               <select
                 value={propType}
                 onChange={e => setPropType(e.target.value)}
-                className="cb-search__select"
+                className="hp-search__select"
                 aria-label="Вид имот"
               >
                 <option value="">Всички</option>
@@ -217,30 +202,34 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
               </select>
             </div>
           </div>
-          <div className="cb-search__field cb-search__field--price">
+          <div className="hp-search__field hp-search__field--price">
             <EuroIcon />
-            <div className="cb-search__wrap">
+            <div className="hp-search__select-wrap">
               <span>Цена</span>
-              <strong>{priceLabel}</strong>
+              <strong>Без ограничение</strong>
             </div>
           </div>
-          <div className="cb-search__field cb-search__field--area">
+          <div className="hp-search__field hp-search__field--area">
             <AreaIcon />
-            <div className="cb-search__wrap">
+            <div className="hp-search__select-wrap">
               <span>Площ</span>
-              <strong>{searchAreaLabel}</strong>
+              <strong>Без ограничение</strong>
             </div>
           </div>
-          <button type="button" className="cb-search__filter" onClick={() => router.push(`/buy?city=${city.slug}`)}>
+          <button
+            type="button"
+            className="hp-search__filter"
+            onClick={() => router.push(`/buy?city=${city.slug}`)}
+          >
             <FilterIcon />
             Филтри
           </button>
-          <button type="button" className="cb-search__submit" onClick={runSearch}>
+          <button type="button" className="hp-search__submit" onClick={runSearch}>
             <SearchIcon />
             Търси
           </button>
         </div>
-      </section>
+      </div>
 
       <section className="cb-quarters" aria-labelledby="cb-quarters-title">
         <div className="cb-quarters__head">
@@ -250,7 +239,9 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
             onClick={handleExplore}
           >
             Виж всички квартали
-            <span aria-hidden>→</span>
+            <span className="cb-quarters__all-arrow" aria-hidden>
+              →
+            </span>
           </Link>
           <h2 id="cb-quarters-title" className="cb-quarters__title">
             Избери квартал в гр. {city.name}
@@ -266,14 +257,6 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
   )
 }
 
-function PeopleIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-    </svg>
-  )
-}
 function GridIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -281,14 +264,6 @@ function GridIcon() {
       <rect x="14" y="3" width="7" height="7" />
       <rect x="3" y="14" width="7" height="7" />
       <rect x="14" y="14" width="7" height="7" />
-    </svg>
-  )
-}
-function PinLineIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-      <circle cx="12" cy="10" r="3" />
     </svg>
   )
 }
