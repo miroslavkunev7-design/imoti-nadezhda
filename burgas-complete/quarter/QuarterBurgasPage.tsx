@@ -60,8 +60,8 @@ export default async function NeighborhoodPage({ params, searchParams }: PagePro
         <div className="mb-3">
           <Breadcrumb items={[
             { label: 'Начало', href: '/' },
-            { label: 'Градове', href: '/cities' },
-            { label: city?.name ?? params.slug, href: `/cities/${params.slug}` },
+            { label: 'Градове', href: '/buy' },
+            { label: city?.name ?? params.slug, href: '/cities/burgas' },
             { label: quarterDisplay.name },
           ]} />
         </div>
