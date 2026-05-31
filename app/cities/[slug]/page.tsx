@@ -6,6 +6,7 @@ import { FALLBACK_CITIES, getQuartersForCity } from '@/lib/data/fallback'
 import { countLocalPropertiesForQuarter } from '@/lib/properties/merge-local'
 import type { City, Quarter } from '@/types'
 import CityHeroBand from '@/components/city/CityHeroBand'
+import CityBurgasView from '@/components/city/CityBurgasView'
 
 export const revalidate = 120
 
@@ -38,6 +39,17 @@ export default async function CityPage({ params }: PageProps) {
   const data = await getData(params.slug)
   if (!data) notFound()
   const { city, quarters } = data
+
+  if (params.slug === 'burgas') {
+    const activeListings = quarters.reduce((sum, q) => sum + (q.property_count ?? 0), 0)
+    return (
+      <CityBurgasView
+        city={city}
+        quarters={quarters}
+        activeListings={activeListings}
+      />
+    )
+  }
 
   return (
     <div className="rd-page-shell">

@@ -9,6 +9,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const isAdmin = pathname.startsWith('/admin')
   const isHome = pathname === '/'
+  const isBurgasCity = pathname === '/cities/burgas'
 
   if (isAdmin) return <>{children}</>
 
@@ -18,6 +19,10 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
         {children}
       </main>
     )
+  }
+
+  if (isBurgasCity) {
+    return <main className="main--city-burgas-exact">{children}</main>
   }
 
   return (
