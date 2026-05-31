@@ -10,8 +10,7 @@ interface Props {
 
 export default function MarbleQuarterCard({ quarter, index = 0 }: Props) {
   const count = quarter.property_count ?? 0
-  const countLabel =
-    count > 0 ? `${count} ${count === 1 ? 'имот' : 'имота'}` : 'Виж обяви'
+  const countLabel = count > 0 ? `${count} имота` : 'Виж обяви'
 
   return (
     <Link

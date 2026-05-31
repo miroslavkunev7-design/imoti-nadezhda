@@ -6,8 +6,11 @@ import { useRouter } from 'next/navigation'
 import type { City, Quarter } from '@/types'
 import { PROPERTY_TYPES_BG } from '@/lib/data/fallback'
 import { setSelectedCity } from '@/lib/client/selected-city'
-import { getCityPanoramaAsset } from '@/lib/data/city-background'
 import MarbleQuarterCard from '@/components/city/MarbleQuarterCard'
+
+/** Снимка 3 — информационната карта / панорама вляво (замени файла при нужда) */
+const BURGAS_HERO_IMAGE = '/images/cities/burgas-hero-panorama.jpg'
+const BURGAS_HERO_WEBP = '/images/cities/burgas-hero-panorama.webp'
 
 const QUARTER_ORDER = [
   'lazur',
@@ -31,7 +34,6 @@ interface Props {
 
 export default function CityBurgasView({ city, quarters, activeListings }: Props) {
   const router = useRouter()
-  const panorama = getCityPanoramaAsset(city.slug, city.image_url ?? null)
 
   const sortedQuarters = useMemo(() => {
     const order = new Map(QUARTER_ORDER.map((s, i) => [s, i]))
@@ -54,88 +56,79 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
     router.push(`/buy?${params.toString()}`)
   }
 
-  const areaStat = city.area_km2 ? `${Math.round(city.area_km2)} km² площ` : '256 km² площ'
-  const listingsStat =
+  const populationLabel = city.population
+    ? `~${city.population.toLocaleString('bg-BG')} жители`
+    : '~210 000 жители'
+  const areaLabel = city.area_km2
+    ? `${Math.round(city.area_km2)} km² площ`
+    : '253 km² площ'
+  const regionLabel = 'Югоизточен регион'
+  const listingsLabel =
     activeListings > 0 ? `${activeListings}+ активни имоти` : '850+ активни имоти'
 
   const description =
-    'Бургас е второто по големина черноморско пристанище в България с уникална атмосфера, езера и прекрасна морска среда.'
+    city.description ||
+    'Бургас е второто по големина черноморско пристанище в България с уникална атмосфера, развита инфраструктура и отлични възможности за живот и инвестиции.'
 
   return (
     <div className="cb-page" aria-label={`Имоти в ${city.name}`}>
-      <picture className="cb-page__bg" aria-hidden>
-        {panorama.webp && <source srcSet={panorama.webp} type="image/webp" />}
-        <img
-          src={panorama.jpg}
-          alt=""
-          className="cb-page__bg-img"
-          style={{ objectPosition: panorama.position ?? 'center 42%' }}
-          draggable={false}
-        />
-      </picture>
-      <div className="cb-page__vignette" aria-hidden />
-
-      <header className="cb-top" aria-label="Главна навигация">
-        <svg className="cb-top__surface" viewBox="0 0 940 166" preserveAspectRatio="none" aria-hidden>
-          <defs>
-            <pattern id="cbMarbleTile" patternUnits="userSpaceOnUse" width="940" height="166">
-              <image
-                href="/images/texture-marble-white-gold.png"
-                x="0"
-                y="0"
-                width="940"
-                height="166"
-                preserveAspectRatio="xMidYMid slice"
-              />
-            </pattern>
-            <linearGradient id="cbGoldRibbon" x1="0" y1="0" x2="0.7" y2="1">
-              <stop offset="0" stopColor="#3d2006" />
-              <stop offset="0.15" stopColor="#8b5e1a" />
-              <stop offset="0.42" stopColor="#e6b44a" />
-              <stop offset="0.58" stopColor="#e6b44a" />
-              <stop offset="0.85" stopColor="#7a4c14" />
-              <stop offset="1" stopColor="#3a1e05" />
-            </linearGradient>
-          </defs>
-          <path
-            d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z"
-            fill="url(#cbMarbleTile)"
-            stroke="rgba(190,138,42,0.35)"
-            strokeWidth="1"
-          />
-          <path
-            d="M0 156 C77 169 168 168 216 143 C238 128 247 107 277 91 C315 70 363 54 392 0 H478 C438 25 416 52 371 70 C330 86 300 89 281 105 C257 125 246 147 216 159 C153 181 70 174 0 164 Z"
-            fill="url(#cbGoldRibbon)"
-            opacity="0.96"
-          />
-          <path
-            d="M274 88 C329 71 365 47 392 0 H449 C412 24 394 49 354 64 C315 79 294 79 274 88 Z"
-            fill="rgba(255,242,184,0.64)"
-            style={{ mixBlendMode: 'screen' }}
-          />
-        </svg>
-        <Link href="/" className="cb-brand" aria-label="Начало">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/logo-nadezhda-brand.png"
-            alt="Имоти Надежда"
-            className="cb-brand__img"
-            draggable={false}
-          />
-        </Link>
-        <nav className="cb-nav" aria-label="Навигация">
-          <Link href="/buy" className="cb-nav__link">
+      {/* ── Header: мраморен лого + nav върху тъмен hero (макет 2) ── */}
+      <header className="cb-header" aria-label="Главна навигация">
+        <div className="cb-header__logo-panel">
+          <svg className="cb-header__marble" viewBox="0 0 940 166" preserveAspectRatio="none" aria-hidden>
+            <defs>
+              <pattern id="cbMarbleTile" patternUnits="userSpaceOnUse" width="940" height="166">
+                <image
+                  href="/images/texture-marble-white-gold.png"
+                  x="0"
+                  y="0"
+                  width="940"
+                  height="166"
+                  preserveAspectRatio="xMidYMid slice"
+                />
+              </pattern>
+              <linearGradient id="cbGoldRibbon" x1="0" y1="0" x2="0.7" y2="1">
+                <stop offset="0" stopColor="#3d2006" />
+                <stop offset="0.42" stopColor="#e6b44a" />
+                <stop offset="0.58" stopColor="#e6b44a" />
+                <stop offset="1" stopColor="#3a1e05" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M8 0 H934 Q940 0 940 6 V114 H277 C246 114 236 128 216 143 C166 180 72 171 0 156 V0 Z"
+              fill="url(#cbMarbleTile)"
+              stroke="rgba(190,138,42,0.35)"
+              strokeWidth="1"
+            />
+            <path
+              d="M0 156 C77 169 168 168 216 143 C238 128 247 107 277 91 C315 70 363 54 392 0 H478 C438 25 416 52 371 70 C330 86 300 89 281 105 C257 125 246 147 216 159 C153 181 70 174 0 164 Z"
+              fill="url(#cbGoldRibbon)"
+              opacity="0.96"
+            />
+          </svg>
+          <Link href="/" className="cb-header__brand" aria-label="Начало">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/logo-nadezhda-brand.png"
+              alt="Имоти Надежда"
+              className="cb-header__brand-img"
+              draggable={false}
+            />
+          </Link>
+        </div>
+        <nav className="cb-header__nav" aria-label="Навигация">
+          <Link href="/buy" className="cb-header__link">
             За продажба
           </Link>
-          <span className="cb-nav__sep" aria-hidden />
-          <Link href="/buy?deal=rent" className="cb-nav__link">
+          <span className="cb-header__sep" aria-hidden />
+          <Link href="/buy?deal=rent" className="cb-header__link">
             Под наем
           </Link>
-          <span className="cb-nav__sep" aria-hidden />
-          <Link href="/about" className="cb-nav__link">
+          <span className="cb-header__sep" aria-hidden />
+          <Link href="/about" className="cb-header__link">
             За нас
           </Link>
-          <Link href="/admin/login" className="cb-nav__user" aria-label="Вход">
+          <Link href="/admin/login" className="cb-header__user" aria-label="Вход">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
               <circle cx="12" cy="8" r="4" />
               <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
@@ -144,33 +137,60 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
         </nav>
       </header>
 
-      <aside className="cb-about" aria-labelledby="cb-about-title">
-        <p className="cb-about__eyebrow">ЗА ГРАДА</p>
-        <h1 id="cb-about-title" className="cb-about__title">
-          {city.name}
-        </h1>
-        <p className="cb-about__text">{description}</p>
-        <ul className="cb-about__stats">
-          <li>
-            <GridIcon />
-            <span>{areaStat}</span>
-          </li>
-          <li>
-            <BuildingIcon />
-            <span>{listingsStat}</span>
-          </li>
-        </ul>
-      </aside>
+      {/* ── Hero: златна рамка + снимка 3 вляво, ЗА ГРАДА вдясно ── */}
+      <section className="cb-hero" aria-labelledby="cb-hero-title">
+        <div className="cb-hero__visual">
+          <div className="cb-frame" aria-hidden={false}>
+            <div className="cb-frame__gold-ring" aria-hidden />
+            <picture className="cb-frame__media">
+              <source srcSet={BURGAS_HERO_WEBP} type="image/webp" />
+              <img
+                src={BURGAS_HERO_IMAGE}
+                alt={`Панорама — ${city.name}`}
+                className="cb-frame__img"
+                draggable={false}
+              />
+            </picture>
+          </div>
+        </div>
 
+        <div className="cb-hero__info">
+          <p className="cb-hero__eyebrow">ЗА ГРАДА</p>
+          <h1 id="cb-hero-title" className="cb-hero__title">
+            {city.name}
+          </h1>
+          <p className="cb-hero__text">{description}</p>
+          <ul className="cb-hero__stats">
+            <li>
+              <PeopleIcon />
+              <span>{populationLabel}</span>
+            </li>
+            <li>
+              <GridIcon />
+              <span>{areaLabel}</span>
+            </li>
+            <li>
+              <PinIcon />
+              <span>{regionLabel}</span>
+            </li>
+            <li>
+              <BuildingIcon />
+              <span>{listingsLabel}</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      {/* ── Тъмна търсачка със златна рамка ── */}
       <div className="cb-search" role="search">
-        <div className="cb-search__field cb-search__field--city">
+        <div className="cb-search__field">
           <PinFieldIcon />
           <div className="cb-search__wrap">
             <span>Град</span>
             <strong>Бургас</strong>
           </div>
         </div>
-        <div className="cb-search__field cb-search__field--quarter">
+        <div className="cb-search__field">
           <PinFieldIcon />
           <div className="cb-search__wrap">
             <span>Квартал</span>
@@ -189,7 +209,7 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
             </select>
           </div>
         </div>
-        <div className="cb-search__field cb-search__field--type">
+        <div className="cb-search__field">
           <BagIcon />
           <div className="cb-search__wrap">
             <span>Вид имот</span>
@@ -208,18 +228,18 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
             </select>
           </div>
         </div>
-        <div className="cb-search__field cb-search__field--price">
+        <div className="cb-search__field">
           <EuroIcon />
           <div className="cb-search__wrap">
             <span>Цена</span>
-            <strong>Без ограничение</strong>
+            <strong>Без значение</strong>
           </div>
         </div>
-        <div className="cb-search__field cb-search__field--area">
+        <div className="cb-search__field">
           <AreaIcon />
           <div className="cb-search__wrap">
             <span>Площ</span>
-            <strong>Без ограничение</strong>
+            <strong>Без значение</strong>
           </div>
         </div>
         <button
@@ -236,6 +256,7 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
         </button>
       </div>
 
+      {/* ── Мраморна лента + карти квартали ── */}
       <section className="cb-quarters" aria-labelledby="cb-quarters-title">
         <div className="cb-quarters__head">
           <Link
@@ -260,6 +281,14 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
   )
 }
 
+function PeopleIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+    </svg>
+  )
+}
 function GridIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -267,6 +296,14 @@ function GridIcon() {
       <rect x="14" y="3" width="7" height="7" />
       <rect x="3" y="14" width="7" height="7" />
       <rect x="14" y="14" width="7" height="7" />
+    </svg>
+  )
+}
+function PinIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+      <circle cx="12" cy="10" r="3" />
     </svg>
   )
 }
