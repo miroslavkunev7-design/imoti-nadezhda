@@ -15,7 +15,7 @@ const CITY_PAGE_BACKGROUNDS: Record<string, CityPanoramaAsset> = {
   burgas: {
     jpg: '/images/cities/burgas-hero-pier.jpg',
     webp: '/images/cities/burgas-hero-pier.webp',
-    position: 'center 38%',
+    position: 'center 42%',
     label: 'Бургас — пирс и морска градина (hero фон, mockup)',
   },
   shumen: {

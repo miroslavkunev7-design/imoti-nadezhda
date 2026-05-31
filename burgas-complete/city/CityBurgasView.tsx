@@ -106,7 +106,7 @@ export default function CityBurgasView({ city, quarters }: Props) {
             src={heroJpg}
             alt=""
             className="cb-hero__bg-img"
-            style={{ objectPosition: hero.position ?? 'center 38%' }}
+            style={{ objectPosition: hero.position ?? 'center 42%' }}
             draggable={false}
             fetchPriority="high"
             decoding="async"
@@ -116,7 +116,7 @@ export default function CityBurgasView({ city, quarters }: Props) {
         <div className="cb-hero__shade" aria-hidden />
         <div className="cb-hero__gold-inset" aria-hidden />
 
-        <BurgasHeader variant="on-photo" />
+        <BurgasHeader marbleId="cbMarble" />
 
         <div className="cb-hero__overlay" aria-labelledby="cb-about-title">
           <div className="cb-hero__panel">

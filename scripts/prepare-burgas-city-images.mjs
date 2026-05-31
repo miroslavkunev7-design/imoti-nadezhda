@@ -5,6 +5,7 @@
  * - burgas-about-card.*  — снимка 2, фото в картата „ЗА ГРАДА“
  * Премахва типични watermark зони (горе-ляво / долу-дясно).
  */
+import fs from 'fs'
 import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -13,11 +14,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, '..')
 const outDir = path.join(root, 'public/images/cities')
 
-/** Снимка за hero (пирс / mockup горно поле) — замени с прикачената */
+/** HQ източник по подразбиране (не upscaled 612px burgas.jpg) */
+const DEFAULT_HERO_SRC = path.join(outDir, 'burgas-city-hero-sunset-wikimedia.jpg')
+
+/** Снимка за hero (пирс / mockup) — BURGAS_SRC_HERO=... за прикачената */
 const SRC_HERO =
   process.env.BURGAS_SRC_HERO ??
   process.env.BURGAS_SRC_BG ??
-  path.join(outDir, 'burgas.jpg')
+  (fs.existsSync(DEFAULT_HERO_SRC) ? DEFAULT_HERO_SRC : path.join(outDir, 'burgas-page-bg.jpg'))
 
 /** Clone-fill corner bands where agency logos usually sit. */
 async function stripLogoCorners(input, { w, h }) {
@@ -55,15 +59,27 @@ async function writePair(base, name, resize) {
   const jpgPath = path.join(outDir, `${name}.jpg`)
   const webpPath = path.join(outDir, `${name}.webp`)
   let pipeline = base
-  if (resize) pipeline = pipeline.resize(resize.width, resize.height, { fit: 'cover', position: resize.position ?? 'centre' })
-  await pipeline.jpeg({ quality: 90, mozjpeg: true }).toFile(jpgPath)
+  if (resize) {
+    pipeline = pipeline
+      .resize(resize.width, resize.height, {
+        fit: 'cover',
+        position: resize.position ?? 'centre',
+        withoutEnlargement: true,
+      })
+      .sharpen({ sigma: 0.6, m1: 0.5, m2: 0.35 })
+  }
+  await pipeline.jpeg({ quality: 92, mozjpeg: true }).toFile(jpgPath)
   await sharp(jpgPath).webp({ quality: 88 }).toFile(webpPath)
   console.log('OK', name)
 }
 
 async function main() {
   const heroClean = await stripLogoCorners(SRC_HERO, {})
-  await writePair(heroClean, 'burgas-hero-pier', { width: 1920, height: 1080, position: 'center' })
+  await writePair(heroClean, 'burgas-hero-pier', {
+    width: 2560,
+    height: 1440,
+    position: 'centre',
+  })
   console.log('Hero: public/images/cities/burgas-hero-pier.jpg')
 }
 

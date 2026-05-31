@@ -5,9 +5,9 @@
   height: 100dvh !important;
   max-height: 100dvh !important;
   overflow: hidden !important;
-  padding: clamp(6px, 0.8vh, 10px) !important;
+  padding: 0 !important;
   margin: 0 !important;
-  background: #1a0810;
+  background: var(--cb-marble, #faf7f2);
 }
 
 .cb-page {
@@ -23,12 +23,9 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border-radius: clamp(18px, 2.2vw, 26px);
-  border: 2px solid rgba(207, 165, 74, 0.85);
-  box-shadow:
-    0 0 0 1px rgba(255, 253, 248, 0.35) inset,
-    0 0 48px rgba(207, 165, 74, 0.22),
-    0 24px 64px rgba(0, 0, 0, 0.45);
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
   background: var(--cb-marble);
   font-family: var(--font-inter), system-ui, sans-serif;
 }
@@ -39,7 +36,7 @@
   flex: 0 0 var(--cb-hero-h);
   min-height: 300px;
   overflow: hidden;
-  border-radius: clamp(16px, 2vw, 24px) clamp(16px, 2vw, 24px) 0 0;
+  border-radius: 0;
   background:
     linear-gradient(180deg, #1a4a6e 0%, #0d2838 40%, #0a1820 100%),
     #0a1820;
@@ -60,7 +57,7 @@
 .cb-hero__bg-img {
   object-fit: cover;
   user-select: none;
-  object-position: center 38%;
+  object-position: center 42%;
   min-height: 100%;
   opacity: 1;
   display: block;
@@ -150,7 +147,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: clamp(72px, 14vh, 110px) clamp(20px, 4vw, 48px) clamp(88px, 14vh, 120px);
+  padding: clamp(96px, 17vh, 128px) clamp(20px, 4vw, 48px) clamp(88px, 14vh, 120px);
   pointer-events: none;
 }
 
@@ -252,16 +249,22 @@
   border-right-color: rgba(207, 165, 74, 0.35);
 }
 
-/* Legacy marble header (quarter/property) */
+/* Marble ribbon header (mockup горна лента) */
 .cb-top {
   position: absolute;
   top: 0;
   left: 0;
-  width: 92%;
-  max-width: 960px;
-  height: clamp(72px, 18vh, 118px);
-  z-index: 5;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.28));
+  width: min(100%, 980px);
+  max-width: 980px;
+  height: clamp(80px, 16vh, 128px);
+  z-index: 8;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.22));
+  pointer-events: none;
+}
+
+.cb-top a,
+.cb-top button {
+  pointer-events: auto;
 }
 
 .cb-top__surface {
