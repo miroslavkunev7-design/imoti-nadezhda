@@ -1,98 +1,209 @@
-/* /cities/burgas — 1:1 clone (homepage hp-* frame + quarters band) */
+/* /cities/burgas — isolated 1:1 layout (1024×576 frame, no global hp/redesign bleed) */
 
-.main--city-burgas-exact {
+.main--city-burgas-exact,
+.cb-layout-root {
   min-height: 0 !important;
   height: 100dvh !important;
   max-height: 100dvh !important;
   overflow: hidden !important;
   padding: 0 !important;
   margin: 0 !important;
+  width: 100%;
 }
 
-body:has(.main--city-burgas-exact) {
+body:has(.cb-layout-root) {
   overflow: hidden !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  background: #faf7f2 !important;
 }
 
 .cb-page {
   --cb-burg: #6b001c;
   --cb-gold: #cfa54a;
-  --cb-marble: #faf7f2;
+  --cb-gold-light: #e8c878;
   --cb-cream: #fffdf8;
-  --cb-hero-h: 63.5dvh;
+  --cb-marble: #faf7f2;
+  position: relative;
   width: 100%;
   height: 100dvh;
   max-height: 100dvh;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  background: var(--cb-marble);
+  isolation: isolate;
   font-family: var(--font-inter), system-ui, sans-serif;
+  color: var(--cb-burg);
 }
 
-/* Hero stage — same proportions as homepage (1024×576 frame) */
-.cb-hero-stage {
-  position: relative;
-  flex: 0 0 var(--cb-hero-h);
+/* Panorama — горните ~58% */
+.cb-page__bg,
+.cb-page__bg-img {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 58dvh;
   width: 100%;
-  overflow: visible;
-  background: #16070b;
 }
 
-.cb-hero-stage .hp-bg,
-.cb-hero-stage .hp-bg__img {
+.cb-page__bg {
+  z-index: 0;
+  overflow: hidden;
+}
+
+.cb-page__bg-img {
+  object-fit: cover;
+  object-position: center 42%;
+  user-select: none;
+}
+
+.cb-page__vignette {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 58dvh;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(84, 0, 26, 0.48) 0%, rgba(84, 0, 26, 0.1) 12%, transparent 30%, transparent 60%, rgba(10, 4, 8, 0.25) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.03) 0%, transparent 44%, rgba(44, 3, 15, 0.48) 100%);
+}
+
+/* Мраморна лента долу */
+.cb-page::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44dvh;
+  z-index: 0;
+  background:
+    url('/images/texture-marble-white-gold.png') center top / cover no-repeat,
+    linear-gradient(180deg, var(--cb-cream) 0%, var(--cb-marble) 100%);
+}
+
+/* ── Header (1:1 home-exact) ── */
+.cb-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 91.8vw;
+  height: 20vh;
+  z-index: 10;
+  overflow: visible;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.cb-top__surface {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
 }
 
-.cb-hero-stage .hp-bg__img {
-  object-fit: cover;
-  object-position: center 42%;
+.cb-brand {
+  position: absolute;
+  z-index: 4;
+  left: 1.5vw;
+  top: 1.5vh;
+  width: 22vw;
+  height: 24.5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
-.cb-hero__vignette {
-  background:
-    linear-gradient(90deg, rgba(84, 0, 26, 0.5) 0%, rgba(84, 0, 26, 0.12) 14%, transparent 32%, transparent 58%, rgba(10, 4, 8, 0.28) 100%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, transparent 42%, rgba(44, 3, 15, 0.5) 100%);
+.cb-brand__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
 }
 
-/* ЗА ГРАДА — дясна колона върху панорамата */
+.cb-nav {
+  position: absolute;
+  top: 5.75vh;
+  right: 1.66vw;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  height: 7.46vh;
+}
+
+.cb-nav__link {
+  display: inline-flex;
+  align-items: center;
+  height: 7.46vh;
+  padding: 0 1.95vw;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 1.46vw;
+  font-weight: 600;
+  color: #3a2119;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.cb-nav__sep {
+  width: 1px;
+  height: 2.78vh;
+  background: rgba(190, 138, 42, 0.54);
+}
+
+.cb-nav__user {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.42vw;
+  height: 6.08vh;
+  margin-left: 1.27vw;
+  border-radius: 999px;
+  border: 1.4px solid rgba(190, 138, 42, 0.66);
+  color: #be8a2a;
+}
+
+.cb-nav__user svg {
+  width: 1.76vw;
+  height: 3.13vh;
+}
+
+/* ── ЗА ГРАДА ── */
 .cb-about {
   position: absolute;
-  z-index: 6;
-  top: 21vh;
-  right: 3.2vw;
-  width: 33vw;
-  max-width: 420px;
+  z-index: 8;
+  top: 19vh;
+  right: 3.5vw;
+  width: 34vw;
+  max-width: 440px;
   color: #fff;
   pointer-events: none;
 }
 
 .cb-about__eyebrow {
-  margin: 0 0 0.6vh;
+  margin: 0 0 0.5vh;
   font-size: 0.66vw;
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #e8c878;
+  color: var(--cb-gold-light);
 }
 
 .cb-about__title {
   margin: 0 0 1.2vh;
   font-family: var(--font-playfair), Georgia, serif;
-  font-size: clamp(2.1rem, 3.8vw, 3.1rem);
+  font-size: 3.2vw;
   font-weight: 700;
   line-height: 1.05;
-  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.45);
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
 }
 
 .cb-about__text {
-  margin: 0 0 2vh;
-  font-size: clamp(12px, 0.95vw, 14px);
+  margin: 0 0 1.8vh;
+  font-size: 0.95vw;
   line-height: 1.55;
   color: rgba(255, 255, 255, 0.92);
-  max-width: 42ch;
+  max-width: 40ch;
 }
 
 .cb-about__stats {
@@ -101,53 +212,159 @@ body:has(.main--city-burgas-exact) {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 1.2vh 1.8vw;
+  gap: 1vh 1.6vw;
 }
 
 .cb-about__stats li {
   display: flex;
   align-items: center;
-  gap: 0.5vw;
-  font-size: clamp(11px, 0.85vw, 13px);
+  gap: 0.45vw;
+  font-size: 0.88vw;
   font-weight: 600;
   color: rgba(255, 248, 230, 0.96);
-  white-space: nowrap;
 }
 
 .cb-about__stats svg {
-  flex-shrink: 0;
   color: var(--cb-gold);
+  flex-shrink: 0;
 }
 
-/* Search — мост между hero и квартали (като макета) */
-.cb-hero-stage .hp-search.cb-search-bridge {
-  top: auto;
-  bottom: -4.2vh;
+/* ── Search (1:1 home-exact positions on page) ── */
+.cb-search {
+  position: absolute;
+  z-index: 12;
+  top: 42.53vh;
   left: 50.29vw;
   width: 48.83vw;
   height: 8.33vh;
-  z-index: 12;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  border-radius: 0.78vw;
+  border: 1px solid rgba(190, 148, 48, 0.5);
+  background: url('/images/texture-marble-white-gold.png') center / cover no-repeat;
+  box-shadow:
+    0 7px 30px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 245, 210, 0.4);
 }
 
-/* ── Квартали — мраморна лента ── */
-.cb-quarters {
-  flex: 1;
-  min-height: 0;
+.cb-search__field,
+.cb-search__filter,
+.cb-search__submit {
+  border: 0;
+  margin: 0;
+  font: inherit;
+}
+
+.cb-search__field {
+  display: flex;
+  align-items: center;
+  gap: 0.59vw;
+  height: 100%;
+  padding: 0 0.88vw;
+  color: var(--cb-gold);
+  border-right: 1px solid rgba(207, 165, 74, 0.29);
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.cb-search__field svg,
+.cb-search__filter svg,
+.cb-search__submit svg {
+  width: 1.17vw;
+  height: 2.08vh;
+  flex-shrink: 0;
+  stroke-width: 1.8;
+}
+
+.cb-search__wrap {
   display: flex;
   flex-direction: column;
-  padding: 5.5vh 2.5vw 2vh 17.19vw;
-  background:
-    url('/images/texture-marble-white-gold.png') center top / cover no-repeat,
-    linear-gradient(180deg, var(--cb-cream) 0%, var(--cb-marble) 100%);
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cb-search__wrap span {
+  font-size: 0.66vw;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(107, 0, 28, 0.43);
+}
+
+.cb-search__wrap strong,
+.cb-search__select {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 0.88vw;
+  font-weight: 800;
+  color: var(--cb-burg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cb-search__select {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: 100%;
+  cursor: pointer;
+}
+
+.cb-search__field--city { width: 14.2%; }
+.cb-search__field--quarter { width: 14.8%; }
+.cb-search__field--type { width: 18.3%; }
+.cb-search__field--price { width: 16.8%; }
+.cb-search__field--area { width: 15.1%; }
+
+.cb-search__filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.39vw;
+  width: 10.2%;
+  color: rgba(107, 0, 28, 0.74);
+  font-size: 0.82vw;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cb-search__submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.49vw;
+  width: 10.6%;
+  background: linear-gradient(135deg, #e8c878 0%, #cfa54a 52%, #b8923a 100%);
+  color: #2e0612;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 0.88vw;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* ── Quarters band ── */
+.cb-quarters {
+  position: absolute;
+  z-index: 6;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 38dvh;
+  display: flex;
+  flex-direction: column;
+  padding: 4.5vh 2.5vw 2vh 17.19vw;
   box-sizing: border-box;
+  pointer-events: auto;
 }
 
 .cb-quarters__head {
   display: flex;
   align-items: center;
   gap: 2vw;
-  margin-bottom: 1.8vh;
+  margin-bottom: 1.4vh;
   flex-shrink: 0;
 }
 
@@ -155,31 +372,26 @@ body:has(.main--city-burgas-exact) {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  gap: 0.6vw;
-  padding: 1.1vh 1.4vw;
+  gap: 0.5vw;
+  padding: 1vh 1.25vw;
   border-radius: 0.55vw;
   background: linear-gradient(180deg, #7a0d28, var(--cb-burg));
   color: #fff;
-  font-size: clamp(12px, 0.82vw, 14px);
+  font-size: 0.82vw;
   font-weight: 600;
   text-decoration: none;
   border: 1px solid rgba(207, 165, 74, 0.4);
-  box-shadow: 0 6px 22px rgba(107, 0, 28, 0.28);
+  box-shadow: 0 6px 20px rgba(107, 0, 28, 0.28);
   white-space: nowrap;
-}
-
-.cb-quarters__all-arrow {
-  font-size: 1.1em;
-  line-height: 1;
 }
 
 .cb-quarters__title {
   margin: 0;
   font-family: var(--font-playfair), Georgia, serif;
-  font-size: clamp(1.2rem, 2vw, 1.65rem);
+  font-size: 1.85vw;
   font-weight: 700;
   color: var(--cb-burg);
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 .cb-quarters__track {
@@ -190,9 +402,8 @@ body:has(.main--city-burgas-exact) {
   gap: 0.68vw;
   overflow-x: auto;
   overflow-y: hidden;
-  padding-bottom: 0.5vh;
+  padding-bottom: 0.4vh;
   scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
 }
 
 .cb-quarters__track::-webkit-scrollbar {
@@ -200,122 +411,87 @@ body:has(.main--city-burgas-exact) {
 }
 
 .cb-quarters__track::-webkit-scrollbar-thumb {
-  background: rgba(107, 0, 28, 0.22);
+  background: rgba(107, 0, 28, 0.2);
   border-radius: 2px;
 }
 
-/* ── Карти квартали (бяло тяло + снимка, LM/DM ефект) ── */
-.mq-card {
+/* Cards */
+.cb-page .mq-card {
   flex: 0 0 14.26vw;
   width: 14.26vw;
-  min-width: 168px;
-  max-width: 220px;
+  min-width: 155px;
   height: 25.69vh;
-  min-height: 210px;
-  max-height: 280px;
+  min-height: 0;
+  max-height: 100%;
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   text-decoration: none;
   border-radius: 0.78vw;
   overflow: hidden;
-  background: #ffffff;
+  background: #fff;
   border: 1.5px solid rgba(207, 165, 74, 0.55);
-  box-shadow:
-    0 8px 28px rgba(107, 0, 28, 0.14),
-    0 2px 10px rgba(0, 0, 0, 0.06);
-  transition:
-    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 28px rgba(107, 0, 28, 0.12);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
   position: relative;
   isolation: isolate;
 }
 
-.mq-card:hover,
-.mq-card:focus-visible {
-  transform: translateY(-5px);
-  box-shadow:
-    0 16px 44px rgba(107, 0, 28, 0.22),
-    0 0 28px rgba(207, 165, 74, 0.2);
-  outline: none;
+.cb-page .mq-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 40px rgba(107, 0, 28, 0.2);
 }
 
-.mq-card__media {
+.cb-page .mq-card__media {
   position: relative;
-  flex: 0 0 58%;
-  min-height: 0;
+  flex: 0 0 57%;
   overflow: hidden;
 }
 
-.mq-card__photo {
+.cb-page .mq-card__photo {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.45s ease;
 }
 
-.mq-card:hover .mq-card__photo {
-  transform: scale(1.05);
+.cb-page .mq-card:hover .mq-card__photo {
+  transform: scale(1.04);
 }
 
-.mq-card__shade {
+.cb-page .mq-card__shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 55%, rgba(107, 0, 28, 0.18) 100%);
   z-index: 1;
+  background: linear-gradient(to bottom, transparent 50%, rgba(107, 0, 28, 0.15) 100%);
   pointer-events: none;
 }
 
-/* Marble Wave Flow (LM) */
-.mq-card__wave {
+.cb-page .mq-card__wave {
   position: absolute;
-  width: 75%;
-  height: 75%;
+  width: 72%;
+  height: 72%;
   z-index: 3;
   pointer-events: none;
   opacity: 0;
-  background: radial-gradient(
-    circle at 35% 35%,
-    rgba(255, 253, 248, 0.98) 0%,
-    rgba(250, 247, 242, 0.75) 38%,
-    rgba(207, 165, 74, 0.4) 58%,
-    transparent 75%
-  );
-  filter: blur(1.5px);
+  background: radial-gradient(circle at 35% 35%, rgba(255, 253, 248, 0.95), rgba(207, 165, 74, 0.35) 55%, transparent 72%);
 }
 
-.mq-card__wave--tl {
-  top: -22%;
-  left: -22%;
-}
+.cb-page .mq-card__wave--tl { top: -20%; left: -20%; }
+.cb-page .mq-card__wave--br { bottom: -20%; right: -20%; }
 
-.mq-card__wave--br {
-  bottom: -22%;
-  right: -22%;
-}
-
-.mq-card:hover .mq-card__wave {
+.cb-page .mq-card:hover .mq-card__wave {
   opacity: 1;
-  animation: mq-wave-pulse 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: cb-wave 0.85s ease forwards;
 }
 
-@keyframes mq-wave-pulse {
-  0% {
-    opacity: 0;
-    transform: scale(0.45);
-  }
-  45% {
-    opacity: 1;
-    transform: scale(1.08);
-  }
-  100% {
-    opacity: 0.9;
-    transform: scale(1.18);
-  }
+@keyframes cb-wave {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 0.88; transform: scale(1.12); }
 }
 
-.mq-card__dust {
+.cb-page .mq-card__dust {
   position: absolute;
   inset: 0;
   z-index: 4;
@@ -323,98 +499,80 @@ body:has(.main--city-burgas-exact) {
   opacity: 0;
 }
 
-.mq-card:hover .mq-card__dust {
-  opacity: 1;
-}
+.cb-page .mq-card:hover .mq-card__dust { opacity: 1; }
 
-.mq-card__spark {
+.cb-page .mq-card__spark {
   position: absolute;
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
-  background: radial-gradient(circle, #f0cc6a 0%, #cfa54a 60%, transparent 100%);
-  box-shadow: 0 0 8px rgba(207, 165, 74, 0.85);
+  background: radial-gradient(circle, #f0cc6a, #cfa54a 60%, transparent);
+  box-shadow: 0 0 6px rgba(207, 165, 74, 0.8);
+  animation: cb-spark 0.9s ease-out forwards;
+  animation-delay: calc(var(--si) * 0.04s);
   opacity: 0;
-  animation: mq-spark 1s ease-out forwards;
-  animation-delay: calc(var(--si) * 0.045s);
 }
 
-.mq-card__spark:nth-child(1) { left: 6%; bottom: 20%; }
-.mq-card__spark:nth-child(2) { left: 16%; bottom: 30%; }
-.mq-card__spark:nth-child(3) { left: 26%; bottom: 14%; }
-.mq-card__spark:nth-child(4) { left: 40%; bottom: 24%; }
-.mq-card__spark:nth-child(5) { left: 54%; bottom: 16%; }
-.mq-card__spark:nth-child(6) { left: 66%; bottom: 28%; }
-.mq-card__spark:nth-child(7) { left: 76%; bottom: 12%; }
-.mq-card__spark:nth-child(8) { left: 86%; bottom: 22%; }
-.mq-card__spark:nth-child(9) { left: 12%; bottom: 6%; }
-.mq-card__spark:nth-child(10) { left: 46%; bottom: 6%; }
-.mq-card__spark:nth-child(11) { left: 70%; bottom: 34%; }
-.mq-card__spark:nth-child(12) { left: 90%; bottom: 16%; }
+.cb-page .mq-card__spark:nth-child(1) { left: 8%; bottom: 18%; }
+.cb-page .mq-card__spark:nth-child(2) { left: 20%; bottom: 28%; }
+.cb-page .mq-card__spark:nth-child(3) { left: 35%; bottom: 12%; }
+.cb-page .mq-card__spark:nth-child(4) { left: 50%; bottom: 22%; }
+.cb-page .mq-card__spark:nth-child(5) { left: 65%; bottom: 15%; }
+.cb-page .mq-card__spark:nth-child(6) { left: 78%; bottom: 25%; }
+.cb-page .mq-card__spark:nth-child(7) { left: 88%; bottom: 10%; }
+.cb-page .mq-card__spark:nth-child(8) { left: 92%; bottom: 20%; }
+.cb-page .mq-card__spark:nth-child(9) { left: 14%; bottom: 8%; }
+.cb-page .mq-card__spark:nth-child(10) { left: 48%; bottom: 8%; }
+.cb-page .mq-card__spark:nth-child(11) { left: 72%; bottom: 32%; }
+.cb-page .mq-card__spark:nth-child(12) { left: 58%; bottom: 30%; }
 
-@keyframes mq-spark {
-  0% {
-    opacity: 0;
-    transform: translateY(6px) scale(0.2);
-  }
-  40% {
-    opacity: 1;
-    transform: translateY(-6px) scale(1.3);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.3);
-  }
+@keyframes cb-spark {
+  0% { opacity: 0; transform: translateY(6px) scale(0.3); }
+  40% { opacity: 1; transform: translateY(-4px) scale(1.2); }
+  100% { opacity: 0; transform: translateY(-16px) scale(0.3); }
 }
 
-.mq-card__body {
-  position: relative;
-  z-index: 2;
+.cb-page .mq-card__body {
   flex: 1;
+  position: relative;
+  padding: 1.1vh 0.9vw 1.2vh;
+  background: linear-gradient(180deg, #fff, var(--cb-cream));
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.6vh;
-  padding: 1.2vh 0.95vw 1.4vh;
-  background: linear-gradient(180deg, #ffffff 0%, var(--cb-cream) 100%);
-  min-height: 0;
+  gap: 0.4vh;
 }
 
-.mq-card__name {
+.cb-page .mq-card__name {
   margin: 0;
-  padding-right: 2.4vw;
+  padding-right: 2.2vw;
   font-family: var(--font-playfair), Georgia, serif;
-  font-size: clamp(1rem, 1.15vw, 1.22rem);
+  font-size: 1.15vw;
   font-weight: 700;
   color: var(--cb-burg);
-  line-height: 1.12;
+  line-height: 1.1;
 }
 
-.mq-card__count {
+.cb-page .mq-card__count {
+  margin: 0;
   display: flex;
   align-items: center;
-  gap: 0.35vw;
-  margin: 0;
-  font-size: clamp(10px, 0.68vw, 12px);
+  gap: 0.3vw;
+  font-size: 0.68vw;
   font-weight: 600;
   color: #a97a1f;
 }
 
-.mq-card__count svg {
-  color: var(--cb-gold);
-  flex-shrink: 0;
-}
+.cb-page .mq-card__count svg { color: var(--cb-gold); }
 
-.mq-card__arrow {
+.cb-page .mq-card__arrow {
   position: absolute;
-  right: 0.75vw;
-  bottom: 1.1vh;
+  right: 0.7vw;
+  bottom: 1vh;
   width: 2.15vw;
   height: 3.6vh;
-  min-width: 28px;
-  min-height: 28px;
-  max-width: 34px;
-  max-height: 34px;
+  min-width: 26px;
+  min-height: 26px;
   border-radius: 50%;
   border: 1px solid rgba(207, 165, 74, 0.55);
   background: #fff;
@@ -422,120 +580,42 @@ body:has(.main--city-burgas-exact) {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  transition: border-color 0.25s, transform 0.25s, background 0.25s;
 }
 
-.mq-card:hover .mq-card__arrow {
-  border-color: var(--cb-gold);
-  background: linear-gradient(135deg, #fffdf8, #f5e6c8);
-  transform: translate(2px, -2px);
-}
-
-/* Dark — Magma Marble Burst */
-html.dark .cb-quarters {
-  background:
-    radial-gradient(ellipse 70% 50% at 80% 0%, rgba(255, 120, 40, 0.1), transparent 50%),
-    linear-gradient(180deg, #1a0f14 0%, #0a0608 100%);
-}
-
-html.dark .cb-quarters__title {
-  color: #e8c878;
-}
-
-html.dark .mq-card {
-  background: linear-gradient(180deg, #2e1418 0%, #1a0a10 100%);
-  border-color: rgba(207, 165, 74, 0.4);
-}
-
-html.dark .mq-card__body {
-  background: linear-gradient(180deg, #2a1218, #1a0a10);
-}
-
-html.dark .mq-card__name {
-  color: #fff5e8;
-}
-
-html.dark .mq-card__wave {
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(255, 150, 60, 0.95) 0%,
-    rgba(230, 90, 30, 0.6) 45%,
-    transparent 78%
-  );
-}
-
-html.dark .mq-card:hover .mq-card__media::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 5;
-  animation: mq-magma-crack 0.75s ease-out forwards;
-  box-shadow: inset 0 0 20px 3px rgba(255, 110, 35, 0.4);
-}
-
-@keyframes mq-magma-crack {
-  0% {
-    box-shadow: inset 0 0 0 0 rgba(255, 120, 40, 0);
-  }
-  50% {
-    box-shadow: inset 0 0 28px 5px rgba(255, 90, 30, 0.5);
-  }
-  100% {
-    box-shadow: inset 0 0 14px 2px rgba(255, 140, 60, 0.35);
-  }
-}
-
-/* ── Responsive ── */
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
   .cb-about {
-    width: 42vw;
-    top: 18vh;
+    width: 46vw;
+    top: 16vh;
   }
 
-  .cb-hero-stage .hp-search.cb-search-bridge {
-    left: 8vw;
-    width: 84vw;
-    bottom: -3.5vh;
+  .cb-search {
+    left: 6vw;
+    width: 88vw;
   }
 
   .cb-quarters {
-    padding-left: 8vw;
+    padding-left: 6vw;
   }
+
+  .cb-about__title { font-size: clamp(1.6rem, 5vw, 2.2rem); }
+  .cb-about__text { font-size: 12px; }
+  .cb-about__stats li { font-size: 11px; }
+  .cb-quarters__title { font-size: clamp(1.1rem, 3.5vw, 1.4rem); }
+  .cb-quarters__all-btn { font-size: 12px; }
 }
 
-@media (max-width: 768px) {
-  .cb-page {
-    --cb-hero-h: 56dvh;
-  }
-
-  .cb-about {
-    right: 12px;
-    width: calc(100% - 24px);
-    top: 17vh;
-  }
-
-  .cb-about__text {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .hp-search__field--area,
-  .hp-search__field--price {
+@media (max-width: 720px) {
+  .cb-search__field--price,
+  .cb-search__field--area {
     display: none;
   }
 
-  .cb-quarters__head {
-    flex-direction: column;
-    align-items: flex-start;
+  .cb-nav__link:nth-child(2) {
+    display: none;
   }
 
-  .mq-card {
-    flex: 0 0 72vw;
-    width: 72vw;
-    max-width: none;
+  .cb-page .mq-card {
+    flex: 0 0 68vw;
+    width: 68vw;
   }
 }
