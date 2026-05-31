@@ -2,6 +2,8 @@
 
 Прочети този файл **първо**, ако продължаваш работа след Cloud Agent сесия. Обхваща целия проект, базата данни, деплой и всичко свършено днес по Burgas.
 
+**Постоянни правила за всеки следващ агент:** [`docs/AGENT-HANDOFF-RULES.md`](AGENT-HANDOFF-RULES.md)
+
 ---
 
 ## 1. Какво е проектът
@@ -146,10 +148,12 @@ npm run dev
 5. **Quarter**: `QuarterBurgasView` — hero + search + филтри + карти + карта (bq-*)
 6. **Property**: `PropertyDetailBurgasView` — hero interior + search overlay + 6 stats + gallery
 
-### Hero изображение
+### Hero изображение (`/cities/burgas`)
 
-- `public/images/cities/burgas-hero-panorama.jpg` (+ `.webp`) — от `burgas.jpg` (пир/Морска градина)
-- `lib/data/city-background.ts` — burgas → panorama paths
+- **Активно:** `public/images/cities/burgas-city-hero-sunset.jpg` (+ `.webp`) — HQ залез/пирс/Морска градина
+- `lib/data/city-background.ts` → `getCityPanoramaAsset('burgas')`
+- **Layout (31.05):** hero с прелята info карта (`cb-about--blend`) → търсене в `cb-search-band` (център) → квартали
+- За 1:1 с прикачен PNG от потребителя: замени `burgas-city-hero-sunset.jpg` и регенерирай `.webp`
 
 ### PR
 

@@ -1,10 +1,11 @@
 # Имоти Надежда (Imoti Nadezhda) - Real Estate Platform
 
-## Handoff за нов агент (прочети първо при ~95% контекст)
+## Handoff за нов агент (задължително — всяка сесия)
 
-**Пълен контекст от днешната сесия + DB + Burgas:** [`docs/AGENT-HANDOFF.md`](docs/AGENT-HANDOFF.md)
+**Пълен контекст:** [`docs/AGENT-HANDOFF.md`](docs/AGENT-HANDOFF.md)  
+**Постоянни правила (10+ сесии):** [`docs/AGENT-HANDOFF-RULES.md`](docs/AGENT-HANDOFF-RULES.md)
 
-Там е описано: Supabase Postgres през Vercel, 3-те Burgas страници, `burgas-complete/`, PR #2, demo имот `900001`, правила на потребителя.
+При ~90–95% mockup match или предаване на задача — обнови handoff и предай командата от `AGENT-HANDOFF-RULES.md` на следващия агент.
 
 ---
 

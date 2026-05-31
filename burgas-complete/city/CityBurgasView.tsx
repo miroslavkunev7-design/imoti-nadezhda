@@ -69,53 +69,60 @@ export default function CityBurgasView({ city, quarters, activeListings }: Props
 
   return (
     <div className="cb-page" aria-label={`Имоти в ${city.name}`}>
-      <section className="cb-hero">
+      <section className="cb-hero" aria-label="Панорама и информация за града">
         <picture className="cb-hero__bg" aria-hidden>
           {panorama.webp && <source srcSet={panorama.webp} type="image/webp" />}
           <img
             src={panorama.jpg}
             alt=""
             className="cb-hero__bg-img"
-            style={{ objectPosition: panorama.position ?? 'center 38%' }}
+            style={{ objectPosition: panorama.position ?? 'center 42%' }}
             draggable={false}
           />
         </picture>
+        <div className="cb-hero__warm" aria-hidden />
         <div className="cb-hero__vignette" aria-hidden />
+        <div className="cb-hero__fade" aria-hidden />
         <div className="burgas-gold-frame" aria-hidden />
 
         <BurgasHeader marbleId="cbMarble" />
 
-        <aside className="cb-about burgas-about-card" aria-labelledby="cb-about-title">
-          <p className="burgas-about-card__eyebrow">ЗА ГРАДА</p>
-          <h1 id="cb-about-title" className="burgas-about-card__title">
-            {city.name}
-          </h1>
-          <p className="burgas-about-card__text">{description}</p>
-          <ul className="burgas-about-card__stats">
-            <li>
-              <PeopleIcon />
-              <span>{populationLabel}</span>
-            </li>
-            <li>
-              <GridIcon />
-              <span>{areaLabel}</span>
-            </li>
-            <li>
-              <PinLineIcon />
-              <span>{regionLabel}</span>
-            </li>
-            <li>
-              <BuildingIcon />
-              <span>{listingsLabel}</span>
-            </li>
-          </ul>
+        <aside className="cb-about burgas-about-card cb-about--blend" aria-labelledby="cb-about-title">
+          <div className="cb-about__photo" aria-hidden style={{ backgroundImage: `url(${panorama.jpg})` }} />
+          <div className="cb-about__panel">
+            <p className="burgas-about-card__eyebrow">ЗА ГРАДА</p>
+            <h1 id="cb-about-title" className="burgas-about-card__title">
+              {city.name}
+            </h1>
+            <p className="burgas-about-card__text">{description}</p>
+            <ul className="burgas-about-card__stats">
+              <li>
+                <PeopleIcon />
+                <span>{populationLabel}</span>
+              </li>
+              <li>
+                <GridIcon />
+                <span>{areaLabel}</span>
+              </li>
+              <li>
+                <PinLineIcon />
+                <span>{regionLabel}</span>
+              </li>
+              <li>
+                <BuildingIcon />
+                <span>{listingsLabel}</span>
+              </li>
+            </ul>
+          </div>
         </aside>
+      </section>
 
+      <section className="cb-search-band" aria-label="Търсене на имоти">
         <BurgasSearchBar
           variant="city"
           citySlug={city.slug}
           cityName={city.name}
-          className="cb-hero__search"
+          className="cb-search-band__bar"
           quarters={sortedQuarters}
           quarterValue={quarterSlug}
           onQuarterChange={setQuarterSlug}

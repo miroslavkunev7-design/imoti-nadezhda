@@ -15,7 +15,7 @@
   --cb-gold-light: #e8c878;
   --cb-cream: #fffdf8;
   --cb-marble: #faf7f2;
-  --cb-hero-h: 58vh;
+  --cb-hero-h: 54vh;
   width: 100%;
   height: 100dvh;
   max-height: 100dvh;
@@ -52,32 +52,52 @@
   user-select: none;
 }
 
-.cb-hero__vignette {
+.cb-hero__warm {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(105deg, rgba(30, 8, 18, 0.2) 0%, transparent 48%),
-    linear-gradient(270deg, rgba(84, 0, 26, 0.35) 0%, transparent 42%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, transparent 42%, rgba(44, 3, 15, 0.52) 100%);
+    linear-gradient(120deg, rgba(255, 160, 80, 0.18) 0%, transparent 42%),
+    linear-gradient(200deg, rgba(107, 0, 28, 0.22) 0%, transparent 55%);
+  mix-blend-mode: soft-light;
+}
+
+.cb-hero__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(105deg, rgba(30, 8, 18, 0.15) 0%, transparent 50%),
+    linear-gradient(270deg, rgba(84, 0, 26, 0.28) 0%, transparent 40%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, transparent 38%, rgba(44, 3, 15, 0.38) 100%);
+}
+
+.cb-hero__fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 52%;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 253, 248, 0.12) 35%,
+    rgba(250, 247, 242, 0.72) 68%,
+    var(--cb-cream) 88%,
+    var(--cb-marble) 100%
+  );
 }
 
 .cb-hero__bg-img {
-  object-position: left center;
+  object-position: center 42%;
 }
 
 .cb-hero .cb-top {
   z-index: 6;
-}
-
-.cb-hero__search {
-  position: absolute;
-  z-index: 8;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: clamp(14px, 2.5vh, 22px);
-  width: min(94%, 920px);
 }
 
 /* Header (marble band) */
@@ -160,15 +180,76 @@
   height: 18px;
 }
 
-/* ЗА ГРАДА — burgundy card (mockup 2, дясно) */
+/* ЗА ГРАДА — прелята карта (mockup 2/3, дясно) */
 .cb-about {
   position: absolute;
   z-index: 7;
-  top: clamp(92px, 20vh, 138px);
+  top: clamp(88px, 19vh, 132px);
   right: clamp(14px, 2.8vw, 36px);
-  width: min(400px, 38vw);
-  max-height: calc(100% - 120px);
-  overflow: auto;
+  width: min(420px, 40vw);
+  max-height: calc(100% - 100px);
+  overflow: hidden;
+  border-radius: 18px;
+  padding: 0;
+}
+
+.cb-about.cb-about--blend.burgas-about-card {
+  background: transparent;
+  pointer-events: auto;
+}
+
+.cb-about--blend {
+  border: 1px solid rgba(207, 165, 74, 0.5);
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.45),
+    0 0 48px rgba(207, 165, 74, 0.14);
+}
+
+.cb-about__photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 40%;
+  transform: scale(1.04);
+  filter: saturate(1.08) contrast(1.02);
+}
+
+.cb-about__photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    165deg,
+    rgba(127, 23, 52, 0.88) 0%,
+    rgba(78, 11, 31, 0.94) 55%,
+    rgba(46, 6, 18, 0.97) 100%
+  );
+}
+
+.cb-about__panel {
+  position: relative;
+  z-index: 1;
+  padding: clamp(18px, 2vw, 26px) clamp(20px, 2.2vw, 28px);
+}
+
+/* Търсене — център, под hero/картата, над кварталите */
+.cb-search-band {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(4px, 1vh, 10px) clamp(16px, 3vw, 32px) clamp(14px, 2vh, 20px);
+  margin-top: clamp(-36px, -5vh, -22px);
+  background: linear-gradient(180deg, var(--cb-cream) 0%, var(--cb-marble) 100%);
+}
+
+.cb-search-band__bar {
+  width: min(94%, 920px);
+  box-shadow:
+    0 14px 40px rgba(107, 0, 28, 0.18),
+    0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
 /* Search bar */
@@ -294,7 +375,7 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  padding: clamp(16px, 2.5vh, 24px) clamp(16px, 3vw, 32px) clamp(12px, 2vh, 18px);
+  padding: clamp(8px, 1.2vh, 14px) clamp(16px, 3vw, 32px) clamp(12px, 2vh, 18px);
   background:
     url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
     radial-gradient(ellipse 80% 50% at 15% 0%, rgba(207, 165, 74, 0.08), transparent 55%),
@@ -660,13 +741,16 @@ html.dark .mq-card:hover .mq-card__media::after {
     top: 88px;
   }
 
-  .cb-about__stats {
-    grid-template-columns: 1fr;
+  .cb-search-band {
+    margin-top: -16px;
+    padding-left: 12px;
+    padding-right: 12px;
   }
 
+  .cb-search-band__bar,
   .cb-search {
     flex-wrap: wrap;
-    width: calc(100% - 24px);
+    width: calc(100% - 8px);
   }
 
   .cb-search__field--area,
