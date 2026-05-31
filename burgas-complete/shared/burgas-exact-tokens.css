@@ -1,0 +1,100 @@
+/* Shared Burgas mockup tokens — city / quarter / property */
+
+:root {
+  --burgas-burg: #6b001c;
+  --burgas-burg-deep: #4e0b1f;
+  --burgas-gold: #cfa54a;
+  --burgas-gold-light: #e8c878;
+  --burgas-cream: #fffdf8;
+  --burgas-marble: #faf7f2;
+  --burgas-gold-border: rgba(207, 165, 74, 0.55);
+  --burgas-frame-inset: clamp(5px, 0.85vw, 9px);
+  --burgas-frame-inset-2: clamp(7px, 1.1vw, 12px);
+}
+
+/* Gold inset frame (terrace hero) */
+.burgas-gold-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 var(--burgas-frame-inset) rgba(207, 165, 74, 0.78),
+    inset 0 0 0 var(--burgas-frame-inset-2) rgba(255, 253, 248, 0.32),
+    inset 0 0 72px rgba(207, 165, 74, 0.06);
+}
+
+/* Burgundy info card (ЗА ГРАДА / ЗА КВАРТАЛА) */
+.burgas-about-card {
+  pointer-events: auto;
+  border-radius: 16px;
+  padding: clamp(18px, 2vw, 26px) clamp(20px, 2.2vw, 28px);
+  background: linear-gradient(165deg, rgba(127, 23, 52, 0.96) 0%, rgba(78, 11, 31, 0.98) 100%);
+  border: 1px solid var(--burgas-gold-border);
+  box-shadow:
+    0 22px 52px rgba(0, 0, 0, 0.48),
+    0 0 40px rgba(207, 165, 74, 0.12);
+}
+
+.burgas-about-card__eyebrow {
+  margin: 0 0 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(240, 221, 176, 0.78);
+}
+
+.burgas-about-card__title {
+  margin: 0 0 12px;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.85rem, 3.8vw, 2.65rem);
+  font-weight: 700;
+  line-height: 1.05;
+  color: #fff;
+}
+
+.burgas-about-card__text {
+  margin: 0 0 16px;
+  font-size: clamp(12px, 1vw, 14px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 38ch;
+}
+
+.burgas-about-card__stats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+}
+
+.burgas-about-card__stats li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: clamp(11px, 0.9vw, 13px);
+  font-weight: 600;
+  color: rgba(255, 248, 230, 0.95);
+}
+
+.burgas-about-card__stats svg {
+  flex-shrink: 0;
+  color: var(--burgas-gold);
+}
+
+/* Marble page shell (quarter listing body) */
+.burgas-marble-shell {
+  margin: 0 clamp(10px, 1.5vw, 18px) clamp(20px, 3vh, 32px);
+  padding: clamp(14px, 2vw, 22px);
+  border-radius: 18px;
+  border: 1px solid var(--burgas-gold-border);
+  background:
+    url('/images/texture-marble-white-gold.png') center / cover no-repeat,
+    linear-gradient(180deg, var(--burgas-cream), var(--burgas-marble));
+  box-shadow:
+    0 16px 48px rgba(107, 0, 28, 0.1),
+    inset 0 1px 0 rgba(255, 245, 210, 0.65);
+}

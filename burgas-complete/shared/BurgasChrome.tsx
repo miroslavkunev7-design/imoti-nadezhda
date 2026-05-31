@@ -21,8 +21,12 @@ export function BurgasHeader({ marbleId = 'burgasMarble' }: { marbleId?: string 
           <linearGradient id={`${marbleId}Gold`} x1="0" y1="0" x2="0.7" y2="1">
             <stop offset="0" stopColor="#3d2006" />
             <stop offset="0.15" stopColor="#8b5e1a" />
+            <stop offset="0.30" stopColor="#c9882e" />
             <stop offset="0.42" stopColor="#e6b44a" />
+            <stop offset="0.50" stopColor="#f0cc6a" />
             <stop offset="0.58" stopColor="#e6b44a" />
+            <stop offset="0.70" stopColor="#c08025" />
+            <stop offset="0.85" stopColor="#7a4c14" />
             <stop offset="1" stopColor="#3a1e05" />
           </linearGradient>
         </defs>

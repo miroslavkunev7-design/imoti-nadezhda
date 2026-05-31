@@ -1,5 +1,6 @@
 /* Burgas quarter listing — mockup 1 (dynamic /cities/burgas/[quarter]) */
 
+@import '../shared/burgas-exact-tokens.css';
 @import '../city/city-burgas-exact.css';
 
 .main--quarter-burgas-exact {
@@ -49,14 +50,35 @@
     linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, transparent 50%, rgba(44, 3, 15, 0.55) 100%);
 }
 
-.bq-hero__frame {
+.bq-hero__quarter-switch {
   position: absolute;
-  inset: 0;
-  z-index: 4;
-  pointer-events: none;
-  box-shadow:
-    inset 0 0 0 clamp(4px, 0.8vw, 8px) rgba(207, 165, 74, 0.72),
-    inset 0 0 0 clamp(6px, 1vw, 11px) rgba(255, 253, 248, 0.28);
+  z-index: 6;
+  top: clamp(88px, 16vh, 120px);
+  right: clamp(14px, 2.5vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bq-hero__quarter-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 230, 0.85);
+}
+
+.bq-hero__quarter-select {
+  min-width: 160px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(207, 165, 74, 0.55);
+  background: rgba(107, 0, 28, 0.88);
+  color: #fff;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .bq-hero .cb-top {
@@ -71,22 +93,13 @@
   bottom: clamp(12px, 2vh, 20px);
 }
 
-.bq-hero__search.cb-search__field--area {
-  display: none;
+.bq-hero__search {
+  width: min(94%, 860px);
 }
 
-@media (max-width: 900px) {
-  .bq-hero__search .cb-search__field--price {
-    display: none;
-  }
-}
-
-/* ── Body ── */
+/* ── Body (marble shell) ── */
 .bq-body {
-  padding: clamp(16px, 3vw, 32px) clamp(16px, 3vw, 40px) clamp(48px, 6vh, 72px);
-  background:
-    radial-gradient(ellipse 80% 40% at 10% 0%, rgba(207, 165, 74, 0.08), transparent 55%),
-    linear-gradient(180deg, var(--bq-cream) 0%, var(--bq-marble) 100%);
+  padding: clamp(16px, 2.5vw, 28px);
 }
 
 .bq-crumb {
@@ -150,18 +163,13 @@
   color: rgba(42, 6, 18, 0.78);
 }
 
-.bq-intro__stats {
+ul.bq-intro__stats.burgas-about-card {
   list-style: none;
   margin: 0;
-  padding: clamp(16px, 2vw, 22px);
+  min-width: min(300px, 100%);
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px 20px;
-  min-width: min(280px, 100%);
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(107, 0, 28, 0.94), rgba(78, 11, 31, 0.98));
-  border: 1px solid rgba(207, 165, 74, 0.4);
-  box-shadow: 0 12px 32px rgba(107, 0, 28, 0.2);
+  gap: 10px 14px;
 }
 
 .bq-intro__stats li {
@@ -174,8 +182,7 @@
 }
 
 .bq-intro__stats svg {
-  flex-shrink: 0;
-  color: var(--bq-gold);
+  color: var(--burgas-gold);
 }
 
 /* Main layout */
@@ -191,9 +198,9 @@
   top: 16px;
   padding: 18px 16px;
   border-radius: 14px;
-  background: #fff;
-  border: 1px solid rgba(207, 165, 74, 0.4);
-  box-shadow: 0 8px 24px rgba(107, 0, 28, 0.08);
+  background: linear-gradient(180deg, #fff 0%, var(--bq-cream) 100%);
+  border: 1px solid rgba(207, 165, 74, 0.45);
+  box-shadow: 0 8px 24px rgba(107, 0, 28, 0.1);
 }
 
 .bq-sidebar__title {
@@ -229,9 +236,10 @@
 
 .bq-sidebar__btn:hover,
 .bq-sidebar__btn.is-active {
-  background: linear-gradient(90deg, rgba(207, 165, 74, 0.15), transparent);
-  border-color: rgba(207, 165, 74, 0.45);
+  background: linear-gradient(90deg, rgba(107, 0, 28, 0.08), rgba(207, 165, 74, 0.12));
+  border-color: rgba(207, 165, 74, 0.55);
   color: var(--bq-burg);
+  box-shadow: inset 3px 0 0 var(--bq-burg);
 }
 
 .bq-sidebar__all {
@@ -247,11 +255,36 @@
 
 .bq-content__head {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
+  flex-direction: column;
+  gap: 10px;
   margin-bottom: 16px;
+}
+
+.bq-content__tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bq-sort {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(107, 0, 28, 0.65);
+}
+
+.bq-sort select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(207, 165, 74, 0.45);
+  background: #fff;
+  color: var(--bq-burg);
+  font-weight: 700;
+  font-size: 12px;
 }
 
 .bq-content__title {
@@ -274,8 +307,20 @@
 
 .bq-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(14px, 1.5vw, 20px);
+}
+
+@media (min-width: 1280px) {
+  .bq-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .bq-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .bq-empty {

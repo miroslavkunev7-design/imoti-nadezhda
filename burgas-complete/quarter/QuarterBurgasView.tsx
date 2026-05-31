@@ -4,9 +4,9 @@ import { useCallback, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { City, Property, Quarter } from '@/types'
-import { PROPERTY_TYPES_BG } from '@/lib/data/fallback'
 import { resolveMediaUrl } from '@/lib/upload-bridge'
 import { BurgasHeader } from '@/burgas-complete/shared/BurgasChrome'
+import { BurgasSearchBar } from '@/burgas-complete/shared/BurgasSearchBar'
 import BurgasListingCard from '@/burgas-complete/quarter/BurgasListingCard'
 
 interface Props {
@@ -36,11 +36,11 @@ export default function QuarterBurgasView({
   const heroImage = resolveMediaUrl(quarter.image_url) ?? '/images/quarters/burgas/lazur.jpg'
 
   const [propType, setPropType] = useState('')
-  const [priceLabel] = useState('Без значение')
   const [quickFilter, setQuickFilter] = useState('all')
+  const [sort, setSort] = useState<'newest' | 'price_asc' | 'price_desc'>('newest')
 
   const filtered = useMemo(() => {
-    let list = properties
+    let list = [...properties]
     if (quickFilter === 'apartment') {
       list = list.filter(p => p.type === 'Апартамент')
     } else if (quickFilter === 'house') {
@@ -53,8 +53,13 @@ export default function QuarterBurgasView({
     if (propType) {
       list = list.filter(p => p.type === propType)
     }
+    if (sort === 'price_asc') {
+      list.sort((a, b) => a.price_eur - b.price_eur)
+    } else if (sort === 'price_desc') {
+      list.sort((a, b) => b.price_eur - a.price_eur)
+    }
     return list
-  }, [properties, quickFilter, propType])
+  }, [properties, quickFilter, propType, sort])
 
   const populationLabel = quarter.population
     ? `~${Math.round(quarter.population / 1000)}k жители`
@@ -82,74 +87,41 @@ export default function QuarterBurgasView({
           aria-label={quarter.name}
         />
         <div className="bq-hero__vignette" aria-hidden />
-        <div className="bq-hero__frame" aria-hidden />
+        <div className="burgas-gold-frame" aria-hidden />
 
         <BurgasHeader marbleId="bqMarble" />
 
-        <div className="cb-search bq-hero__search" role="search">
-          <div className="cb-search__field cb-search__field--city">
-            <PinFieldIcon />
-            <div className="cb-search__wrap">
-              <span>Град</span>
-              <strong>{city.name}</strong>
-            </div>
-          </div>
-          <div className="cb-search__field cb-search__field--quarter">
-            <PinFieldIcon />
-            <div className="cb-search__wrap">
-              <span>Квартал</span>
-              <select
-                className="cb-search__select"
-                value={quarter.slug}
-                aria-label="Квартал"
-                onChange={e => router.push(`/cities/burgas/${e.target.value}`)}
-              >
-                {allQuarters.map(q => (
-                  <option key={q.slug} value={q.slug}>
-                    {q.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className="cb-search__field cb-search__field--type">
-            <BagIcon />
-            <div className="cb-search__wrap">
-              <span>Вид имот</span>
-              <select
-                value={propType}
-                onChange={e => setPropType(e.target.value)}
-                className="cb-search__select"
-                aria-label="Вид имот"
-              >
-                <option value="">Всички</option>
-                {PROPERTY_TYPES_BG.map(t => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className="cb-search__field cb-search__field--price">
-            <EuroIcon />
-            <div className="cb-search__wrap">
-              <span>Цена</span>
-              <strong>{priceLabel}</strong>
-            </div>
-          </div>
-          <button type="button" className="cb-search__filter" onClick={() => router.push(`/buy?city=${city.slug}&quarter=${quarter.slug}`)}>
-            <FilterIcon />
-            Филтри
-          </button>
-          <button type="button" className="cb-search__submit" onClick={runSearch}>
-            <SearchIcon />
-            Търси
-          </button>
+        <div className="bq-hero__quarter-switch">
+          <label className="bq-hero__quarter-label" htmlFor="bq-quarter-select">
+            Квартал
+          </label>
+          <select
+            id="bq-quarter-select"
+            className="bq-hero__quarter-select"
+            value={quarter.slug}
+            aria-label="Избери квартал"
+            onChange={e => router.push(`/cities/burgas/${e.target.value}`)}
+          >
+            {allQuarters.map(q => (
+              <option key={q.slug} value={q.slug}>
+                {q.name}
+              </option>
+            ))}
+          </select>
         </div>
+
+        <BurgasSearchBar
+          variant="quarter"
+          citySlug={city.slug}
+          cityName={city.name}
+          className="bq-hero__search"
+          propType={propType}
+          onPropTypeChange={setPropType}
+          onSearch={runSearch}
+        />
       </section>
 
-      <div className="bq-body">
+      <div className="burgas-marble-shell bq-body">
         <nav className="bq-crumb" aria-label="Breadcrumb">
           <Link href="/">Начало</Link>
           <span aria-hidden>/</span>
@@ -160,11 +132,11 @@ export default function QuarterBurgasView({
 
         <header className="bq-intro">
           <div className="bq-intro__text">
-            <p className="bq-intro__eyebrow">ЗА КВАРТАЛА</p>
+            <p className="burgas-about-card__eyebrow">ЗА КВАРТАЛА</p>
             <h1 className="bq-intro__title">кв. {quarter.name}</h1>
             <p className="bq-intro__desc">{description}</p>
           </div>
-          <ul className="bq-intro__stats">
+          <ul className="bq-intro__stats burgas-about-card">
             <li>
               <PeopleIcon />
               <span>{populationLabel}</span>
@@ -208,9 +180,19 @@ export default function QuarterBurgasView({
           <div className="bq-content">
             <div className="bq-content__head">
               <h2 className="bq-content__title">Имоти в кв. {quarter.name}</h2>
-              <p className="bq-content__count">
-                Намерени: <strong>{filtered.length}</strong> от {total}
-              </p>
+              <div className="bq-content__tools">
+                <p className="bq-content__count">
+                  Намерени: <strong>{filtered.length}</strong> от {total}
+                </p>
+                <label className="bq-sort">
+                  <span>Подреди</span>
+                  <select value={sort} onChange={e => setSort(e.target.value as typeof sort)} aria-label="Подредба">
+                    <option value="newest">Най-нови</option>
+                    <option value="price_asc">Цена ↑</option>
+                    <option value="price_desc">Цена ↓</option>
+                  </select>
+                </label>
+              </div>
             </div>
 
             {filtered.length === 0 ? (
@@ -234,7 +216,7 @@ export default function QuarterBurgasView({
               <div className="bq-map__embed">
                 <iframe
                   title={`Карта — ${quarter.name}`}
-                  src={`https://www.openstreetmap.org/export/embed.html?bbox=27.42%2C42.48%2C27.52%2C42.52&layer=mapnik&marker=42.5%2C27.47`}
+                  src="https://www.openstreetmap.org/export/embed.html?bbox=27.42%2C42.48%2C27.52%2C42.52&layer=mapnik&marker=42.5%2C27.47"
                   loading="lazy"
                 />
               </div>
@@ -276,44 +258,6 @@ function BuildingIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
       <path d="M3 21h18M5 21V7l7-4 7 4v14" />
-    </svg>
-  )
-}
-function PinFieldIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Z" />
-      <circle cx="12" cy="9" r="2.4" />
-    </svg>
-  )
-}
-function BagIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-      <path d="M6 7h12l1 14H5L6 7Z" />
-      <path d="M9 7a3 3 0 016 0" />
-    </svg>
-  )
-}
-function EuroIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-      <path d="M5 10h11M5 14h9M19 5.5A8 8 0 1020 18.5" />
-    </svg>
-  )
-}
-function FilterIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-      <path d="M4 6h16M7 12h10M10 18h4" />
-    </svg>
-  )
-}
-function SearchIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-      <circle cx="11" cy="11" r="7" />
-      <path d="m20 20-3-3" />
     </svg>
   )
 }

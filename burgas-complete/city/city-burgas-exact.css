@@ -58,12 +58,26 @@
   z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(84, 0, 26, 0.48) 0%, transparent 42%, transparent 58%, rgba(18, 0, 8, 0.28) 100%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, transparent 40%, rgba(44, 3, 15, 0.5) 100%);
+    linear-gradient(105deg, rgba(30, 8, 18, 0.2) 0%, transparent 48%),
+    linear-gradient(270deg, rgba(84, 0, 26, 0.35) 0%, transparent 42%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, transparent 42%, rgba(44, 3, 15, 0.52) 100%);
 }
 
 .cb-hero__bg-img {
-  object-position: center 38%;
+  object-position: left center;
+}
+
+.cb-hero .cb-top {
+  z-index: 6;
+}
+
+.cb-hero__search {
+  position: absolute;
+  z-index: 8;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: clamp(14px, 2.5vh, 22px);
+  width: min(94%, 920px);
 }
 
 /* Header (marble band) */
@@ -146,73 +160,20 @@
   height: 18px;
 }
 
-/* ЗА ГРАДА panel */
+/* ЗА ГРАДА — burgundy card (mockup 2, дясно) */
 .cb-about {
   position: absolute;
-  z-index: 6;
-  top: clamp(100px, 22vh, 150px);
-  right: clamp(16px, 3vw, 40px);
-  width: min(380px, 36vw);
-  padding: clamp(18px, 2vw, 26px) clamp(20px, 2.2vw, 28px);
-  color: #fff;
-  pointer-events: none;
-}
-
-.cb-about__eyebrow {
-  margin: 0 0 6px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--cb-gold-light);
-}
-
-.cb-about__title {
-  margin: 0 0 12px;
-  font-family: var(--font-playfair), Georgia, serif;
-  font-size: clamp(2rem, 4vw, 2.75rem);
-  font-weight: 700;
-  line-height: 1.05;
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
-}
-
-.cb-about__text {
-  margin: 0 0 18px;
-  font-size: clamp(12px, 1vw, 14px);
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.9);
-  max-width: 36ch;
-}
-
-.cb-about__stats {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px 16px;
-}
-
-.cb-about__stats li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: clamp(11px, 0.9vw, 13px);
-  color: rgba(255, 248, 230, 0.95);
-}
-
-.cb-about__stats svg {
-  flex-shrink: 0;
-  color: var(--cb-gold);
+  z-index: 7;
+  top: clamp(92px, 20vh, 138px);
+  right: clamp(14px, 2.8vw, 36px);
+  width: min(400px, 38vw);
+  max-height: calc(100% - 120px);
+  overflow: auto;
 }
 
 /* Search bar */
 .cb-search {
-  position: absolute;
-  z-index: 7;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: clamp(14px, 2.5vh, 22px);
+  position: relative;
   width: min(94%, 920px);
   min-height: 56px;
   display: flex;
