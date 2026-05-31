@@ -12,6 +12,7 @@ import PropertyCharacteristics from '@/components/property/PropertyCharacteristi
 import { BurgasHeader } from '@/burgas-complete/shared/BurgasChrome'
 import { BurgasSearchBar } from '@/burgas-complete/shared/BurgasSearchBar'
 import { resolveMediaUrl } from '@/lib/upload-bridge'
+import { formatPrice, formatArea, formatFloor } from '@/lib/utils'
 import { useState } from 'react'
 
 interface Props {
@@ -36,6 +37,15 @@ export default function PropertyDetailBurgasView({
     resolveMediaUrl(galleryImages[0]?.image_url ?? property.primary_image) ??
     '/images/quarters/burgas/lazur.jpg'
 
+  const stats = [
+    { label: 'Площ', value: formatArea(property.area_sqm) },
+    { label: 'Стаи', value: property.bedrooms ? String(property.bedrooms) : '—' },
+    { label: 'Етаж', value: formatFloor(property.floor, property.total_floors) },
+    { label: 'Спални', value: property.bedrooms ? String(property.bedrooms) : '—' },
+    { label: 'Бани', value: property.bathrooms ? String(property.bathrooms) : '—' },
+    { label: 'Вид', value: property.type },
+  ]
+
   const breadcrumbs = [
     { label: 'Начало', href: '/' },
     { label: 'Градове', href: '/buy' },
@@ -56,11 +66,29 @@ export default function PropertyDetailBurgasView({
           citySlug={citySlug}
           cityName={cityName}
           quarterName={property.quarter_name ?? quarterSlug}
+          quarterSlug={quarterSlug}
           className="pdb-hero__search"
           propType={propType}
           onPropTypeChange={setPropType}
         />
       </section>
+
+      <header className="pdb-intro">
+        {property.is_featured && <span className="pdb-head__badge">ТОП ОФЕРТА</span>}
+        <h1 className="pdb-intro__title">{property.title}</h1>
+        <p className="pdb-intro__loc">
+          {property.quarter_name}, {property.city_name ?? cityName}
+        </p>
+        <p className="pdb-intro__price">{formatPrice(property.price_eur)}</p>
+        <ul className="pdb-intro__stats">
+          {stats.map(s => (
+            <li key={s.label}>
+              <span className="pdb-intro__stat-label">{s.label}</span>
+              <strong>{s.value}</strong>
+            </li>
+          ))}
+        </ul>
+      </header>
 
       <div className="property-detail-page pdb-detail">
         <div className="pd-shell">
@@ -75,12 +103,6 @@ export default function PropertyDetailBurgasView({
               <Breadcrumb items={breadcrumbs} />
             </div>
           </div>
-
-          {property.is_featured && (
-            <div className="pdb-detail__top-badge">
-              <span className="pdb-head__badge">ТОП ОФЕРТА</span>
-            </div>
-          )}
 
           <div className="pd-body">
             <section className="pd-top" aria-label="Галерия и основна информация">

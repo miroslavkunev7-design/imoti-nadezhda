@@ -114,6 +114,7 @@ export default function QuarterBurgasView({
           variant="quarter"
           citySlug={city.slug}
           cityName={city.name}
+          quarterSlug={quarter.slug}
           className="bq-hero__search"
           propType={propType}
           onPropTypeChange={setPropType}

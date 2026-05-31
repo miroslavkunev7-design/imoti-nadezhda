@@ -41,7 +41,7 @@ export function BurgasSearchBar({
 
   function handleFilters() {
     const params = new URLSearchParams({ city: citySlug })
-    if (quarterSlug) params.set('quarter', quarterSlug)
+    if (quarterSlug && variant !== 'city') params.set('quarter', quarterSlug)
     router.push(`/buy?${params.toString()}`)
   }
 

@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import PropertyDetailScreen from '@/components/property/PropertyDetailScreen'
 import { FALLBACK_CITIES } from '@/lib/data/fallback'
@@ -26,6 +26,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function PropertyDetailPage({ params }: PageProps) {
+  if (params.slug === 'burgas') {
+    redirect(`/cities/burgas/${params.quarter}/property/${params.id}`)
+  }
+
   const id = parseInt(params.id)
   if (isNaN(id)) notFound()
 

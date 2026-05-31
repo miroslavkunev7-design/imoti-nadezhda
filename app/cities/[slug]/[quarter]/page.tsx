@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -32,6 +32,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function NeighborhoodPage({ params, searchParams }: PageProps) {
+  if (params.slug === 'burgas') {
+    redirect(`/cities/burgas/${params.quarter}`)
+  }
+
   const city = FALLBACK_CITIES.find(c => c.slug === params.slug)
   if (!city) notFound()
 

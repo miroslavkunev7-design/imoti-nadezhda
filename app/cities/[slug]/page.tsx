@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import { cache } from 'react'
 import Link from 'next/link'
@@ -35,6 +35,8 @@ export async function generateStaticParams() {
 }
 
 export default async function CityPage({ params }: PageProps) {
+  if (params.slug === 'burgas') redirect('/cities/burgas')
+
   const data = await getData(params.slug)
   if (!data) notFound()
   const { city, quarters } = data
