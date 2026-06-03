@@ -2,58 +2,29 @@
 
 Luxury real estate platform for Shumen, Varna, Burgas, and Novi Pazar.
 
+**Production:** https://imoti-nadezhda.vercel.app
+
 ## Quick Start
 
-### 1. Install dependencies
 ```bash
-npm install
-```
-
-### 2. Configure environment
-```bash
-copy .env.example .env.local
-# Then open .env.local and fill in your MySQL credentials
-```
-
-### 3. Run development server
-```bash
+npm ci
+cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Open http://localhost:3000
+
+## Deploy (Vercel)
+
+1. Import this repo on [Vercel](https://vercel.com/new)
+2. Framework: **Next.js** (auto-detected)
+3. Add env vars from `.env.example` (minimum: `NEXTAUTH_SECRET`, Supabase/Postgres if used)
+4. Deploy — each push to `master` triggers a new build
 
 ## Tech Stack
-- **Next.js 14** (App Router)
-- **TypeScript**
-- **Tailwind CSS** — luxury dark crimson design tokens
-- **Framer Motion** — cinematic animations
-- **postgres** + **Supabase** — PostgreSQL on Supabase (via `POSTGRES_URL`)
-- **NextAuth.js** — authentication
 
-## Database
-PostgreSQL on Supabase. Tables: cities, quarters, properties, property_images, property_features,
-users, favorites, inquiries, appointments, crm_clients, crm_notes, crm_tasks,
-activity_logs, settings, uploads.
+- Next.js 14 (App Router), TypeScript, Tailwind CSS
+- PostgreSQL via Supabase (`POSTGRES_URL`)
+- Vercel hosting
 
-## Project Structure
-```
-app/                  Next.js App Router pages + API routes
-  layout.tsx          Root layout (Navbar + BottomBar)
-  page.tsx            Homepage
-  cities/[slug]/      City pages
-  buy/                Browse all listings
-  sell/               Publish a property
-  admin/              CRM dashboard
-  api/                REST API routes
-components/
-  layout/             Navbar, BottomBar
-  ui/                 Logo, Breadcrumb, Badges, Skeletons
-  cards/              CityCard, NeighborhoodCard, PropertyCard
-  search/             SearchWidget and filter components
-lib/
-  db.ts               Postgres pool + typed query helpers (Supabase)
-  queries/            Server-side data access functions
-  utils.ts            Formatting, slugs, constants
-types/
-  index.ts            All shared TypeScript interfaces
-```
+See `AGENTS.md` and `docs/AGENT-HANDOFF.md` for full project context.
