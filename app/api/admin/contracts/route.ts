@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
 
     const result = await execute(`
       INSERT INTO appointments (appointment_date, status, notes)
-      VALUES (CURDATE(), 'pending', ?)`,
+      VALUES (CURRENT_DATE, 'pending', ?)`,
       [`${type} | ${client_name} | ${property_title} | €${value ?? 0}`]
     )
 

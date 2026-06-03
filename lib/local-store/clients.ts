@@ -1,7 +1,8 @@
 import { readFile, writeFile, mkdir } from 'fs/promises'
 import path from 'path'
 
-const DATA_DIR = path.join(process.cwd(), 'data')
+const isVercel = Boolean(process.env.VERCEL || process.env.VERCEL_ENV)
+const DATA_DIR = isVercel ? '/tmp' : path.join(process.cwd(), 'data')
 const FILE_PATH = path.join(DATA_DIR, 'local-crm-clients.json')
 
 export type StoredClient = {

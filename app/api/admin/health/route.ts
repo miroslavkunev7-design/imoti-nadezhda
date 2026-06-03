@@ -48,9 +48,9 @@ export async function GET() {
     uploadConfigured: true,
     cloudinaryConfigured: true,
     mediaBase,
-    uploadUrl: 'https://api.cloudinary.com/v1_1/djh3tkfuu/image/upload',
+    uploadUrl: `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'djh3tkfuu'}/image/upload`,
     db: { ok: dbOk, propertyCount, totalPropertyCount, cityCount, error: dbError },
-    upload: { ok: true, detail: 'Cloudinary (djh3tkfuu / ml_default)', error: null },
+    upload: { ok: true, detail: `Cloudinary (${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'djh3tkfuu'} / ${process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || 'ml_default'})`, error: null },
     hints: [
       !dbConfigured &&
         'Свържи Supabase с Vercel (Storage → Connect) или добави POSTGRES_URL',

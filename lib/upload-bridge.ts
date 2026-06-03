@@ -3,7 +3,8 @@
  * Cloudinary and absolute URLs pass through directly.
  */
 
-const CLOUDINARY_BASE = 'https://res.cloudinary.com/djh3tkfuu'
+const CLOUDINARY_CLOUD = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'djh3tkfuu'
+const CLOUDINARY_BASE = `https://res.cloudinary.com/${CLOUDINARY_CLOUD}`
 
 export function getMediaBaseUrl(): string {
   const explicit = (process.env.NEXT_PUBLIC_MEDIA_URL ?? '').trim()

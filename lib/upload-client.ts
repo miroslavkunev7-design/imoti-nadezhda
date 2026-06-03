@@ -1,10 +1,11 @@
 /**
- * Browser → Cloudinary (unsigned upload with preset 'ml_default')
+ * Browser → Cloudinary (unsigned upload with preset)
  * After successful upload, saves the URL to the database via /api/admin/upload.
  */
 
-const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/djh3tkfuu/image/upload'
-const UPLOAD_PRESET = 'ml_default'
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'djh3tkfuu'
+const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`
+const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || 'ml_default'
 
 async function uploadToCloudinary(file: File | Blob, fileName: string): Promise<string> {
   const form = new FormData()
